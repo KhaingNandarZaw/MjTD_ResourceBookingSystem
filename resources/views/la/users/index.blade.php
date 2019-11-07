@@ -1,10 +1,10 @@
 @extends("la.layouts.app")
 
-@section("contentheader_title", "")
-@section("contentheader_description", "")
+@section("contentheader_title", "Users")
+@section("contentheader_description", "users listing")
 @section("section", "Users")
 @section("sub_section", "Listing")
-@section("htmlheader_title", "User Listing")
+@section("htmlheader_title", "Users Listing")
 
 @section("main-content")
 
@@ -18,7 +18,7 @@
     </div>
 @endif
 
-<div class="box box-green">
+<div class="box box-warning">
     <div class="box-header with-border">
         User List
         @la_access("Users", "create")

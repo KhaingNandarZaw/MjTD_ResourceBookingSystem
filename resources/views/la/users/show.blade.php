@@ -39,7 +39,6 @@
 								@la_display($module, 'mobile')
 								@la_display($module, 'mobile2')
 								@la_display($module, 'email')
-								@la_display($module, 'department')
 								@la_display($module, 'address')
 							</div>
 						</div>

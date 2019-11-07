@@ -35,7 +35,6 @@
             @la_input($module, 'date_birth')
             @la_input($module, 'gender')
             @la_input($module, 'mobile')
-            @la_input($module, 'department')
             @la_input($module, 'address')
 
             <div class="form-group">
