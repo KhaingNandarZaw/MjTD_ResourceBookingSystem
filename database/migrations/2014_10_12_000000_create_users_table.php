@@ -112,17 +112,6 @@ class CreateUsersTable extends Migration
                 "maxlength" => 500,
                 "required" => false,
                 "listing_col" => false
-            ], [
-                "colname" => "department",
-                "label" => "Department",
-                "field_type" => "Dropdown",
-                "unique" => false,
-                "defaultvalue" => "",
-                "minlength" => 0,
-                "maxlength" => 0,
-                "required" => true,
-                "listing_col" => false,
-                "popup_vals" => "@departments",
             ]
         ]);
         
