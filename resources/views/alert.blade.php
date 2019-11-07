@@ -3,7 +3,6 @@
 <link rel="stylesheet" type="text/css" href="{{asset('/css/bootstrap-notify.css')}}">
 
 <script>
-
 $(function () {
   @if(Session::has('success'))
     $('.notifications').notify({
@@ -48,6 +47,5 @@ $(function () {
       @endphp
   @endif
 });
-
 </script>
 @endpush
