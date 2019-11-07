@@ -14,7 +14,6 @@ $(function () {
      @endphp
   @endif
 
-
   @if(Session::has('info'))
       $('.notifications').notify({
         message: { text: "{{ Session::get('info') }}" },
@@ -25,7 +24,6 @@ $(function () {
       @endphp
   @endif
 
-
   @if(Session::has('warning'))
   		$('.notifications').notify({
         message: { text: "{{ Session::get('warning') }}" },
@@ -35,7 +33,6 @@ $(function () {
         Session::forget('warning');
       @endphp
   @endif
-
 
   @if(Session::has('error'))
   		$('.notifications').notify({

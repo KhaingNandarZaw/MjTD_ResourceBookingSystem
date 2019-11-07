@@ -75,7 +75,6 @@ $(function () {
         columnDefs: [ { orderable: false, targets: [-1] }],
         @endif
     });
-    
 });
 </script>
 @endpush

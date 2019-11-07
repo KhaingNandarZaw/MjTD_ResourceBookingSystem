@@ -44,7 +44,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 				@if($user->id == Auth::user()->id || Entrust::hasRole("SUPER_ADMIN"))
 				<div role="tabpanel" class="tab-pane fade" id="tab-account-settings">
 					<div class="tab-content">

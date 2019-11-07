@@ -4,7 +4,6 @@
 	Role View
 @endsection
 
-
 @section('main-content')
 <div id="page-content" class="profile2">
 	

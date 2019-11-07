@@ -22,7 +22,7 @@
     </div>
 @endif
 
-<div class="box box-green">
+<div class="box box-success">
     <div class="box-header with-border">
         User Entry
     </div>    
