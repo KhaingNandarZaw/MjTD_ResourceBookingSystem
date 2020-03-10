@@ -89,7 +89,6 @@ class RolesController extends Controller
 			$perm = Permission::where("name", "ADMIN_PANEL")->first();
 			$role->attachPermission($perm);
 			
-			\Session::flash('success', 'Successfully Saved.');
 			return redirect()->route(config('laraadmin.adminRoute') . '.roles.index');
 			
 		} else {
@@ -193,7 +192,6 @@ class RolesController extends Controller
 
 			$insert_id = Module::updateRow("Roles", $request, $id);
 			
-			\Session::flash('success', 'Successfully Updated.');
 			return redirect()->route(config('laraadmin.adminRoute') . '.roles.index');
 			
 		} else {

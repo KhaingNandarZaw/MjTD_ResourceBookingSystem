@@ -4,11 +4,8 @@
 @section('htmlheader')
 	@include('la.layouts.partials.htmlheader')
 @show
-
 <body class="{{ LAConfigs::getByKey('skin') }} {{ LAConfigs::getByKey('layout') }} @if(LAConfigs::getByKey('layout') == 'sidebar-mini') sidebar-collapse @endif" bsurl="{{ url('') }}" adminRoute="{{ config('laraadmin.adminRoute') }}">
 <div class="wrapper">
-
-	@include('alert')
 
 	@include('la.layouts.partials.mainheader')
 
@@ -18,7 +15,7 @@
 
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper">
-		@if(LAConfigs::getByKey('layout') == 'layout-top-nav') <div class="container" style="width:100%;"> @endif
+		@if(LAConfigs::getByKey('layout') == 'layout-top-nav') <div> @endif <!-- class="container" -->
 		@if(!isset($no_header))
 			@include('la.layouts.partials.contentheader')
 		@endif

@@ -10,7 +10,7 @@
 						<span class="label label-success">4</span>
 					</a>
 					<ul class="dropdown-menu">
-						<li class="header">You have 4 invitations</li>
+						<li class="header">You have 4 messages</li>
 						<li>
 							<!-- inner menu: contains the messages -->
 							<ul class="menu">
@@ -31,7 +31,7 @@
 								</li><!-- end message -->
 							</ul><!-- /.menu -->
 						</li>
-						<li class="footer"><a href="#">See All Invitations</a></li>
+						<li class="footer"><a href="#">See All Messages</a></li>
 					</ul>
 				</li><!-- /.messages-menu -->
 				@endif

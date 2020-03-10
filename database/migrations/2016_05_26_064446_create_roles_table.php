@@ -14,7 +14,7 @@ use Dwij\Laraadmin\Models\Module;
 class CreateRolesTable extends Migration
 {
     /**
-     * Migration generate Module Table Schema by LaraAdmin
+     * Run the migrations.
      *
      * @return void
      */
@@ -62,6 +62,17 @@ class CreateRolesTable extends Migration
                 "required" => false,
                 "listing_col" => true,
                 "popup_vals" => "@roles",
+            ], [
+                "colname" => "dept",
+                "label" => "Department",
+                "field_type" => "Dropdown",
+                "unique" => false,
+                "defaultvalue" => "1",
+                "minlength" => 0,
+                "maxlength" => 0,
+                "required" => false,
+                "listing_col" => true,
+                "popup_vals" => "@departments",
             ]
         ]);
         
@@ -82,7 +93,6 @@ class CreateRolesTable extends Migration
             "popup_vals" => ["Employee", "Client"]
         ]
         # Format Details: Check http://laraadmin.com/docs/migrations_cruds#schema-ui-types
-        
         colname: Database column name. lowercase, words concatenated by underscore (_)
         label: Label of Column e.g. Name, Cost, Is Public
         field_type: It defines type of Column in more General way.
@@ -95,7 +105,7 @@ class CreateRolesTable extends Migration
         popup_vals: These are values for MultiSelect, TagInput and Radio Columns. Either connecting @tables or to list []
         */
     }
-    
+
     /**
      * Reverse the migrations.
      *
@@ -103,7 +113,7 @@ class CreateRolesTable extends Migration
      */
     public function down()
     {
-        if(Schema::hasTable('roles')) {
+        if (Schema::hasTable('roles')) {
             Schema::drop('roles');
         }
     }

@@ -54,10 +54,81 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
 	Route::get(config('laraadmin.adminRoute') . '/permission_dt_ajax', 'LA\PermissionsController@dtajax');
 	Route::post(config('laraadmin.adminRoute') . '/save_permissions/{id}', 'LA\PermissionsController@save_permissions');
 	
+	/* ================== Departments ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/departments', 'LA\DepartmentsController');
+	Route::get(config('laraadmin.adminRoute') . '/department_dt_ajax', 'LA\DepartmentsController@dtajax');
 	
 	/* ================== Backups ================== */
 	Route::resource(config('laraadmin.adminRoute') . '/backups', 'LA\BackupsController');
 	Route::get(config('laraadmin.adminRoute') . '/backup_dt_ajax', 'LA\BackupsController@dtajax');
 	Route::post(config('laraadmin.adminRoute') . '/create_backup_ajax', 'LA\BackupsController@create_backup_ajax');
 	Route::get(config('laraadmin.adminRoute') . '/downloadBackup/{id}', 'LA\BackupsController@downloadBackup');
+
+
+    /* ================== Accessories ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/accessories', 'LA\AccessoriesController');
+    Route::get(config('laraadmin.adminRoute') . '/accessory_dt_ajax', 'LA\AccessoriesController@dtajax');
+
+    /* ================== Resources ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/resources', 'LA\ResourcesController');
+	Route::get(config('laraadmin.adminRoute') . '/resource_dt_ajax', 'LA\ResourcesController@dtajax');
+	
+	Route::get(config('laraadmin.adminRoute') . '/schedule', 'ScheduleController@index');
+
+
+    /* ================== Start_Ons ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/start_ons', 'LA\Start_OnsController');
+    Route::get(config('laraadmin.adminRoute') . '/start_on_dt_ajax', 'LA\Start_OnsController@dtajax');
+
+
+
+    /* ================== All_Schedules ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/all_schedules', 'LA\All_SchedulesController');
+	Route::get(config('laraadmin.adminRoute') . '/all_schedule_dt_ajax', 'LA\All_SchedulesController@dtajax');
+	
+	/* ================== Time layout for all days viewing ================== */
+	Route::post(config('laraadmin.adminRoute') . '/store_data', 'LA\StoreDataController@store');
+	// Route::get(config('laraadmin.adminRoute') . '/store_data_0', 'LA\StoreDataController@store_0');
+	// Route::get(config('laraadmin.adminRoute') . '/store_data_1', 'LA\StoreDataController@store_1');
+	// Route::get(config('laraadmin.adminRoute') . '/store_data_2', 'LA\StoreDataController@store_2');
+	// Route::get(config('laraadmin.adminRoute') . '/store_data_3', 'LA\StoreDataController@store_3');
+	// Route::get(config('laraadmin.adminRoute') . '/store_data_4', 'LA\StoreDataController@store_4');
+	// Route::get(config('laraadmin.adminRoute') . '/store_data_f', 'LA\StoreDataController@store_f');
+	// Route::get(config('laraadmin.adminRoute') . '/store_data_6', 'LA\StoreDataController@store_6');
+	Route::post(config('laraadmin.adminRoute') . '/store_data_num', 'LA\StoreDataController@store_data_num');
+	Route::post(config('laraadmin.adminRoute') . '/save', 'LA\StoreDataController@save');
+	Route::post(config('laraadmin.adminRoute') . '/save_0', 'LA\StoreDataController@save_0');
+	
+
+    /* ================== Reservations ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/reservations', 'LA\ReservationsController');
+    Route::get(config('laraadmin.adminRoute') . '/reservation_dt_ajax', 'LA\ReservationsController@dtajax');
+	Route::post(config('laraadmin.adminRoute') . '/getstartendtime', 'LA\ReservationsController@getstartendtime');
+	Route::post(config('laraadmin.adminRoute') . '/reservations/next', 'LA\ReservationsController@next');
+	Route::post(config('laraadmin.adminRoute') . '/reservations/previous', 'LA\ReservationsController@previous');
+
+    /* ================== Reservations_users ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/reservations_users', 'LA\Reservations_usersController');
+    Route::get(config('laraadmin.adminRoute') . '/reservations_user_dt_ajax', 'LA\Reservations_usersController@dtajax');
+
+    /* ================== Reservations_invitees ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/reservations_invitees', 'LA\Reservations_inviteesController');
+    Route::get(config('laraadmin.adminRoute') . '/reservations_invitee_dt_ajax', 'LA\Reservations_inviteesController@dtajax');
+
+    /* ================== Reservation_accessories ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/reservation_accessories', 'LA\Reservation_accessoriesController');
+	Route::get(config('laraadmin.adminRoute') . '/reservation_accessory_dt_ajax', 'LA\Reservation_accessoriesController@dtajax');
+	
+	/* ================== Calendar ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/calendar', 'CalendarController');
+
+	/* ================== Reserve ================== */
+	Route::post(config('laraadmin.adminRoute') . '/reserve', 'ReserveController@index');
+	Route::post(config('laraadmin.adminRoute') . '/reserve_next', 'ReserveController@next');
+
+	/* ================== BookingList ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/bookinglist', 'BookinglistController');
+
+
+
 });

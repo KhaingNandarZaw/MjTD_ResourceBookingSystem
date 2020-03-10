@@ -41,4 +41,9 @@ class Upload extends Model
     {
         return url("files/".$this->hash."/".$this->name);
     }
+
+    public function resources()
+    {
+        return $this->hasMany(Resource::class, 'id', 'image');
+    }
 }

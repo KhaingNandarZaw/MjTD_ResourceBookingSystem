@@ -38,8 +38,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $module = Module::get('Users');        
-
+        $module = Module::get('Users');
+        
         if(Module::hasAccess($module->id)) {
             return View('la.users.index', [
                 'show_actions' => $this->show_action,
@@ -82,10 +82,8 @@ class UsersController extends Controller
             $validator = Validator::make($request->all(), $rules);
             
             if($validator->fails()) {
-                \Session::flash('error', $validator);
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-
      
             $insert_id = Module::insert("Users", $request);
  
@@ -116,9 +114,6 @@ class UsersController extends Controller
             $role = Role::find($request->role);
             $user->attachRole($role);
             
-            
-            \Session::flash('success', 'Successfully Saved.');
-
             return redirect()->route(config('laraadmin.adminRoute') . '.users.index');
             
         } else {
@@ -233,7 +228,6 @@ class UsersController extends Controller
         if(Module::hasAccess("Users", "delete")) {
             User::find($id)->delete();
             
-            \Session::flash('success', 'Successfully Deleted.');
             // Redirecting to index() method
             return redirect()->route(config('laraadmin.adminRoute') . '.users.index');
         } else {

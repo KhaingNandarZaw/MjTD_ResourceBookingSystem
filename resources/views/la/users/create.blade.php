@@ -15,7 +15,7 @@
     </div>
 @endif
 
-<div class="box box-danger">
+<div class="box box-green">
     <div class="box-header with-border">
         User Entry
     </div>    
@@ -25,6 +25,7 @@
                         @la_input($module, 'name')
                         @la_input($module, 'email')
                         @la_input($module, 'designation')
+                        @la_input($module, 'department')
                         @la_input($module, 'gender')
                         @la_input($module, 'date_birth')
                         @la_input($module, 'mobile')
@@ -61,6 +62,7 @@ $(function () {
     $("#user-add-form").validate({
         
     });
+
 });
 </script>
 @endpush

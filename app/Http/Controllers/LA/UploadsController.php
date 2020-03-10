@@ -191,7 +191,10 @@ class UploadsController extends Controller
 						}
 					}
 					$upload->save();
-	
+					// dd($upload);
+					// return view('la.resources.create', [
+					// 	'upload' => $upload
+					// ]);
 					return response()->json([
 						"status" => "success",
 						"upload" => $upload
@@ -246,7 +249,7 @@ class UploadsController extends Controller
 				
 				$uploads2[] = $u;
 			}
-			
+			// print_r($uploads2);
 			// $folder = storage_path('/uploads');
 			// $files = array();
 			// if(file_exists($folder)) {

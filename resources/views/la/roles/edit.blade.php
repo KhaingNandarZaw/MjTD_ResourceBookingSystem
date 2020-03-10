@@ -34,6 +34,7 @@
 					@la_input($module, 'display_name')
 					@la_input($module, 'description')
 					@la_input($module, 'parent')
+					@la_input($module, 'dept')
 					<br>
 					<div class="form-group">
 						{!! Form::submit( 'Update', ['class'=>'btn btn-success']) !!} <a href="{{ url(config('laraadmin.adminRoute') . '/roles') }}" class="btn btn-default pull-right">Cancel</a>

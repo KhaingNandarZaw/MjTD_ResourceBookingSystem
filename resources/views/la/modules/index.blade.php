@@ -11,13 +11,16 @@ use Dwij\Laraadmin\Models\Module;
 @section("htmlheader_title", "Modules Listing")
 
 @section("headerElems")
-<button class="btn btn-success btn-sm pull-right " data-toggle="modal" data-target="#AddExistModal">Module from Existing Table</button>
-<button class="btn btn-success btn-sm pull-right " style="margin-right:5px;" data-toggle="modal" data-target="#AddModal">Add Module</button>
+
 @endsection
 
 @section("main-content")
 
 <div class="box box-info">
+<button class="btn btn-success btn-sm pull-right " data-toggle="modal" data-target="#AddExistModal">Module from Existing Table</button>
+<button class="btn btn-success btn-sm pull-right " style="margin-right:5px;" data-toggle="modal" data-target="#AddModal">Add Module</button>
+
+
 	<!--<div class="box-header"></div>-->
 	<div class="box-body">
 		<table id="dt_modules" class="table table-bordered">
