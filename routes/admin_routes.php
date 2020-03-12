@@ -128,7 +128,6 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
 
 	/* ================== BookingList ================== */
 	Route::resource(config('laraadmin.adminRoute') . '/bookinglist', 'BookinglistController');
-
-
-
+	Route::match(['get', 'post'], config('laraadmin.adminRoute') . '/bookinglist', 'BookinglistController@task_checking');
+	
 });
