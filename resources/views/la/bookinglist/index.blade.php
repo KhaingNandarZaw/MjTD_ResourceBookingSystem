@@ -16,29 +16,53 @@
         
     </div>    
     <div class="box-body">
+    {!! Form::open(['action' => 'BookinglistController@task_checking', 'method' => 'POST']) !!}
+        <div class="row form-group">
+            <div class="col-sm-2">
+                <label>From Date</label>
+                <div class="input-group date"><input class="form-control input-sm" placeholder="Enter From Date" data-rule-minlength="0" id="from_date" name="from_date" type="text" value="{{$from_date}}"><span class="input-group-addon input_dt"><span class="fa fa-calendar"></span></span></div>
+            </div>
+            <div class="col-sm-2">
+                <label>To Date</label>
+                <div class="input-group date"><input class="form-control input-sm" placeholder="Enter To Date" data-rule-minlength="0" id="to_date" name="to_date" type="text" value="{{$to_date}}"><span class="input-group-addon input_dt"><span class="fa fa-calendar"></span></span></div>
+            </div>
+            <div class="col-md-1" style="margin-top:25px;">
+                {{ Form::button('<i class="fa fa-search"> 
+                
+                </i>', ['type' => 'submit', 'class' => 'btn btn-primary btn-sm'] )  }} 
+            </div>
+        </div>
+    {!! Form::close() !!}
+
+
+
         <table id="example1" class="table table-bordered table-striped" data-form="deleteFormusers">
         <thead>
         <tr>
             <th>ID</th>
             <th>Title</th>
-            <th>Description</th>
             <th>Begin Date</th>
             <th>Begin Time</th>
             <th>End Date</th>
             <th>End Time</th>
+            <th>User Name</th>
+            <th>Resource</th>
         </tr>
         
-        @foreach($bookinglist as $bookinglists)
+        @foreach($results as $all_bookinglist)
         <tr>
-            <td>{{$bookinglists->id}}</td>
-            <td>{{$bookinglists->title}}</td>
-            <td>{{$bookinglists->description}}</td>
-            <td>{{$bookinglists->begin_date}}</td>
-            <td>{{$bookinglists->begin_time}}</td>
-            <td>{{$bookinglists->end_date}}</td>
-            <td>{{$bookinglists->end_time}}</td>
+                <td>{{$all_bookinglist['id']}}</td>
+                <td><a href="{{route('admin.bookinglist.show',$all_bookinglist['id'])}}">{{$all_bookinglist['title']}}</a></td>
+                <td>{{$all_bookinglist['begin_date']}}</td>
+                <td>{{$all_bookinglist['begin_time']}}</td>
+                <td>{{$all_bookinglist['end_date']}}</td>
+                <td>{{$all_bookinglist['end_time']}}</td>
+                <td>{{$all_bookinglist['username']}}</td>
+                <td>{{$all_bookinglist['resourcename']}}</td>
         </tr>
         @endforeach
+
+       
         
         </thead>
         <tbody>

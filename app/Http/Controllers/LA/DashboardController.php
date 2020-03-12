@@ -12,6 +12,9 @@ namespace App\Http\Controllers\LA;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use App\Models\Reservation;
+use DB;
+use Auth;
 
 /**
  * Class DashboardController
@@ -36,6 +39,17 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('la.dashboard');
+        $now_str = \Carbon\Carbon::now()->format('Y-m-d');
+        $bookinglist=DB::table('reservations')
+                    ->whereDate('begin_date', '>=', $now_str)
+                    ->get();
+        $user = Auth::user();
+        $sql = "SELECT reservations.* FROM reservations left join reservations_users on reservations_users.reservations_id = reservations.id
+        where reservations_users.user_id = 1 or reservations.owner_id = 1";
+
+        $query = DB::table(DB::raw("($sql) as catch"));
+        $reservations_list = $query->get();
+        
+        return view('la.dashboard',compact('bookinglist','reservations_list'));
     }
 }

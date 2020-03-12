@@ -170,6 +170,7 @@ class ReservationsController extends Controller
      */
     public function show($id,Request $request)
     {
+        
         if(Module::hasAccess("Reservations", "view")) {
             $user = User::All();
             $all_schedule = All_Schedule::find($id);
