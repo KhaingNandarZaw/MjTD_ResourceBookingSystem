@@ -26,11 +26,21 @@
                 <label>To Date</label>
                 <div class="input-group date"><input class="form-control input-sm" placeholder="Enter To Date" data-rule-minlength="0" id="to_date" name="to_date" type="text" value="{{$to_date}}"><span class="input-group-addon input_dt"><span class="fa fa-calendar"></span></span></div>
             </div>
+            <div class="col-sm-2">
+                <label>Resource</label>
+                <select class="form-control input-sm" data-placeholder="Select User" rel="select2" name="resourcename">
+                    <option value="0" selected>*</option>
+                    @foreach($resources as $resource)
+                        <option value="{{$resource->id}}">{{$resource->name}}</option>
+                    @endforeach
+                </select>
+            </div>
             <div class="col-md-1" style="margin-top:25px;">
                 {{ Form::button('<i class="fa fa-search"> 
                 
                 </i>', ['type' => 'submit', 'class' => 'btn btn-primary btn-sm'] )  }} 
             </div>
+            
         </div>
     {!! Form::close() !!}
 

@@ -10,6 +10,7 @@ use Carbon;
 use Module;
 use Zizaco\Entrust\EntrustFacade as Entrust;
 use App\Models\User;
+use App\Models\Resource;
 
 
 class BookinglistController extends Controller
@@ -138,14 +139,15 @@ class BookinglistController extends Controller
 
     public function task_checking(Request $request)
     {
-        
-        $task_type = "0";
+        $query = "";
         $today = date("Y-m-d");
         $input_from_date = '';
         $input_to_date = '';
-        
+        $resourcename='0';
         $bookinglist=Reservation::all();
         $user = Auth::user();
+        $resources=Resource::all();
+        
         $query = DB::table('resources')
             ->select('resources.id','name','title','begin_date','end_date','begin_time','end_time')
             ->leftJoin('reservations', 'resources.id', '=', 'reservations.resource_id');
@@ -156,6 +158,11 @@ class BookinglistController extends Controller
         $input_to_date = Carbon::createFromFormat('Y-m-d', $to_date)->format('d/m/Y');
         
         //filter
+        if($request->has('resourcename')){
+            $resourcename = $request->input('resourcename');
+            //dd($resourcename);
+        }
+        
         if($request->has('from_date') && $request->input('from_date') != ''){
             $input_from_date = $request->input('from_date');
             $from_date = Carbon::createFromFormat('d/m/Y', $input_from_date)->format('Y-m-d');
@@ -165,6 +172,7 @@ class BookinglistController extends Controller
             $input_to_date = $request->input('to_date');
             $to_date = Carbon::createFromFormat('d/m/Y', $input_to_date)->format('Y-m-d');
         }
+        
         
         // $query = $results;
         //$query = DB::table('reservations');
@@ -176,7 +184,11 @@ class BookinglistController extends Controller
         if(isset($to_date) && $to_date != ""){
             $query = $query->whereDate('end_date', '<=', $to_date);
         }
+        if(isset($resourcename) && $resourcename != "0"){
+            $query = $query->where('resources.id', '=', $resourcename);
+        }
         $all_bookinglists = $query->get();
+        //dd($all_bookinglists);
 
             foreach($all_bookinglists as $key=>$data)
             {
@@ -184,6 +196,7 @@ class BookinglistController extends Controller
             $newarr['id']=$data->id;
             $newarr['title']=$data->title;
             $newarr['resourcename']=$data->name;
+            $newarr['resourceid']=$data->id;
             $newarr['begin_date']=$data->begin_date;
             $newarr['begin_time']=$data->begin_time;
             $newarr['end_date']=$data->end_date;
@@ -191,14 +204,15 @@ class BookinglistController extends Controller
             $newarr['username']=$user->name;
             $results[]=$newarr;
             }
-        //dd($results);
+        
 
         
         //dd($all_bookinglists);
         return View('la.bookinglist.index', [
             'from_date' => $input_from_date,
             'to_date' => $input_to_date,
-            'results' => $results
+            'results' => $results,
+            'resources' => $resources
         ]);
         
     }

@@ -61,6 +61,26 @@ Reservations View
                                 
                             if($module->row['start_on'] == 8 && $module->row['no_of_days_visible'] > 1){
                                 switch($module->row['no_of_days_visible']){
+                                    case 1:
+                                        if($module->row['same_layout'])
+                                        $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>" . $res['start'] . "</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                    echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots sat dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
                                     case 2:
                                         if($module->row['same_layout'])
                                             $result = unserialize($for_same_day->time_slot);
@@ -559,10 +579,68 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                    break;
+                                    break;                                    
                                 }
-                            }elseif($module->row['start_on'] == 7 && $module->row['no_of_days_visible'] > 2){
+                            }elseif($module->row['start_on'] == 7 && $module->row['no_of_days_visible'] > 1){
                                 switch($module->row['no_of_days_visible']){
+                                    case 1:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots fri dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 2:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots fri dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots sat dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
                                     case 3:
                                         if($module->row['same_layout'])
                                             $result = unserialize($for_same_day->time_slot);
@@ -1024,8 +1102,122 @@ Reservations View
                                         }
                                     break;
                                 }
-                            }elseif($module->row['start_on'] == 6 && $module->row['no_of_days_visible'] > 3){
+                            }elseif($module->row['start_on'] == 6 && $module->row['no_of_days_visible'] > 1){
                                 switch($module->row['no_of_days_visible']){
+                                    case 1:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots thu dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 2:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots thu dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots fri dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 3:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots thu dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots fri dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots sat dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
                                     case 4:
                                         if($module->row['same_layout'])
                                             $result = unserialize($for_same_day->time_slot);
@@ -1431,8 +1623,196 @@ Reservations View
                                         }
                                     break;
                                 }
-                            }elseif($module->row['start_on'] == 5 && $module->row['no_of_days_visible'] > 4){
+                            }elseif($module->row['start_on'] == 5 && $module->row['no_of_days_visible'] > 1){
                                 switch($module->row['no_of_days_visible']){
+                                    case 1:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots wed dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 2:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots wed dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots thu dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 3:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots wed dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots thu dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots fri dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 4:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots wed dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots thu dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots fri dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots sat dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
                                     case 5:
                                         if($module->row['same_layout'])
                                             $result = unserialize($for_same_day->time_slot);
@@ -1764,8 +2144,288 @@ Reservations View
                                         }
                                     break;
                                 }
-                            }elseif($module->row['start_on'] == 4 && $module->row['no_of_days_visible'] > 5){
+                            }elseif($module->row['start_on'] == 4 && $module->row['no_of_days_visible'] > 1){
                                 switch($module->row['no_of_days_visible']){
+                                    case 1:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots tuesdaycolor dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 2:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots tuesdaycolor dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots wed dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 3:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots tuesdaycolor dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots wed dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots thu dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 4:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots tuesdaycolor dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots wed dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots thu dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots fri dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 5:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots tuesdaycolor dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots wed dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots thu dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots fri dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots sat dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
                                     case 6:
                                         if($module->row['same_layout'])
                                             $result = unserialize($for_same_day->time_slot);
@@ -2005,8 +2665,398 @@ Reservations View
                                         }
                                     break;
                                 }
-                            }elseif($module->row['start_on'] == 3 && $module->row['no_of_days_visible'] > 6){
+                            }elseif($module->row['start_on'] == 3 && $module->row['no_of_days_visible'] > 1){
                                 switch($module->row['no_of_days_visible']){
+                                    case 1:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} data-mondaycolor='' class='slots dates {$data_resource->id} mondaycolor {$res['start']}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 2:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} data-mondaycolor='' class='slots dates {$data_resource->id} mondaycolor {$res['start']}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots tuesdaycolor dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 3:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} data-mondaycolor='' class='slots dates {$data_resource->id} mondaycolor {$res['start']}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots tuesdaycolor dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots wed dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 4:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} data-mondaycolor='' class='slots dates {$data_resource->id} mondaycolor {$res['start']}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots tuesdaycolor dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots wed dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots thu dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 5:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} data-mondaycolor='' class='slots dates {$data_resource->id} mondaycolor {$res['start']}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots tuesdaycolor dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots wed dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots thu dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots fri dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
+                                    case 6:
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} data-mondaycolor='' class='slots dates {$data_resource->id} mondaycolor {$res['start']}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots tuesdaycolor dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots wed dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots thu dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots fri dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
+                                        if (!empty($result)) {
+                                            echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
+                                            foreach ($result as $res) {
+                                                echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
+                                            }
+                                            echo "</tr>";
+                                            foreach ($data_resources as $data_resource) {
+                                                echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
+                                                    foreach ($result as $res) {
+                                                        echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots sat dates {$data_resource->id}'></td>";
+                                                    }
+                                                echo "</tr>";
+                                            }
+                                        }
+                                    break;
                                     case 7:
                                         if($module->row['same_layout'])
                                             $result = unserialize($for_same_day->time_slot);
