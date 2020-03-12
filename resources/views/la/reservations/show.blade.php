@@ -35,51 +35,25 @@ Reservations View
                                 <button type="button" class="btn btn-primary addreservation pull-right" data-toggle="modal" data-target-id="2" data-target="#AddNewBooking">Add Reservation</button>
                             </div>
                         </div>
-                <div>
+                    <div>
                     <table id="custom-table">
                         <thead>
                             <?php
                             
-                            if(isset($_GET['slotid']) && $_GET['slotid'] !== 'undefined')
-                            {
-                                $current_slot_id = $_GET['slotid'];
-                                $for_same_day = DB::table('slot_zeros')
-                                    ->select('*')
-                                    ->where('schedule_id', $scheduleid)
-                                    ->find($current_slot_id);
-                            }
-                            elseif(isset($_GET['slotid']) && $_GET['slotid'] == 'undefined')
-                            {
-                                $for_same_day = DB::table('slot_zeros')
+                            if($module->row['same_layout']){
+                                $for_same_day = DB::table('slot_ones')
                                     ->select('*')
                                     ->where('schedule_id', $scheduleid)
                                     ->orderBy('created_at', 'desc')
-                                    ->first(); 
-                            }
-                            elseif(!isset($_GET['slodid']))
-                            {
+                                    ->first();
+                            }else{
                                 $for_same_day = DB::table('slot_zeros')
                                     ->select('*')
                                     ->where('schedule_id', $scheduleid)
                                     ->orderBy('created_at', 'desc')
                                     ->first();
                             }
-                            elseif(isset($_GET['previous']))
-                            {
-                                $for_same_day = DB::table('slot_zeros')
-                                    ->select('*')
-                                    ->where('schedule_id', $scheduleid)
-                                    ->orderBy('created_at', 'desc')
-                                    ->first();
-                            }
-                            elseif(isset($_GET['next']))
-                            {
-                                $for_same_day = DB::table('slot_zeros')
-                                    ->select('*')
-                                    ->where('schedule_id', $scheduleid)
-                                    ->orderBy('created_at', 'desc')
-                                    ->first();
-                            }                            
+                            
                             $data_resources = DB::table('resources')
                                 ->select('resources.name','resources.id')
                                 ->where('schedule', $scheduleid)
@@ -88,7 +62,10 @@ Reservations View
                             if($module->row['start_on'] == 8 && $module->row['no_of_days_visible'] > 1){
                                 switch($module->row['no_of_days_visible']){
                                     case 2:
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -99,13 +76,14 @@ Reservations View
                                                 echo "<tr data-id={$data_resource->id} class='ui-widget-content'><th>".$data_resource->name."</th>";
                                                     foreach ($result as $res) {
                                                     echo "<td data-id='' data-resourceid={$data_resource->id} data-date={$res['start']} class='slots sat dates {$data_resource->id}'></td>";
-                                                    print_r($res['end_0'].'&nbsp;'.'&nbsp;');
                                                     }
                                                 echo "</tr>";
-                                                    print_r();
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -122,7 +100,10 @@ Reservations View
                                         }
                                     break;
                                     case 3:
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -137,7 +118,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -152,7 +136,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -170,7 +157,10 @@ Reservations View
                                         }
                                     break;
                                     case 4:
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -185,7 +175,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -200,7 +193,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -215,7 +211,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_2);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
                                             foreach ($result as $res) {
@@ -232,7 +231,10 @@ Reservations View
                                         }
                                     break;
                                     case 5:
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -247,7 +249,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -262,7 +267,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -277,7 +285,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_2);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
                                             foreach ($result as $res) {
@@ -292,7 +303,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_3);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
                                             foreach ($result as $res) {
@@ -309,8 +323,11 @@ Reservations View
                                         }
                                     break;
                                     case 6:
-                                        $result = unserialize($for_same_day->time_slot_6);
-                                            if (!empty($result)) {
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
+                                        if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
                                                 echo "<td class='reslabel'>".$res['start'].'&nbsp;'."</td>";
@@ -324,7 +341,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -339,7 +359,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -354,7 +377,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_2);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
                                             foreach ($result as $res) {
@@ -369,7 +395,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_3);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
                                             foreach ($result as $res) {
@@ -384,7 +413,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_4);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
                                             foreach ($result as $res) {
@@ -401,7 +433,10 @@ Reservations View
                                         }
                                     break;
                                     case 7:
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -416,7 +451,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -431,7 +469,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -446,7 +487,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_2);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
                                             foreach ($result as $res) {
@@ -461,7 +505,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_3);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
                                             foreach ($result as $res) {
@@ -476,7 +523,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_4);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
                                             foreach ($result as $res) {
@@ -491,7 +541,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -511,7 +564,10 @@ Reservations View
                             }elseif($module->row['start_on'] == 7 && $module->row['no_of_days_visible'] > 2){
                                 switch($module->row['no_of_days_visible']){
                                     case 3:
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -526,7 +582,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -541,7 +600,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -558,7 +620,10 @@ Reservations View
                                         }
                                     break;
                                     case 4:
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -573,7 +638,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -588,7 +656,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -603,7 +674,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -620,7 +694,10 @@ Reservations View
                                         }
                                     break;
                                     case 5:
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -635,7 +712,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -650,7 +730,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -665,7 +748,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -680,7 +766,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_2);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
                                             foreach ($result as $res) {
@@ -697,7 +786,10 @@ Reservations View
                                         }
                                     break;
                                     case 6:
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -712,7 +804,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -727,7 +822,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -742,7 +840,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -757,7 +858,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_2);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
                                             foreach ($result as $res) {
@@ -772,7 +876,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_3);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
                                             foreach ($result as $res) {
@@ -789,7 +896,10 @@ Reservations View
                                         }
                                     break;
                                     case 7:
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -804,7 +914,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -819,7 +932,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -834,7 +950,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -849,7 +968,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_2);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
                                             foreach ($result as $res) {
@@ -864,7 +986,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_3);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
                                             foreach ($result as $res) {
@@ -879,7 +1004,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_4);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
                                             foreach ($result as $res) {
@@ -899,7 +1027,10 @@ Reservations View
                             }elseif($module->row['start_on'] == 6 && $module->row['no_of_days_visible'] > 3){
                                 switch($module->row['no_of_days_visible']){
                                     case 4:
-                                        $result = unserialize($for_same_day->time_slot_4);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
                                             foreach ($result as $res) {
@@ -914,7 +1045,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -929,7 +1063,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -944,7 +1081,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -961,7 +1101,10 @@ Reservations View
                                         }
                                     break;
                                     case 5:
-                                        $result = unserialize($for_same_day->time_slot_4);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
                                             foreach ($result as $res) {
@@ -976,7 +1119,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -991,7 +1137,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -1006,7 +1155,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -1021,7 +1173,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -1038,7 +1193,10 @@ Reservations View
                                         }
                                     break;
                                     case 6:
-                                        $result = unserialize($for_same_day->time_slot_4);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
                                             foreach ($result as $res) {
@@ -1053,7 +1211,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -1068,7 +1229,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -1083,7 +1247,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -1098,7 +1265,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -1113,7 +1283,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_2);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
                                             foreach ($result as $res) {
@@ -1130,7 +1303,10 @@ Reservations View
                                         }
                                     break;
                                     case 7:
-                                        $result = unserialize($for_same_day->time_slot_4);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
                                             foreach ($result as $res) {
@@ -1145,7 +1321,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -1160,7 +1339,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -1175,7 +1357,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -1190,7 +1375,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -1205,7 +1393,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_2);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
                                             foreach ($result as $res) {
@@ -1220,7 +1411,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_3);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
                                             foreach ($result as $res) {
@@ -1240,7 +1434,10 @@ Reservations View
                             }elseif($module->row['start_on'] == 5 && $module->row['no_of_days_visible'] > 4){
                                 switch($module->row['no_of_days_visible']){
                                     case 5:
-                                        $result = unserialize($for_same_day->time_slot_3);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
                                             foreach ($result as $res) {
@@ -1255,7 +1452,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_4);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
                                             foreach ($result as $res) {
@@ -1270,7 +1470,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -1285,7 +1488,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -1300,7 +1506,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -1317,7 +1526,10 @@ Reservations View
                                         }
                                     break;
                                     case 6:
-                                        $result = unserialize($for_same_day->time_slot_3);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
                                             foreach ($result as $res) {
@@ -1332,7 +1544,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_4);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
                                             foreach ($result as $res) {
@@ -1347,7 +1562,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -1362,7 +1580,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -1377,7 +1598,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -1392,7 +1616,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -1409,7 +1636,10 @@ Reservations View
                                         }
                                     break;
                                     case 7:
-                                        $result = unserialize($for_same_day->time_slot_3);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
                                             foreach ($result as $res) {
@@ -1424,7 +1654,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_4);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
                                             foreach ($result as $res) {
@@ -1439,7 +1672,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -1454,7 +1690,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -1469,7 +1708,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -1484,7 +1726,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -1499,7 +1744,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_2);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
                                             foreach ($result as $res) {
@@ -1519,7 +1767,10 @@ Reservations View
                             }elseif($module->row['start_on'] == 4 && $module->row['no_of_days_visible'] > 5){
                                 switch($module->row['no_of_days_visible']){
                                     case 6:
-                                        $result = unserialize($for_same_day->time_slot_2);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
                                             foreach ($result as $res) {
@@ -1534,7 +1785,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_3);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
                                             foreach ($result as $res) {
@@ -1549,7 +1803,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_4);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
                                             foreach ($result as $res) {
@@ -1564,7 +1821,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -1579,7 +1839,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -1594,7 +1857,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -1611,7 +1877,10 @@ Reservations View
                                         }
                                     break;
                                     case 7:
-                                        $result = unserialize($for_same_day->time_slot_2);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
                                             foreach ($result as $res) {
@@ -1626,7 +1895,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_3);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
                                             foreach ($result as $res) {
@@ -1641,7 +1913,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_4);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
                                             foreach ($result as $res) {
@@ -1656,7 +1931,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -1671,7 +1949,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -1686,7 +1967,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -1701,7 +1985,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -1721,7 +2008,10 @@ Reservations View
                             }elseif($module->row['start_on'] == 3 && $module->row['no_of_days_visible'] > 6){
                                 switch($module->row['no_of_days_visible']){
                                     case 7:
-                                        $result = unserialize($for_same_day->time_slot_1);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_1);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                             foreach ($result as $res) {
@@ -1736,7 +2026,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_2);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_2);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
                                             foreach ($result as $res) {
@@ -1751,7 +2044,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_3);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_3);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
                                             foreach ($result as $res) {
@@ -1766,7 +2062,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_4);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_4);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
                                             foreach ($result as $res) {
@@ -1781,7 +2080,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_5);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_5);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                             foreach ($result as $res) {
@@ -1796,7 +2098,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_6);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_6);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                             foreach ($result as $res) {
@@ -1811,7 +2116,10 @@ Reservations View
                                                 echo "</tr>";
                                             }
                                         }
-                                        $result = unserialize($for_same_day->time_slot_0);
+                                        if($module->row['same_layout'])
+                                            $result = unserialize($for_same_day->time_slot);
+                                        else
+                                            $result = unserialize($for_same_day->time_slot_0);
                                         if (!empty($result)) {
                                             echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                             foreach ($result as $res) {
@@ -1830,7 +2138,10 @@ Reservations View
                                     break;
                                 }
                             }elseif(isset($for_same_day)){
-                                $result = unserialize($for_same_day->time_slot_0);
+                                if($module->row['same_layout'])
+                                    $result = unserialize($for_same_day->time_slot);
+                                else
+                                    $result = unserialize($for_same_day->time_slot_0);
                                 if (!empty($result)) {
                                     echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='sunday' data-sun=6></th> ";
                                     foreach ($result as $res) {
@@ -1845,7 +2156,10 @@ Reservations View
                                         echo "</tr>";
                                     }
                                 }
-                                $result = unserialize($for_same_day->time_slot_1);
+                                if($module->row['same_layout'])
+                                    $result = unserialize($for_same_day->time_slot);
+                                else
+                                    $result = unserialize($for_same_day->time_slot_1);
                                 if (!empty($result)) {
                                     echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='monday' data-day=0></th> ";
                                     foreach ($result as $res) {
@@ -1860,7 +2174,10 @@ Reservations View
                                         echo "</tr>";
                                     }
                                 }
-                                $result = unserialize($for_same_day->time_slot_2);
+                                if($module->row['same_layout'])
+                                    $result = unserialize($for_same_day->time_slot);
+                                else
+                                    $result = unserialize($for_same_day->time_slot_2);
                                 if (!empty($result)) {
                                     echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='tuesday' data-tue=1></th> ";
                                     foreach ($result as $res) {
@@ -1875,7 +2192,10 @@ Reservations View
                                         echo "</tr>";
                                     }
                                 }
-                                $result = unserialize($for_same_day->time_slot_3);
+                                if($module->row['same_layout'])
+                                    $result = unserialize($for_same_day->time_slot);
+                                else
+                                    $result = unserialize($for_same_day->time_slot_3);
                                 if (!empty($result)) {
                                     echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='wednesday' data-wed=2></th> ";
                                     foreach ($result as $res) {
@@ -1890,7 +2210,10 @@ Reservations View
                                         echo "</tr>";
                                     }
                                 }
-                                $result = unserialize($for_same_day->time_slot_4);
+                                if($module->row['same_layout'])
+                                    $result = unserialize($for_same_day->time_slot);
+                                else
+                                    $result = unserialize($for_same_day->time_slot_4);
                                 if (!empty($result)) {
                                     echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='thursday' data-thu=3></th> ";
                                     foreach ($result as $res) {
@@ -1905,7 +2228,10 @@ Reservations View
                                         echo "</tr>";
                                     }
                                 }
-                                $result = unserialize($for_same_day->time_slot_5);
+                                if($module->row['same_layout'])
+                                    $result = unserialize($for_same_day->time_slot);
+                                else
+                                    $result = unserialize($for_same_day->time_slot_5);
                                 if (!empty($result)) {
                                     echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='friday' data-fri=4></th> ";
                                     foreach ($result as $res) {
@@ -1920,7 +2246,10 @@ Reservations View
                                         echo "</tr>";
                                     }
                                 }
-                                $result = unserialize($for_same_day->time_slot_6);
+                                if($module->row['same_layout'])
+                                    $result = unserialize($for_same_day->time_slot);
+                                else
+                                    $result = unserialize($for_same_day->time_slot_6);
                                 if (!empty($result)) {
                                     echo "<tr class='ui-widget-content'><th class='resdate days px-5' id='saturday' data-sat=5></th> ";
                                     foreach ($result as $res) {
@@ -1938,7 +2267,7 @@ Reservations View
                             }
                         ?>
                         </thead> 
-                    </table> 
+                    </table>
                 </div>
 
                 <!-- hidden div -->
@@ -1996,7 +2325,7 @@ Reservations View
                                     <label for="inputEmail4">Begin <span style="color: red;">*</span></label>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="date" id="begindate" name="begin_date" required class="form-control" value=""  onmouseout="getTheDays()"> 
+                                            <input type="date" id="begindate" name="begin_date" required class="form-control" value=""  onmouseout="getTheDays({{$module->row['same_layout']}})"> 
                                         </div>
                                         <div class="col-md-6">
                                             <select name="begin_time" id="begintime" class="form-control"></select>
@@ -2007,7 +2336,7 @@ Reservations View
                                     <label for="inputEmail4">End <span style="color: red;">*</span></label>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <input type="date" id="enddate" name="end_date" class="form-control" value="" onmouseout="getTheEndDays()">
+                                            <input type="date" id="enddate" name="end_date" class="form-control" value="" onmouseout="getTheEndDays({{$module->row['same_layout']}})">
                                         </div>
                                         <div class="col-md-6">
                                             <select name="end_time" id="end_time" class="form-control"></select>
@@ -2171,7 +2500,7 @@ Reservations View
 </script>
 <!-------------------------time binding in new reservations ----------------------------->
 <script type="text/javascript">
-    function getTheDays() {
+    function getTheDays(same_layout) {
         var dategtc = new Date($('#begindate').val());
         var day=dategtc.getDay();
 
@@ -2182,7 +2511,7 @@ Reservations View
        
         $.ajax({
             type: "POST",
-            data: {"_token": "{{ csrf_token() }}","day": day,"scheduleidone": scheduleidone},
+            data: {"_token": "{{ csrf_token() }}","day": day,"scheduleidone": scheduleidone, "same_layout" : same_layout},
             url: "{{ url(config('laraadmin.adminRoute') . '/getstartendtime') }}",
             success: function(response)
             {
@@ -2233,7 +2562,7 @@ Reservations View
         });
     }
         
-    function getTheEndDays() {
+    function getTheEndDays(same_layout) {
         var enddate = new Date($('#enddate').val());
         var day = enddate.getDay();
 
@@ -2242,7 +2571,7 @@ Reservations View
         
         $.ajax({
             type: "POST",
-            data: {"_token": "{{ csrf_token() }}","day": day,"scheduleidone": scheduleidone},
+            data: {"_token": "{{ csrf_token() }}","day": day,"scheduleidone": scheduleidone, "same_layout" : same_layout},
             url: "{{ url(config('laraadmin.adminRoute') . '/getstartendtime') }}",
             success: function(response)
             {
@@ -2620,10 +2949,9 @@ function colorBinding(){
 
             var dt_slot = slot_data.toString().substring(0, 12);
             var res_slot = slot_data.toString().substring(12);
-
-            if(current_date_time > date_time){
-                $('[data-id="'+slot_data+'"]').css('background-color', '#CF9D9B');
-            }
+            // if(current_date_time > date_time){
+            //     $('[data-id="'+slot_data+'"]').css('background-color', '#CF9D9B');
+            // }
             if(dt_v <= dt_slot && dt_val > dt_slot && res_v == res_slot && res_val == res_slot)
             {
                 $('[data-id="'+slot_data+'"]').css('background-color', '');

@@ -80,7 +80,6 @@ class ReservationsController extends Controller
     
     public function store(Request $request)
     {
-        
         $reservation = Reservation::create([
             'resource_id' => $request['resource'],
             'title' => $request['title'],
@@ -116,7 +115,7 @@ class ReservationsController extends Controller
             Reservation_accessory::create($input);
 
         }        
-         Redirect::route('admin.reservations.show',array('id' => $request->schedule_id));
+        return redirect()->route('admin.reservations.show', ['id' => $request->schedule_id]);
     }
     
 
@@ -126,36 +125,48 @@ class ReservationsController extends Controller
        
         $sid = $request->scheduleidone;
         $day = $request->day;
-        $for_same_day= DB::table('slot_zeros')
+        $same_layout = $request->same_layout;
+
+        if(!$same_layout){
+            $for_same_day= DB::table('slot_zeros')
                         ->select('*')
                         ->where('schedule_id',$sid)
                         ->orderBy('created_at', 'desc')
                         ->first();
         
-        switch ($day) {
-            case "0":
-                $betimes=($for_same_day->time_slot_0);
-                break;
-            case "1":
-                $betimes=($for_same_day->time_slot_1);
-                break;
-            case "2":
-                $betimes=($for_same_day->time_slot_2);
-                break;
-            case "3":
-                $betimes=($for_same_day->time_slot_3);
-                break;
-            case "4":
-                $betimes=($for_same_day->time_slot_4);
-                break;
-            case "5":
-                $betimes=($for_same_day->time_slot_5);
-                break;
-            case "6":
-                $betimes=($for_same_day->time_slot_6);
-                break;
-            default:
-                echo"null";
+            switch ($day) {
+                case "0":
+                    $betimes=($for_same_day->time_slot_0);
+                    break;
+                case "1":
+                    $betimes=($for_same_day->time_slot_1);
+                    break;
+                case "2":
+                    $betimes=($for_same_day->time_slot_2);
+                    break;
+                case "3":
+                    $betimes=($for_same_day->time_slot_3);
+                    break;
+                case "4":
+                    $betimes=($for_same_day->time_slot_4);
+                    break;
+                case "5":
+                    $betimes=($for_same_day->time_slot_5);
+                    break;
+                case "6":
+                    $betimes=($for_same_day->time_slot_6);
+                    break;
+                default:
+                    echo"null";
+            }
+        }else{
+            $for_same_day= DB::table('slot_ones')
+                        ->select('*')
+                        ->where('schedule_id',$sid)
+                        ->orderBy('created_at', 'desc')
+                        ->first();
+
+            $betimes=($for_same_day->time_slot);
         }
         return response()->json([
             'betimes' => unserialize($betimes),
@@ -305,7 +316,7 @@ class ReservationsController extends Controller
                 ]);
             }
         } else {
-            return redirect(config('laraadmin.adminRoute') . "/");
+            return redirect()->route('admin.reservations.show', ['id' => $id]);
         }
     }
 
@@ -375,7 +386,7 @@ class ReservationsController extends Controller
                 ]);
             }
         } else {
-            return redirect(config('laraadmin.adminRoute') . "/");
+            return redirect()->route('admin.reservations.show', ['id' => $id]);
         }
     }
     
