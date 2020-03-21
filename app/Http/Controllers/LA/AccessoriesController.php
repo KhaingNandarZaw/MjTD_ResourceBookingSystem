@@ -98,7 +98,7 @@ class AccessoriesController extends Controller
                 $module = Module::get('Accessories');
                 $module->row = $accessory;
                 
-                return view('la.accessories.edit', [
+                return view('la.accessories.show', [
                     'module' => $module,
                     'view_col' => $module->view_col,
                     'no_header' => true,
@@ -217,9 +217,6 @@ class AccessoriesController extends Controller
                 if($col == $module->view_col) {
                     $data->data[$i][$j] = '<a href="' . url(config('laraadmin.adminRoute') . '/accessories/' . $data->data[$i][0]) . '">' . $data->data[$i][$j] . '</a>';
                 }
-                // else if($col == "author") {
-                //    $data->data[$i][$j];
-                // }
             }
             
             if($this->show_action) {

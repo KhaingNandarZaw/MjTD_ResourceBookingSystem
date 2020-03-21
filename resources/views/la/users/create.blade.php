@@ -4,6 +4,9 @@
 @section("section_url", url(config('laraadmin.adminRoute') . '/users'))
 @section("sub_section", "Create") 
 
+@section("contentheader_title", "Users")
+@section("contentheader_description", "Create New User")
+
 @section("main-content")
 @if (count($errors) > 0)
     <div class="alert alert-danger">
@@ -20,12 +23,11 @@
         User Entry
     </div>    
     <div class="box-body">
-    	{!! Form::open(['action' => 'LA\UsersController@store', 'id' => 'user-add-form']) !!}
+        {!! Form::open(['action' => 'LA\UsersController@store', 'id' => 'user-add-form']) !!}
             <div class="box-body">
                         @la_input($module, 'name')
                         @la_input($module, 'email')
                         @la_input($module, 'designation')
-                        @la_input($module, 'department')
                         @la_input($module, 'gender')
                         @la_input($module, 'date_birth')
                         @la_input($module, 'mobile')
@@ -36,7 +38,7 @@
                         <?php $roles = App\Role::all(); ?>
                         @foreach($roles as $role)
                             @if($role->id != 1)
-                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                <option value="{{ $role->id }}">{{ $role->name }}</option>  
                             @endif
                         @endforeach
                     </select>

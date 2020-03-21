@@ -96,7 +96,8 @@ class ReservationsController extends Controller
             'reservations_id' =>$reservation['id']
         ]);
 
-        foreach($request->input('user_id') as $user)
+        if($request->input('user_id')){
+            foreach($request->input('user_id') as $user)
             {
                 $reservations_user=Reservations_user::create([
             
@@ -104,6 +105,7 @@ class ReservationsController extends Controller
                     'reservations_id' =>$reservation['id']
                 ]);
             }
+        }
         $accessories_id = $request->accessories_id;  
         $quantity = $request->quantity;       
 

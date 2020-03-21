@@ -1,9 +1,8 @@
 @extends('la.layouts.app')
 
 @section('htmlheader_title')
-    Booking List View
+    Booking Detail
 @endsection
-
 
 @section('main-content')
 <div id="page-content" class="profile2">
@@ -21,46 +20,35 @@
                         <h4>General Info</h4>
                     </div>
                     <div class="panel-body">
-                        
-                        <table class="table">
-                            
+                        <div class="form-group">
+                            <label for="name" class="col-md-4 col-sm-6 col-xs-6">Title :</label>
+                            <div class="col-md-8 col-sm-6 col-xs-6 fvalue">{{$bookinglist->title}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-md-4 col-sm-6 col-xs-6">Description :</label>
+                            <div class="col-md-8 col-sm-6 col-xs-6 fvalue">{{$bookinglist->description}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-md-4 col-sm-6 col-xs-6">Resource :</label>
+                            <div class="col-md-8 col-sm-6 col-xs-6 fvalue">{{$bookinglist->name}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-md-4 col-sm-6 col-xs-6">Booking Date :</label>
+                            <div class="col-md-8 col-sm-6 col-xs-6 fvalue">{{$bookinglist->begin_date}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-md-4 col-sm-6 col-xs-6">Booking Time :</label>
+                            <div class="col-md-8 col-sm-6 col-xs-6 fvalue">{{$bookinglist->begin_time}} - {{$bookinglist->end_time}}</div>
+                        </div>
+                        <table class="table table-striped table-border">
+                            <thead>
+                                <tr>
+                                    <th class="col-sm-4">Participant Users</th>
+                                    <th class="col-sm-4">Invitees</th>
+                                    <th class="col-sm-4" colspan="2">Accessories List</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">Title</th>
-                                    <th>:</th>
-                                    <td>{{$bookinglist->title}}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Description</th>
-                                    <th>:</th>
-                                    <td>{{$bookinglist->description}}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Begin Date</th>
-                                    <th>:</th>
-                                    <td>{{$bookinglist->begin_date}}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Booking Time</th>
-                                    <th>:</th>
-                                    <td>{{$bookinglist->begin_time}}-{{$bookinglist->end_time}}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">End Date</th>
-                                    <th>:</th>
-                                    <td>{{$bookinglist->end_date}}</td>
-                                </tr>
-                                
-                                <tr>
-                                    <th scope="row">Resource</th>
-                                    <th>:</th>
-                                    <td>{{$resource->name}}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Participant Users</th>
-                                    <th scope="row">Invitees</th>
-                                    <th scope="row">Accessories List</th>
-                                </tr>
                                 <tr>
                                     <td>
                                         @foreach($participants_list as $participants_lists)
@@ -70,16 +58,17 @@
                                     <td>
                                         {{$invitees->email}}
                                     </td>
+                                    @foreach($accessories_list as $accessories_lists)
                                     <td>
-                                        @foreach($accessories_list as $accessories_lists)
                                         {{$accessories_lists->name}}<br>
-                                        @endforeach
                                     </td>
+                                    <td>
+                                        {{$accessories_lists->quantity}}<br>
+                                    </td>
+                                    @endforeach
                                 </tr>                                
                             </tbody>
-                            </table>
-                        
-                        
+                        </table>
                     </div>
                 </div>
             </div>

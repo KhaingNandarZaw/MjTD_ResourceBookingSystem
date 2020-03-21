@@ -41,6 +41,17 @@ class CreateAccessoriesTable extends Migration
                 "maxlength" => 255,
                 "required" => true,
                 "listing_col" => true
+            ], [
+                "colname" => "resources",
+                "label" => "Resources",
+                "field_type" => "Multiselect",
+                "unique" => false,
+                "defaultvalue" => "",
+                "minlength" => 0,
+                "maxlength" => 0,
+                "required" => true,
+                "listing_col" => true,
+                "popup_vals" => "@resources",
             ]
         ]);
         

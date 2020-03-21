@@ -1,6 +1,6 @@
 @extends("la.layouts.app")
 
-@section("contentheader_title", "")
+@section("contentheader_title", "Booking Lists")
 @section("contentheader_description", "")
 @section("section", "Booking")
 @section("sub_section", "Listing")
@@ -8,24 +8,10 @@
 
 @section("main-content")
 
-
-
-<div class="box box-green">
-    <div class="box-header with-border">
-        Booking List
-        
-    </div>    
+<div class="box box-green">  
     <div class="box-body">
-    {!! Form::open(['action' => 'BookinglistController@task_checking', 'method' => 'POST']) !!}
+    {!! Form::open(['action' => 'BookinglistController@bookinglist_filter', 'method' => 'POST']) !!}
         <div class="row form-group">
-            <div class="col-sm-2">
-                <label>From Date</label>
-                <div class="input-group date"><input class="form-control input-sm" placeholder="Enter From Date" data-rule-minlength="0" id="from_date" name="from_date" type="text" value="{{$from_date}}"><span class="input-group-addon input_dt"><span class="fa fa-calendar"></span></span></div>
-            </div>
-            <div class="col-sm-2">
-                <label>To Date</label>
-                <div class="input-group date"><input class="form-control input-sm" placeholder="Enter To Date" data-rule-minlength="0" id="to_date" name="to_date" type="text" value="{{$to_date}}"><span class="input-group-addon input_dt"><span class="fa fa-calendar"></span></span></div>
-            </div>
             <div class="col-sm-2">
                 <label>Resource</label>
                 <select class="form-control input-sm" data-placeholder="Select User" rel="select2" name="resourcename">
@@ -34,6 +20,14 @@
                         <option value="{{$resource->id}}">{{$resource->name}}</option>
                     @endforeach
                 </select>
+            </div>
+            <div class="col-sm-2">
+                <label>From Date</label>
+                <div class="input-group date"><input class="form-control input-sm" placeholder="Enter From Date" data-rule-minlength="0" id="from_date" name="from_date" type="text" value="{{$from_date}}"><span class="input-group-addon input_dt"><span class="fa fa-calendar"></span></span></div>
+            </div>
+            <div class="col-sm-2">
+                <label>To Date</label>
+                <div class="input-group date"><input class="form-control input-sm" placeholder="Enter To Date" data-rule-minlength="0" id="to_date" name="to_date" type="text" value="{{$to_date}}"><span class="input-group-addon input_dt"><span class="fa fa-calendar"></span></span></div>
             </div>
             <div class="col-md-1" style="margin-top:25px;">
                 {{ Form::button('<i class="fa fa-search"> 
@@ -44,40 +38,33 @@
         </div>
     {!! Form::close() !!}
 
-
-
         <table id="example1" class="table table-bordered table-striped" data-form="deleteFormusers">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Begin Date</th>
-            <th>Begin Time</th>
-            <th>End Date</th>
-            <th>End Time</th>
-            <th>User Name</th>
-            <th>Resource</th>
-        </tr>
-        
-        @foreach($results as $all_bookinglist)
-        <tr>
-                <td>{{$all_bookinglist['id']}}</td>
-                <td><a href="{{route('admin.bookinglist.show',$all_bookinglist['id'])}}">{{$all_bookinglist['title']}}</a></td>
-                <td>{{$all_bookinglist['begin_date']}}</td>
-                <td>{{$all_bookinglist['begin_time']}}</td>
-                <td>{{$all_bookinglist['end_date']}}</td>
-                <td>{{$all_bookinglist['end_time']}}</td>
-                <td>{{$all_bookinglist['username']}}</td>
-                <td>{{$all_bookinglist['resourcename']}}</td>
-        </tr>
-        @endforeach
-
-       
-        
-        </thead>
-        <tbody>
-            
-        </tbody>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Resource</th>
+                    <th>Title</th>
+                    <th>Begin Date</th>
+                    <th>Begin Time</th>
+                    <th>End Date</th>
+                    <th>End Time</th>
+                    <th>Reserved By</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($results as $all_bookinglist)
+                <tr>
+                    <td>{{$all_bookinglist['id']}}</td>
+                    <td><a href="{{route('admin.bookinglist.show',$all_bookinglist['id'])}}">{{$all_bookinglist['resourcename']}}</a></td>
+                    <td><a href="{{route('admin.bookinglist.show',$all_bookinglist['id'])}}">{{$all_bookinglist['title']}}</a></td>
+                    <td>{{$all_bookinglist['begin_date']}}</td>
+                    <td>{{$all_bookinglist['begin_time']}}</td>
+                    <td>{{$all_bookinglist['end_date']}}</td>
+                    <td>{{$all_bookinglist['end_time']}}</td>
+                    <td>{{$all_bookinglist['username']}}</td>
+                </tr>
+            @endforeach
+            </tbody>
         </table>
     </div>
 </div>
@@ -100,17 +87,9 @@ $(function () {
             $form.submit();
         });
     });
-    // $("#example1").DataTable({
-    //     processing: true,
-    //     serverSide: true,
-    //     ajax: "{{ url(config('laraadmin.adminRoute') . '/user_dt_ajax') }}",
-    //     language: {
-    //         lengthMenu: "_MENU_",
-    //         search: "_INPUT_",
-    //         searchPlaceholder: "Search"
-    //     },
-        
-    // });
+    $("#example1").DataTable({
+
+    });
     
 });
 </script>

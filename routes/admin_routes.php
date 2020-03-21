@@ -3,8 +3,10 @@
 use Dwij\Laraadmin\Helpers\LAHelper;
 
 /* ================== Homepage ================== */
-Route::get('/', 'HomeController@index');
+Route::get('/admin', 'HomeController@index');
 Route::auth();
+
+Route::post('/doLogin', 'HomeController@doLogin');
 
 /* ================== Access Uploaded Files ================== */
 Route::get('files/{hash}/{name}', 'LA\UploadsController@get_file');
@@ -128,6 +130,6 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
 
 	/* ================== BookingList ================== */
 	Route::resource(config('laraadmin.adminRoute') . '/bookinglist', 'BookinglistController');
-	Route::match(['get', 'post'], config('laraadmin.adminRoute') . '/bookinglist', 'BookinglistController@task_checking');
+	Route::match(['get', 'post'], config('laraadmin.adminRoute') . '/bookinglist', 'BookinglistController@bookinglist_filter');
 	
 });

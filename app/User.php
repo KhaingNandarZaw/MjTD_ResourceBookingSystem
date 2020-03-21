@@ -9,6 +9,7 @@
 
 namespace App;
 
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -21,7 +22,7 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Authenticatable implements AuthorizableContract, CanResetPasswordContract
 {
-    use Notifiable;
+    use HasApiTokens, Notifiable;
     use CanResetPassword;
     // use SoftDeletes;
     use EntrustUserTrait;

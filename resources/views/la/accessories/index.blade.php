@@ -8,7 +8,7 @@
 
 @section("headerElems")
 @la_access("Accessories", "create")
-    <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#AddModal">Add Accessory</button>
+    <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#AddModal"><i class="fa fa-plus"> Add New Accessory</i></button>
 @endla_access
 @endsection
 
@@ -24,12 +24,12 @@
     </div>
 @endif
 
-<div class="box box-info">
+<div class="box">
     <!--<div class="box-header"></div>-->
     <div class="box-body">
-        <table id="example1" class="table table-striped">
+        <table id="example1" class="table table-striped table-bordered">
         <thead>
-        <tr class="info">
+        <tr>
             @foreach( $listing_cols as $col )
             <th>{{ $module->fields[$col]['label'] or ucfirst($col) }}</th>
             @endforeach
@@ -51,7 +51,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Add Accessory</h4>
+                <h4 class="modal-title" id="myModalLabel">Add New Accessory</h4>
             </div>
             {!! Form::open(['action' => 'LA\AccessoriesController@store', 'id' => 'accessory-add-form']) !!}
             <div class="modal-body">

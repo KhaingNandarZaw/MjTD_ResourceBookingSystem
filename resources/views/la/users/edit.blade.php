@@ -35,22 +35,17 @@
             @la_input($module, 'date_birth')
             @la_input($module, 'gender')
             @la_input($module, 'mobile')
-            @la_input($module, 'department')
             @la_input($module, 'address')
 
             <div class="form-group">
                 <label for="role">Role<span style="color: red;"> * </span>:</label>
                 <select class="form-control" required="1" data-placeholder="Select Role" rel="select2" name="role">
-                    <?php $roles = App\Role::all(); ?>
-                    @foreach($roles as $role)
-                        @if($role->id != 1 || Entrust::hasRole("SUPER_ADMIN"))
-                            @if($user->hasRole($role->name))
-                                <option value="{{ $role->id }}" selected>{{ $role->name }}</option>
-                            @else
-                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                <?php $roles = App\Role::all(); ?>
+                        @foreach($roles as $role)
+                            @if($role->id != 1)
+                                <option value="{{ $role->id }}">{{ $role->name }}</option>  
                             @endif
-                        @endif
-                    @endforeach
+                        @endforeach
                 </select>
             </div>
             <div class="form-group">

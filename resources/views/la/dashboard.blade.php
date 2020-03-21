@@ -9,33 +9,32 @@
         <section class="content">
           <!-- Main row -->
           <div class="row">
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-6">
               <div class="box">
                     <div class="box-header">
-                        <h4 class="box-title">Your coming reservations</h4>
+                        <h4 class="box-title">Upcoming reservations</h4>
                     </div>
                     <div class="box-body">
-                    @foreach($bookinglist as $bookinglists)
-
-                      <ul class="products-list product-list-in-box">
-                        <li class="item">
-                          <div class="product-img">
-                            <span class="fa fa-gift" style="font-size:25px;"></span>
-                          </div>
-                          
-                          <div class="product-info">
-                            <a href="{{route('admin.bookinglist.show',$bookinglists->id)}}" class="product-title">{{$bookinglists->title}}
-                              <span class="label label-warning pull-right">{{$bookinglists->begin_date}}</span></a>
-                            <span class="product-description">
-                                 {{$bookinglists->begin_time}}-{{$bookinglists->end_time}}
-                                </span>
-                          </div>
-                          
-                        </li>
-                       
-                      </ul>
-                    @endforeach
-                   
+                      @if(count($bookinglist) <= 0)
+                      <span>You have no upcoming reservations.</span>
+                      @endif
+                      @foreach($bookinglist as $bookinglists)
+                        <ul class="products-list product-list-in-box">
+                          <li class="item">
+                            <div class="product-img">
+                              <span class="fa fa-gift" style="font-size:25px;"></span>
+                            </div>
+                            
+                            <div class="product-info">
+                              <a href="{{route('admin.bookinglist.show',$bookinglists->id)}}" class="product-title">{{$bookinglists->title}}
+                                <span class="label label-warning pull-right">{{$bookinglists->begin_date}}</span></a>
+                              <span class="product-description">
+                                   {{$bookinglists->begin_time}}-{{$bookinglists->end_time}}
+                                  </span>
+                            </div>
+                          </li>
+                        </ul>
+                      @endforeach
                     </div>
               </div>
             </div>

@@ -9,7 +9,7 @@
 <div id="page-content" class="profile2">
     
     <ul data-toggle="ajax-tab" class="nav nav-tabs profile" role="tablist">
-        <li class=""><a href="{{ url(config('laraadmin.adminRoute') . '/resources') }}" data-toggle="tooltip" data-placement="right" title="Back to Resources"><i class="fa fa-chevron-left"></i></a></li>
+        <li class=""><a href="javascript:history.back()" data-toggle="tooltip" data-placement="right" title="Back to Resources"><i class="fa fa-chevron-left"></i></a></li>
         <li class="active"><a role="tab" data-toggle="tab" class="active" href="#tab-general-info" data-target="#tab-info"><i class="fa fa-bars"></i> General Info</a></li>
     </ul>
 

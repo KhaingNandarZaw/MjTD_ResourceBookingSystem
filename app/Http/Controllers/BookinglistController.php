@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Reservation;
 use DB;
 use Auth;
-use Carbon;
+use Carbon\Carbon;
 use Module;
 use Zizaco\Entrust\EntrustFacade as Entrust;
 use App\Models\User;
@@ -93,13 +93,14 @@ class BookinglistController extends Controller
                     ->where('reservations_id',$id)
                     ->first();
 
-        $sql = "SELECT accessories.* FROM accessories left join reservation_accessories on reservation_accessories.accessories_id = accessories.id
-        where reservation_accessories.reservations_id =$id";
+        $sql = "SELECT accessories.*, reservation_accessories.quantity FROM accessories left join reservation_accessories on reservation_accessories.accessories_id = accessories.id where reservation_accessories.reservations_id = $id";
         $query = DB::table(DB::raw("($sql) as catch"));
         $accessories_list = $query->get();
          
-        return view('la.bookinglist.show',compact('bookinglist','resource','participants_list','invitees','accessories_list'
-    ));
+        return view('la.bookinglist.show', [
+            'no_header' => true,
+            'no_padding' => "no-padding"
+        ], compact('bookinglist','resource','participants_list','invitees','accessories_list'));
     }
 
     /**
@@ -137,7 +138,7 @@ class BookinglistController extends Controller
     }
 
 
-    public function task_checking(Request $request)
+    public function bookinglist_filter(Request $request)
     {
         $query = "";
         $today = date("Y-m-d");
