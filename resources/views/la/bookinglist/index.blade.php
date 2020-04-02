@@ -48,6 +48,7 @@
                     <th>Begin Time</th>
                     <th>End Date</th>
                     <th>End Time</th>
+                    <th>Number Of Participant</th>
                     <th>Reserved By</th>
                 </tr>
             </thead>
@@ -61,6 +62,7 @@
                     <td>{{$all_bookinglist['begin_time']}}</td>
                     <td>{{$all_bookinglist['end_date']}}</td>
                     <td>{{$all_bookinglist['end_time']}}</td>
+                    <td>{{$all_bookinglist['no_of_participant']}}</td>
                     <td>{{$all_bookinglist['username']}}</td>
                 </tr>
             @endforeach

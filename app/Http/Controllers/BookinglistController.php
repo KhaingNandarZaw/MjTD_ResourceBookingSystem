@@ -38,7 +38,9 @@ class BookinglistController extends Controller
             $newarr['begin_time']=$data->begin_time;
             $newarr['end_date']=$data->end_date;
             $newarr['end_time']=$data->end_time;
+            $newarr['no_of_participant']=$data->no_of_participant;
             $newarr['username']=$user->name;
+            $newarr['no_of_participant']=$data->no_of_participant;
             $results[]=$newarr;
             }
             return view('la.bookinglist.index')->with('results',$results);
@@ -150,7 +152,7 @@ class BookinglistController extends Controller
         $resources=Resource::all();
         
         $query = DB::table('resources')
-            ->select('resources.id','name','title','begin_date','end_date','begin_time','end_time')
+            ->select('resources.id','name','title','begin_date','end_date','begin_time','end_time','no_of_participant')
             ->leftJoin('reservations', 'resources.id', '=', 'reservations.resource_id');
         
         $from_date = Carbon::now()->startOfMonth()->toDateString();
@@ -202,6 +204,7 @@ class BookinglistController extends Controller
             $newarr['begin_time']=$data->begin_time;
             $newarr['end_date']=$data->end_date;
             $newarr['end_time']=$data->end_time;
+            $newarr['no_of_participant']=$data->no_of_participant;
             $newarr['username']=$user->name;
             $results[]=$newarr;
             }

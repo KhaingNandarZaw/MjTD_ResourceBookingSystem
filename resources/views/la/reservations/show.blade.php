@@ -39,7 +39,7 @@ Reservations View
                     <table id="custom-table">
                         <thead>
                             <?php
-                            
+
                             if($module->row['same_layout']){
                                 $for_same_day = DB::table('slot_ones')
                                     ->select('*')
@@ -53,6 +53,7 @@ Reservations View
                                     ->orderBy('created_at', 'desc')
                                     ->first();
                             }
+                            
                             
                             $data_resources = DB::table('resources')
                                 ->select('resources.name','resources.id')
@@ -3355,19 +3356,23 @@ Reservations View
                 <div id="ok" class="container-fluid">
                     <form action="{{route('admin.reservations.store')}}" method="post" enctype="multipart/form-data" id="new_reservation_form">
                         <meta name="csrf-token" content="{{ csrf_token() }}" />    
-                        <input type="hidden" value="{{ Auth::user()->id }}" name="owner_id">
-                        <input type="hidden" id="selected_booking_id" name="schedule_id" value = "{{$scheduleid}}" class="form-control input-sm" >
-                        <input type="hidden" name="week" value="{{json_encode($week)}}">
-                        <div class="row">
-                            <div class="form-group col-sm-12">
-                                <label class="control-label">Resource : </label>                
-                                <select class="js-example-basic-multiple form-control input-sm" onchange="getAccessoriesByResource(this.value)" name="resource" required>
-                                    @foreach($resource as $resources)
-                                        <option value="{{$resources->id}}">
-                                            {{$resources->name}}
-                                        </option>
-                                    @endforeach
-                                </select>
+                            <input type="hidden" value="{{ Auth::user()->id }}" name="owner_id">
+                            <input type="hidden" id="selected_booking_id" name="schedule_id" value = "{{$scheduleid}}" class="form-control input-sm" >
+                            <input type="hidden" name="week" value="{{json_encode($week)}}">
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <label class="control-label">Resource</label>                
+                                    <select class="js-example-basic-multiple form-control" name="resource">
+                                        @foreach($resource as $resources)
+                                            <option value="{{$resources->id}}">
+                                                {{$resources->name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of maximum people
+                                                ({{$resources->no_of_maximum_people}})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                
+                                </div>
+                                
                             </div>
                         </div>
                         <div class="row form-group">
@@ -3466,16 +3471,28 @@ Reservations View
                                     </div>
                                 </div>
                             </div>
-                            
-                            <input type="hidden" name="count1" id="count1" value="{{ $i }}"> 
-                        </div>
-                        <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />
-                        <div class="row col-sm-12">
-                            <div class="form-group col-sm-6">
-                                <button type="submit" class="btn btn-sm btn-primary pull-right" >Create</button>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                <label>Number of Participant</label>
+                                <input type="number" class="form-control" name="no_of_participant">     
+                                </div>  
+                                <div class="form-group col-md-6">
+                                    
+                                    
+                                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#cart">Accessories (<span class="total-count"></span>)</button>
+                                        <a href="#" class="clear-cart btn btn-danger">Clear</a>
+                                    
                             </div>
-                            <div class="form-group col-sm-6">
-                                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+
+
+
+                            <!-- Main -->
+                            
+
+                            <div>
+                                <table class="show-cart table table-hover table-bordered"></table>
                             </div>
                         </div>
                     </form>  

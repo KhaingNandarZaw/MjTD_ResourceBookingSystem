@@ -89,6 +89,7 @@ class ReservationsController extends Controller
             'begin_time' => $request['begin_time'],
             'end_date' => $request['end_date'],
             'end_time' => $request['end_time'],
+            'no_of_participant' => $request['no_of_participant']
         ]);
        
         $reservations_invitees=Reservations_invitee::create([
@@ -116,7 +117,8 @@ class ReservationsController extends Controller
             $input['reservations_id']=$reservation['id'];
             Reservation_accessory::create($input);
 
-        }        
+        }     
+           
         return redirect()->route('admin.reservations.show', ['id' => $request->schedule_id]);
     }
 

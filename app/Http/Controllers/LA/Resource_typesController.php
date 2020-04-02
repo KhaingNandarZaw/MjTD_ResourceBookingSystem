@@ -20,29 +20,25 @@ use Collective\Html\FormFacade as Form;
 use Dwij\Laraadmin\Models\Module;
 use Dwij\Laraadmin\Models\ModuleFields;
 
-use App\Models\Resource;
-use App\Models\User;
-use App\Models\Group;
-use App\Models\Resource_User;
-use App\Models\Resource_Group;
+use App\Models\Resource_type;
 
-class ResourcesController extends Controller
+class Resource_typesController extends Controller
 {
     public $show_action = true;
     
     /**
-     * Display a listing of the Resources.
+     * Display a listing of the Resource_types.
      *
      * @return mixed
      */
     public function index()
     {
-        $module = Module::get('Resources');
+        $module = Module::get('Resource_types');
         
         if(Module::hasAccess($module->id)) {
-            return View('la.resources.index', [
+            return View('la.resource_types.index', [
                 'show_actions' => $this->show_action,
-                'listing_cols' => Module::getListingColumns('Resources'),
+                'listing_cols' => Module::getListingColumns('Resource_types'),
                 'module' => $module
             ]);
         } else {
@@ -51,66 +47,36 @@ class ResourcesController extends Controller
     }
     
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new resource_type.
      *
      * @return mixed
      */
     public function create()
     {
-        $user   = User::get();
-        $group   = Group::get();
-        
-        if(Module::hasAccess("Resources", "create")) {
-            $module = Module::get('Resources');
-            
-            return view('la.resources.create', [
-                    'module' => $module,
-                    'user' =>$user,
-                    'group' =>$group]);
-        } else {
-            return redirect(config('laraadmin.adminRoute') . "/");
-        }
+        //
     }
     
     /**
-     * Store a newly created resource in database.
+     * Store a newly created resource_type in database.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        
-        if(Module::hasAccess("Resources", "create")) {
+        if(Module::hasAccess("Resource_types", "create")) {
             
-            $rules = Module::validateRules("Resources", $request);
+            $rules = Module::validateRules("Resource_types", $request);
             
             $validator = Validator::make($request->all(), $rules);
             
             if($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-            $insert_id = Module::insert("Resources", $request);
             
+            $insert_id = Module::insert("Resource_types", $request);
             
-            $user_id = $request->user_id; 
-            foreach($user_id as $user)
-            {
-                $resource_user=Resource_User::create([
-                    'user_id' => $user,
-                    'resource_id' => $insert_id
-                ]);
-            }
-            $group_id = $request->group_id; 
-            foreach($group_id as $group)
-            {
-                $resource_user=Resource_Group::create([
-                    'group_id' => $group,
-                    'resource_id' => $insert_id
-                ]);
-            }
-            
-            return redirect()->route(config('laraadmin.adminRoute') . '.resources.index');
+            return redirect()->route(config('laraadmin.adminRoute') . '.resource_types.index');
             
         } else {
             return redirect(config('laraadmin.adminRoute') . "/");
@@ -118,30 +84,30 @@ class ResourcesController extends Controller
     }
     
     /**
-     * Display the specified resource.
+     * Display the specified resource_type.
      *
-     * @param int $id resource ID
+     * @param int $id resource_type ID
      * @return mixed
      */
     public function show($id)
     {
-        if(Module::hasAccess("Resources", "view")) {
+        if(Module::hasAccess("Resource_types", "view")) {
             
-            $resource = Resource::find($id);
-            if(isset($resource->id)) {
-                $module = Module::get('Resources');
-                $module->row = $resource;
+            $resource_type = Resource_type::find($id);
+            if(isset($resource_type->id)) {
+                $module = Module::get('Resource_types');
+                $module->row = $resource_type;
                 
-                return view('la.resources.show', [
+                return view('la.resource_types.show', [
                     'module' => $module,
                     'view_col' => $module->view_col,
                     'no_header' => true,
                     'no_padding' => "no-padding"
-                ])->with('resource', $resource);
+                ])->with('resource_type', $resource_type);
             } else {
                 return view('errors.404', [
                     'record_id' => $id,
-                    'record_name' => ucfirst("resource"),
+                    'record_name' => ucfirst("resource_type"),
                 ]);
             }
         } else {
@@ -150,28 +116,28 @@ class ResourcesController extends Controller
     }
     
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified resource_type.
      *
-     * @param int $id resource ID
+     * @param int $id resource_type ID
      * @return \Illuminate\Http\RedirectResponse
      */
     public function edit($id)
     {
-        if(Module::hasAccess("Resources", "edit")) {
-            $resource = Resource::find($id);
-            if(isset($resource->id)) {
-                $module = Module::get('Resources');
+        if(Module::hasAccess("Resource_types", "edit")) {
+            $resource_type = Resource_type::find($id);
+            if(isset($resource_type->id)) {
+                $module = Module::get('Resource_types');
                 
-                $module->row = $resource;
+                $module->row = $resource_type;
                 
-                return view('la.resources.edit', [
+                return view('la.resource_types.edit', [
                     'module' => $module,
                     'view_col' => $module->view_col,
-                ])->with('resource', $resource);
+                ])->with('resource_type', $resource_type);
             } else {
                 return view('errors.404', [
                     'record_id' => $id,
-                    'record_name' => ucfirst("resource"),
+                    'record_name' => ucfirst("resource_type"),
                 ]);
             }
         } else {
@@ -180,17 +146,17 @@ class ResourcesController extends Controller
     }
     
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource_type in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id resource ID
+     * @param int $id resource_type ID
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        if(Module::hasAccess("Resources", "edit")) {
+        if(Module::hasAccess("Resource_types", "edit")) {
             
-            $rules = Module::validateRules("Resources", $request, true);
+            $rules = Module::validateRules("Resource_types", $request, true);
             
             $validator = Validator::make($request->all(), $rules);
             
@@ -198,9 +164,9 @@ class ResourcesController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();;
             }
             
-            $insert_id = Module::updateRow("Resources", $request, $id);
+            $insert_id = Module::updateRow("Resource_types", $request, $id);
             
-            return redirect()->route(config('laraadmin.adminRoute') . '.resources.index');
+            return redirect()->route(config('laraadmin.adminRoute') . '.resource_types.index');
             
         } else {
             return redirect(config('laraadmin.adminRoute') . "/");
@@ -208,18 +174,18 @@ class ResourcesController extends Controller
     }
     
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource_type from storage.
      *
-     * @param int $id resource ID
+     * @param int $id resource_type ID
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        if(Module::hasAccess("Resources", "delete")) {
-            Resource::find($id)->delete();
+        if(Module::hasAccess("Resource_types", "delete")) {
+            Resource_type::find($id)->delete();
             
             // Redirecting to index() method
-            return redirect()->route(config('laraadmin.adminRoute') . '.resources.index');
+            return redirect()->route(config('laraadmin.adminRoute') . '.resource_types.index');
         } else {
             return redirect(config('laraadmin.adminRoute') . "/");
         }
@@ -233,14 +199,14 @@ class ResourcesController extends Controller
      */
     public function dtajax(Request $request)
     {
-        $module = Module::get('Resources');
-        $listing_cols = Module::getListingColumns('Resources');
+        $module = Module::get('Resource_types');
+        $listing_cols = Module::getListingColumns('Resource_types');
         
-        $values = DB::table('resources')->select($listing_cols)->whereNull('deleted_at');
+        $values = DB::table('resource_types')->select($listing_cols)->whereNull('deleted_at');
         $out = Datatables::of($values)->make();
         $data = $out->getData();
         
-        $fields_popup = ModuleFields::getModuleFields('Resources');
+        $fields_popup = ModuleFields::getModuleFields('Resource_types');
         
         for($i = 0; $i < count($data->data); $i++) {
             for($j = 0; $j < count($listing_cols); $j++) {
@@ -249,7 +215,7 @@ class ResourcesController extends Controller
                     $data->data[$i][$j] = ModuleFields::getFieldValue($fields_popup[$col], $data->data[$i][$j]);
                 }
                 if($col == $module->view_col) {
-                    $data->data[$i][$j] = '<a href="' . url(config('laraadmin.adminRoute') . '/resources/' . $data->data[$i][0]) . '">' . $data->data[$i][$j] . '</a>';
+                    $data->data[$i][$j] = '<a href="' . url(config('laraadmin.adminRoute') . '/resource_types/' . $data->data[$i][0]) . '">' . $data->data[$i][$j] . '</a>';
                 }
                 // else if($col == "author") {
                 //    $data->data[$i][$j];
@@ -258,12 +224,12 @@ class ResourcesController extends Controller
             
             if($this->show_action) {
                 $output = '';
-                if(Module::hasAccess("Resources", "edit")) {
-                    $output .= '<a href="' . url(config('laraadmin.adminRoute') . '/resources/' . $data->data[$i][0] . '/edit') . '" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-edit"></i></a>';
+                if(Module::hasAccess("Resource_types", "edit")) {
+                    $output .= '<a href="' . url(config('laraadmin.adminRoute') . '/resource_types/' . $data->data[$i][0] . '/edit') . '" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-edit"></i></a>';
                 }
                 
-                if(Module::hasAccess("Resources", "delete")) {
-                    $output .= Form::open(['route' => [config('laraadmin.adminRoute') . '.resources.destroy', $data->data[$i][0]], 'method' => 'delete', 'style' => 'display:inline']);
+                if(Module::hasAccess("Resource_types", "delete")) {
+                    $output .= Form::open(['route' => [config('laraadmin.adminRoute') . '.resource_types.destroy', $data->data[$i][0]], 'method' => 'delete', 'style' => 'display:inline']);
                     $output .= ' <button class="btn btn-danger btn-xs" type="submit"><i class="fa fa-times"></i></button>';
                     $output .= Form::close();
                 }
