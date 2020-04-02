@@ -11,7 +11,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Dwij\Laraadmin\Models\Module;
 
-class CreateReservationsTable extends Migration
+class CreateResourceTypesTable extends Migration
 {
     /**
      * Migration generate Module Table Schema by LaraAdmin
@@ -20,16 +20,16 @@ class CreateReservationsTable extends Migration
      */
     public function up()
     {
-        Module::generate("Reservations", 'reservations', 'title', 'fa-calendar-check-o', [
+        Module::generate("Resource_types", 'resource_types', 'name', 'fa-cube', [
             [
-                "colname" => "title",
-                "label" => "Title",
+                "colname" => "name",
+                "label" => "Name",
                 "field_type" => "TextField",
                 "unique" => false,
                 "defaultvalue" => "",
                 "minlength" => 0,
                 "maxlength" => 256,
-                "required" => false,
+                "required" => true,
                 "listing_col" => true
             ], [
                 "colname" => "description",
@@ -38,53 +38,13 @@ class CreateReservationsTable extends Migration
                 "unique" => false,
                 "defaultvalue" => "",
                 "minlength" => 0,
-                "maxlength" => 0,
+                "maxlength" => 256,
                 "required" => false,
                 "listing_col" => true
             ], [
-                "colname" => "owner_id",
-                "label" => "Owner ID",
-                "field_type" => "Integer",
-                "unique" => false,
-                "defaultvalue" => "",
-                "minlength" => 0,
-                "maxlength" => 11,
-                "required" => false,
-                "listing_col" => true
-            ], [
-                "colname" => "begin_date",
-                "label" => "Begin Date",
-                "field_type" => "Date",
-                "unique" => false,
-                "defaultvalue" => "",
-                "minlength" => 0,
-                "maxlength" => 0,
-                "required" => false,
-                "listing_col" => true
-            ], [
-                "colname" => "begin_time",
-                "label" => "Begin Time",
-                "field_type" => "Datetime",
-                "unique" => false,
-                "defaultvalue" => "",
-                "minlength" => 0,
-                "maxlength" => 0,
-                "required" => false,
-                "listing_col" => true
-            ], [
-                "colname" => "end_date",
-                "label" => "End Date",
-                "field_type" => "Date",
-                "unique" => false,
-                "defaultvalue" => "",
-                "minlength" => 0,
-                "maxlength" => 0,
-                "required" => false,
-                "listing_col" => true
-            ], [
-                "colname" => "end_time",
-                "label" => "End Time",
-                "field_type" => "Datetime",
+                "colname" => "image",
+                "label" => "Image",
+                "field_type" => "Files",
                 "unique" => false,
                 "defaultvalue" => "",
                 "minlength" => 0,
@@ -93,24 +53,15 @@ class CreateReservationsTable extends Migration
                 "listing_col" => true
             ], [
                 "colname" => "resource_id",
-                "label" => "Resource ID",
-                "field_type" => "Integer",
+                "label" => "Resource",
+                "field_type" => "Multiselect",
                 "unique" => false,
                 "defaultvalue" => "",
                 "minlength" => 0,
-                "maxlength" => 11,
+                "maxlength" => 0,
                 "required" => false,
-                "listing_col" => true
-            ], [
-                "colname" => "no_of_participant",
-                "label" => "No of Participant",
-                "field_type" => "Integer",
-                "unique" => false,
-                "defaultvalue" => "",
-                "minlength" => 0,
-                "maxlength" => 11,
-                "required" => false,
-                "listing_col" => true
+                "listing_col" => true,
+                "popup_vals" => "@resources",
             ]
         ]);
         
@@ -152,8 +103,8 @@ class CreateReservationsTable extends Migration
      */
     public function down()
     {
-        if(Schema::hasTable('reservations')) {
-            Schema::drop('reservations');
+        if(Schema::hasTable('resource_types')) {
+            Schema::drop('resource_types');
         }
     }
 }

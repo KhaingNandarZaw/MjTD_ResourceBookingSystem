@@ -39,7 +39,7 @@ Reservations View
                     <table id="custom-table">
                         <thead>
                             <?php
-                            
+
                             if($module->row['same_layout']){
                                 $for_same_day = DB::table('slot_ones')
                                     ->select('*')
@@ -53,6 +53,7 @@ Reservations View
                                     ->orderBy('created_at', 'desc')
                                     ->first();
                             }
+                            
                             
                             $data_resources = DB::table('resources')
                                 ->select('resources.name','resources.id')
@@ -3364,11 +3365,14 @@ Reservations View
                                     <select class="js-example-basic-multiple form-control" name="resource">
                                         @foreach($resource as $resources)
                                             <option value="{{$resources->id}}">
-                                                {{$resources->name}}
+                                                {{$resources->name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of maximum people
+                                                ({{$resources->no_of_maximum_people}})
                                             </option>
                                         @endforeach
                                     </select>
+                
                                 </div>
+                                
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -3424,14 +3428,25 @@ Reservations View
                                     <input type="email" class="form-control" name="invitees">
                                 </div>
                             </div>
-
-                            <!-- Main -->
-                            <div class="form-group">
-                                <div class="col">
-                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#cart">Accessories (<span class="total-count"></span>)</button>
-                                    <a href="#" class="clear-cart btn btn-danger">Clear</a>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                <label>Number of Participant</label>
+                                <input type="number" class="form-control" name="no_of_participant">     
+                                </div>  
+                                <div class="form-group col-md-6">
+                                    
+                                    
+                                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#cart">Accessories (<span class="total-count"></span>)</button>
+                                        <a href="#" class="clear-cart btn btn-danger">Clear</a>
+                                    
+                            </div>
                                 </div>
                             </div>
+
+
+
+                            <!-- Main -->
+                            
 
                             <div>
                                 <table class="show-cart table table-hover table-bordered"></table>

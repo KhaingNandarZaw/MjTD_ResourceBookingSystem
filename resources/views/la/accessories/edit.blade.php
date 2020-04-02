@@ -50,7 +50,7 @@
                                         <div class="panel-body">
                                             @la_display($module, 'name')
                                             @la_display($module, 'available_quantity')
-                                            @la_display($module, 'resources')
+                                           
                                         </div>
                                         
                                     </div>

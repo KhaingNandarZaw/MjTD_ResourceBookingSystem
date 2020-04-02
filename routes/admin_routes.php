@@ -132,4 +132,35 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
 	Route::resource(config('laraadmin.adminRoute') . '/bookinglist', 'BookinglistController');
 	Route::match(['get', 'post'], config('laraadmin.adminRoute') . '/bookinglist', 'BookinglistController@bookinglist_filter');
 	
+
+
+    /* ================== Groups ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/groups', 'LA\GroupsController');
+    Route::get(config('laraadmin.adminRoute') . '/group_dt_ajax', 'LA\GroupsController@dtajax');
+
+
+    /* ================== User_Groups ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/user_groups', 'LA\User_GroupsController');
+    Route::resource(config('laraadmin.adminRoute') . '/user_groups', 'LA\User_GroupsController@destroy');
+    Route::get(config('laraadmin.adminRoute') . '/user_group_dt_ajax', 'LA\User_GroupsController@dtajax');
+
+    /* ================== Groups ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/groups', 'LA\GroupsController');
+    Route::get(config('laraadmin.adminRoute') . '/group_dt_ajax', 'LA\GroupsController@dtajax');
+
+    /* ================== User_Groups ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/user_groups', 'LA\User_GroupsController');
+    Route::get(config('laraadmin.adminRoute') . '/user_group_dt_ajax', 'LA\User_GroupsController@dtajax');
+
+    /* ================== Resource_types ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/resource_types', 'LA\Resource_typesController');
+    Route::get(config('laraadmin.adminRoute') . '/resource_type_dt_ajax', 'LA\Resource_typesController@dtajax');
+
+    /* ================== Resource_Users ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/resource_users', 'LA\Resource_UsersController');
+    Route::get(config('laraadmin.adminRoute') . '/resource_user_dt_ajax', 'LA\Resource_UsersController@dtajax');
+
+    /* ================== Resource_Groups ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/resource_groups', 'LA\Resource_GroupsController');
+    Route::get(config('laraadmin.adminRoute') . '/resource_group_dt_ajax', 'LA\Resource_GroupsController@dtajax');
 });

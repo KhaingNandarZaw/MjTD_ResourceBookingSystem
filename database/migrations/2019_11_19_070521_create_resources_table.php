@@ -20,7 +20,7 @@ class CreateResourcesTable extends Migration
      */
     public function up()
     {
-        Module::generate("Resources", 'resources', 'name', 'fa-cube', [
+        Module::generate("Resources", 'resources', 'group_id', 'fa-cube', [
             [
                 "colname" => "name",
                 "label" => "Name",
@@ -92,6 +92,16 @@ class CreateResourcesTable extends Migration
                 "minlength" => 0,
                 "maxlength" => 0,
                 "required" => true,
+                "listing_col" => true
+            ], [
+                "colname" => "no_of_maximum_people",
+                "label" => "No of maximum People",
+                "field_type" => "Integer",
+                "unique" => false,
+                "defaultvalue" => "",
+                "minlength" => 0,
+                "maxlength" => 256,
+                "required" => false,
                 "listing_col" => true
             ]
         ]);

@@ -20,30 +20,30 @@ use Collective\Html\FormFacade as Form;
 use Dwij\Laraadmin\Models\Module;
 use Dwij\Laraadmin\Models\ModuleFields;
 
-use App\Models\Resource;
-use App\Models\User;
 use App\Models\Group;
-use App\Models\Resource_User;
-use App\Models\Resource_Group;
+use App\Models\User_Group;
+use App\Models\User;
 
-class ResourcesController extends Controller
+class GroupsController extends Controller
 {
     public $show_action = true;
     
     /**
-     * Display a listing of the Resources.
+     * Display a listing of the Groups.
      *
      * @return mixed
      */
     public function index()
     {
-        $module = Module::get('Resources');
+        $module = Module::get('Groups');
+        $user   = User::get();
         
         if(Module::hasAccess($module->id)) {
-            return View('la.resources.index', [
+            return View('la.groups.index', [
                 'show_actions' => $this->show_action,
-                'listing_cols' => Module::getListingColumns('Resources'),
-                'module' => $module
+                'listing_cols' => Module::getListingColumns('Groups'),
+                'module' => $module,
+                'user' => $user
             ]);
         } else {
             return redirect(config('laraadmin.adminRoute') . "/");
@@ -51,66 +51,46 @@ class ResourcesController extends Controller
     }
     
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new group.
      *
      * @return mixed
      */
     public function create()
     {
-        $user   = User::get();
-        $group   = Group::get();
-        
-        if(Module::hasAccess("Resources", "create")) {
-            $module = Module::get('Resources');
-            
-            return view('la.resources.create', [
-                    'module' => $module,
-                    'user' =>$user,
-                    'group' =>$group]);
-        } else {
-            return redirect(config('laraadmin.adminRoute') . "/");
-        }
+        //
     }
     
     /**
-     * Store a newly created resource in database.
+     * Store a newly created group in database.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        
-        if(Module::hasAccess("Resources", "create")) {
+        if(Module::hasAccess("Groups", "create")) {
             
-            $rules = Module::validateRules("Resources", $request);
+            $rules = Module::validateRules("Groups", $request);
             
             $validator = Validator::make($request->all(), $rules);
             
             if($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-            $insert_id = Module::insert("Resources", $request);
-            
+            $insert_id = Module::insert("Groups", $request);
             
             $user_id = $request->user_id; 
+            
             foreach($user_id as $user)
             {
-                $resource_user=Resource_User::create([
+                $reservations_user=User_Group::create([
                     'user_id' => $user,
-                    'resource_id' => $insert_id
-                ]);
-            }
-            $group_id = $request->group_id; 
-            foreach($group_id as $group)
-            {
-                $resource_user=Resource_Group::create([
-                    'group_id' => $group,
-                    'resource_id' => $insert_id
+                    'group_id' =>$insert_id
                 ]);
             }
             
-            return redirect()->route(config('laraadmin.adminRoute') . '.resources.index');
+            
+            return redirect()->route(config('laraadmin.adminRoute') . '.groups.index');
             
         } else {
             return redirect(config('laraadmin.adminRoute') . "/");
@@ -118,30 +98,37 @@ class ResourcesController extends Controller
     }
     
     /**
-     * Display the specified resource.
+     * Display the specified group.
      *
-     * @param int $id resource ID
+     * @param int $id group ID
      * @return mixed
      */
     public function show($id)
     {
-        if(Module::hasAccess("Resources", "view")) {
+        $sql = "select users.name from users left join user_groups on user_groups.user_id = users.id
+                left join groups on groups.id = user_groups.group_id
+                where users.deleted_at is null and user_groups.deleted_at is null and groups.deleted_at is null and groups.id = $id";
+            $query = DB::table(DB::raw("($sql) as catch"));
+            $username = $query->get();
+        
+        if(Module::hasAccess("Groups", "view")) {
             
-            $resource = Resource::find($id);
-            if(isset($resource->id)) {
-                $module = Module::get('Resources');
-                $module->row = $resource;
+            $group = Group::find($id);
+            if(isset($group->id)) {
+                $module = Module::get('Groups');
+                $module->row = $group;
                 
-                return view('la.resources.show', [
+                return view('la.groups.show', [
                     'module' => $module,
                     'view_col' => $module->view_col,
                     'no_header' => true,
                     'no_padding' => "no-padding"
-                ])->with('resource', $resource);
+                ])->with('group', $group)
+                  ->with('username', $username);
             } else {
                 return view('errors.404', [
                     'record_id' => $id,
-                    'record_name' => ucfirst("resource"),
+                    'record_name' => ucfirst("group"),
                 ]);
             }
         } else {
@@ -150,47 +137,65 @@ class ResourcesController extends Controller
     }
     
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified group.
      *
-     * @param int $id resource ID
+     * @param int $id group ID
      * @return \Illuminate\Http\RedirectResponse
      */
     public function edit($id)
     {
-        if(Module::hasAccess("Resources", "edit")) {
-            $resource = Resource::find($id);
-            if(isset($resource->id)) {
-                $module = Module::get('Resources');
+        $sql = "select users.* from users left join user_groups on user_groups.user_id = users.id
+                left join groups on groups.id = user_groups.group_id
+                where users.deleted_at is null and user_groups.deleted_at is null and groups.deleted_at is null and groups.id = $id";
+        $query = DB::table(DB::raw("($sql) as catch"));
+        $username = $query->get();
+       
+        $user_group=DB::table('user_groups')
+                    ->select("id")
+                    ->where("group_id",$id)
+                    ->get();
+        
+        $user   = User::get();
+        if(Module::hasAccess("Groups", "edit")) {
+            $group = Group::find($id);
+            if(isset($group->id)) {
+                $module = Module::get('Groups');
                 
-                $module->row = $resource;
+                $module->row = $group;
                 
-                return view('la.resources.edit', [
+                return view('la.groups.edit', [
                     'module' => $module,
                     'view_col' => $module->view_col,
-                ])->with('resource', $resource);
+                ])->with('group', $group)
+                ->with('user',$user)
+                ->with('username',$username)
+                ->with('user_group',$user_group);
             } else {
                 return view('errors.404', [
                     'record_id' => $id,
-                    'record_name' => ucfirst("resource"),
+                    'record_name' => ucfirst("group"),
                 ]);
             }
+            
         } else {
             return redirect(config('laraadmin.adminRoute') . "/");
         }
     }
     
     /**
-     * Update the specified resource in storage.
+     * Update the specified group in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id resource ID
+     * @param int $id group ID
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        if(Module::hasAccess("Resources", "edit")) {
+        
+        dd($request);
+        if(Module::hasAccess("Groups", "edit")) {
             
-            $rules = Module::validateRules("Resources", $request, true);
+            $rules = Module::validateRules("Groups", $request, true);
             
             $validator = Validator::make($request->all(), $rules);
             
@@ -198,9 +203,17 @@ class ResourcesController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput();;
             }
             
-            $insert_id = Module::updateRow("Resources", $request, $id);
+            $insert_id = Module::updateRow("Groups", $request, $id);
+            $user_id = $request->user_id;  
             
-            return redirect()->route(config('laraadmin.adminRoute') . '.resources.index');
+            foreach($user_id as $user)
+            {
+                $group = User_Group::find($id);
+                $group->user_id = $user;
+                $group->group_id = $insert_id;
+                $group->save();
+            }
+            return redirect()->route(config('laraadmin.adminRoute') . '.groups.index');
             
         } else {
             return redirect(config('laraadmin.adminRoute') . "/");
@@ -208,18 +221,18 @@ class ResourcesController extends Controller
     }
     
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified group from storage.
      *
-     * @param int $id resource ID
+     * @param int $id group ID
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        if(Module::hasAccess("Resources", "delete")) {
-            Resource::find($id)->delete();
+        if(Module::hasAccess("Groups", "delete")) {
+            Group::find($id)->delete();
             
             // Redirecting to index() method
-            return redirect()->route(config('laraadmin.adminRoute') . '.resources.index');
+            return redirect()->route(config('laraadmin.adminRoute') . '.groups.index');
         } else {
             return redirect(config('laraadmin.adminRoute') . "/");
         }
@@ -233,14 +246,14 @@ class ResourcesController extends Controller
      */
     public function dtajax(Request $request)
     {
-        $module = Module::get('Resources');
-        $listing_cols = Module::getListingColumns('Resources');
+        $module = Module::get('Groups');
+        $listing_cols = Module::getListingColumns('Groups');
         
-        $values = DB::table('resources')->select($listing_cols)->whereNull('deleted_at');
+        $values = DB::table('groups')->select($listing_cols)->whereNull('deleted_at');
         $out = Datatables::of($values)->make();
         $data = $out->getData();
         
-        $fields_popup = ModuleFields::getModuleFields('Resources');
+        $fields_popup = ModuleFields::getModuleFields('Groups');
         
         for($i = 0; $i < count($data->data); $i++) {
             for($j = 0; $j < count($listing_cols); $j++) {
@@ -249,7 +262,7 @@ class ResourcesController extends Controller
                     $data->data[$i][$j] = ModuleFields::getFieldValue($fields_popup[$col], $data->data[$i][$j]);
                 }
                 if($col == $module->view_col) {
-                    $data->data[$i][$j] = '<a href="' . url(config('laraadmin.adminRoute') . '/resources/' . $data->data[$i][0]) . '">' . $data->data[$i][$j] . '</a>';
+                    $data->data[$i][$j] = '<a href="' . url(config('laraadmin.adminRoute') . '/groups/' . $data->data[$i][0]) . '">' . $data->data[$i][$j] . '</a>';
                 }
                 // else if($col == "author") {
                 //    $data->data[$i][$j];
@@ -258,12 +271,12 @@ class ResourcesController extends Controller
             
             if($this->show_action) {
                 $output = '';
-                if(Module::hasAccess("Resources", "edit")) {
-                    $output .= '<a href="' . url(config('laraadmin.adminRoute') . '/resources/' . $data->data[$i][0] . '/edit') . '" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-edit"></i></a>';
+                if(Module::hasAccess("Groups", "edit")) {
+                    $output .= '<a href="' . url(config('laraadmin.adminRoute') . '/groups/' . $data->data[$i][0] . '/edit') . '" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-edit"></i></a>';
                 }
                 
-                if(Module::hasAccess("Resources", "delete")) {
-                    $output .= Form::open(['route' => [config('laraadmin.adminRoute') . '.resources.destroy', $data->data[$i][0]], 'method' => 'delete', 'style' => 'display:inline']);
+                if(Module::hasAccess("Groups", "delete")) {
+                    $output .= Form::open(['route' => [config('laraadmin.adminRoute') . '.groups.destroy', $data->data[$i][0]], 'method' => 'delete', 'style' => 'display:inline']);
                     $output .= ' <button class="btn btn-danger btn-xs" type="submit"><i class="fa fa-times"></i></button>';
                     $output .= Form::close();
                 }
