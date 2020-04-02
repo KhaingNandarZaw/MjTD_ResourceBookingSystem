@@ -26,74 +26,54 @@
     <div class="box-body">
         <div class="row">
             <div class="content">
-
-                <div class="col-md-4">
+                <div class="col-md-8 col-md-offset-2">
                     <h4><b>Update Accessory</b></h4><br>
                     {!! Form::model($accessory, ['route' => [config('laraadmin.adminRoute') . '.accessories.update', $accessory->id ], 'method'=>'PUT', 'id' => 'accessory-edit-form']) !!}
                         @la_form($module)
-                        <br>
+                        <div>
+                            <label for="">Resources</label>
+                            <select class="form-control" data-placeholder="Select Resources" rel="select2" name="select_resource" id="select_resource" onchange="addResource()">
+                                    <option value="0" disabled selected>Select Resources</option>
+                                @foreach($resources as $resource)
+                                    <option value="{{ $resource->id }}">{{ $resource->name }}</option>
+                                @endforeach
+                            </select>        
+                        </div>
+                        <input type="hidden" name="resource_list" id="resource_list" value="">
+                        <div>                      
+                           <div class="panel panel-green resources">
+                                <div class="panel-heading"></div>
+                                <div class="panel-body">
+                                    <table class="table table-striped table-hover" id="resource_table" >
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Resource </th>
+                                                <th> Actions </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($resource_lists as $key=>$resource) 
+                                                <tr class="resource_{{ $resource->id }}">
+                                                    <td>{{ $key+1 }}</td>
+                                                    <td>{{ $resource->name }}</td>
+                                                    <td><button class="btn btn-danger btn-xs" id="btndelete" onclick="delete_resource({{ $resource->id }})" ><i class="fa fa-times"></i> Delete</button></td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div> 
                         <div class="form-group">
-                            {!! Form::submit( 'Update', ['class'=>'btn btn-success']) !!} <a href="{{ url(config('laraadmin.adminRoute') . '/accessories') }}" class="btn btn-default pull-right">Cancel</a>
+                            <div class="col-sm-6"> 
+                            {!! Form::submit( 'Update', ['class'=>'btn btn-success']) !!}
+                            </div>
+                            <div class="col-sm-6"> 
+                                <a href="{{ url(config('laraadmin.adminRoute') . '/accessories') }}" class="btn btn-default pull-right">Cancel</a>
+                            </div>
                         </div>
                     {!! Form::close() !!}
                 </div>
-                <div class="col-md-8">             
-                    <div id="page-content" class="profile2">
-                        <div class="tab-content"> 
-                            <div role="tabpanel" class="tab-pane active fade in" id="tab-info">
-                                <div class="tab-content">
-                                    <div class="panel infolist">
-                                        <div class="panel-default panel-heading">
-                                            <h4><b>General Info</b></h4>
-                                        </div>
-                                    
-                                        <div class="panel-body">
-                                            @la_display($module, 'name')
-                                            @la_display($module, 'available_quantity')
-                                            @la_display($module, 'resources')
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="pull-right">
-                                        <b style="color:red;">Delete {{ $accessory->$view_col }}</b>&nbsp;
-                                        @la_access("Accessories", "delete")
-                                       
-                                        {{ Form::open(['route' => [config('laraadmin.adminRoute') . '.accessories.destroy', $accessory->id], 'method' => 'delete', 'style'=>'display:inline']) }}
-                                        
-                                            <button data-href="/delete.php?id=54" data-toggle="modal" data-target="#confirm-delete" class="btn btn-danger btn-xs" type="button"><i class="fa fa-trash"></i></button>
-                                            <div class="modal" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" style="width:350px;">
-                                                    <div class="modal-content">
-                                                        <div class="modal-body">
-                                                        <span style="text-align:center;">
-                                                            <h4>Are you sure, you want to delete? </h4>
-                                                            <p class="text-secondary">
-                                                                <small>
-                                                                This will delete your record permanently
-                                                                </small>
-                                                            </p>
-                                                            </span>
-                                                            <p class="debug-url"></p>
-                                                        </div>
-                                                    
-                                                        <div class="modal-footer">
-                                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        {{ Form::close() }}    
-                                    </div>
-                                </div>
-                            </div>
-                        </div>        
-                    </div>
-                </div>
-                        
-                        
-            @endla_access
-                
             </div>
         </div>
     </div>
@@ -104,10 +84,59 @@
 
 @push('scripts')
 <script>
+let resource_row = 1;
+let resource = <?php echo json_encode($selected_resource_list) ?>;
+const table = document.querySelector("#resource_table").children[1];
 $(function () {
     $("#accessory-edit-form").validate({
         
     });
+    document.getElementById("resource_list").value = resource_list;
 });
+function addResource()
+{
+    document.querySelector(".resources").style.display = "block";   
+    let select_resource = document.querySelector("#select_resource");
+    let resource_id = select_resource.value;
+    let resource_name = select_resource.options[select_resource.selectedIndex].text;
+
+    let op = select_resource.options;        
+
+    const row = document.createElement('tr');
+    row.className = 'resource_'+resource_id;
+    row.innerHTML = `<td>${resource_row.length}</td><td>${resource_name}</td>
+                     <td><button type="button" class="btn btn-danger btn-xs" id="btndelete" onclick="delete_resource(${resource_id})" ><i class="fa fa-times"></i> Delete</button></td>`;
+
+    if(resource.includes(resource_id)) {
+        alert("Cannot Add");
+        return;
+    } else {
+        if(resource_id == 0) {
+            alert("Cannot Add");
+            return;
+        } else {
+        resource_row++;
+        resource.push(resource_id);                         
+        table.appendChild(row);
+        }
+    }
+
+    document.getElementById("resource_list").value = resource;
+}
+// Remove
+function delete_resource(resource_id) 
+{
+    $(`.resource_${resource_id}`).remove();
+    var resource_info = String(resource_id);
+    var index = resource.indexOf(resource_info);
+    if(index > -1) {
+        resource.splice(index, 1);
+    }
+    resource_row--;
+    document.getElementById("resource_list").value = resource;
+    
+    if(resource.length == 0)
+        document.querySelector(".resources").style.display = "none";
+}
 </script>
 @endpush

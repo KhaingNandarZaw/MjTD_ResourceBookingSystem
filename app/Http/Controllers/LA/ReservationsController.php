@@ -119,8 +119,6 @@ class ReservationsController extends Controller
         }        
         return redirect()->route('admin.reservations.show', ['id' => $request->schedule_id]);
     }
-    
-
 
     public function getstartendtime(Request $request)
     {

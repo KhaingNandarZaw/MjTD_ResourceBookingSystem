@@ -21,6 +21,7 @@ use Dwij\Laraadmin\Models\Module;
 use Dwij\Laraadmin\Models\ModuleFields;
 
 use App\Models\Accessory;
+use App\MOdels\Resource;
 
 class AccessoriesController extends Controller
 {
@@ -34,12 +35,14 @@ class AccessoriesController extends Controller
     public function index()
     {
         $module = Module::get('Accessories');
+        $resources = Resource::whereNull('deleted_at')->get();
         
         if(Module::hasAccess($module->id)) {
             return View('la.accessories.index', [
                 'show_actions' => $this->show_action,
                 'listing_cols' => Module::getListingColumns('Accessories'),
-                'module' => $module
+                'module' => $module,
+                'resources' => $resources
             ]);
         } else {
             return redirect(config('laraadmin.adminRoute') . "/");
@@ -75,6 +78,20 @@ class AccessoriesController extends Controller
             }
             
             $insert_id = Module::insert("Accessories", $request);
+
+            $today = date('Y-m-d h:i:sa');
+            $resource_list = $request->resource_list;
+            $resource_list = explode(',', $resource_list);
+
+            foreach($resource_list as $resource)
+            {
+                DB::table('accessories_resources')
+                    ->insert([
+                        'created_at' => $today,
+                        'accessories_id' => $insert_id,
+                        'resource_id' => $resource
+                    ]);
+            }
             
             return redirect()->route(config('laraadmin.adminRoute') . '.accessories.index');
             
@@ -97,12 +114,18 @@ class AccessoriesController extends Controller
             if(isset($accessory->id)) {
                 $module = Module::get('Accessories');
                 $module->row = $accessory;
+
+                $resource_lists = DB::table('accessories_resources')
+                    ->select('resources.id', 'resources.name')
+                    ->join('resources','resources.id','=','accessories_resources.resource_id')
+                    ->where('accessories_id', $id)->whereNull('resources.deleted_at')->whereNull('accessories_resources.deleted_at')->get();
                 
                 return view('la.accessories.show', [
                     'module' => $module,
                     'view_col' => $module->view_col,
                     'no_header' => true,
-                    'no_padding' => "no-padding"
+                    'no_padding' => "no-padding",
+                    'resource_lists' => $resource_lists
                 ])->with('accessory', $accessory);
             } else {
                 return view('errors.404', [
@@ -129,10 +152,20 @@ class AccessoriesController extends Controller
                 $module = Module::get('Accessories');
                 
                 $module->row = $accessory;
-                
+
+                $resource_lists = DB::table('accessories_resources')
+                    ->select('resources.id', 'resources.name')
+                    ->join('resources','resources.id','=','accessories_resources.resource_id')
+                    ->where('accessories_id', $id)->whereNull('resources.deleted_at')->whereNull('accessories_resources.deleted_at')->get();
+                $resources = Resource::whereNull('deleted_at')->get();
+                $selected_resource_list = DB::table('accessories_resources')->select('resource_id')->where('accessories_id', $id)->whereNull('deleted_at')->get();
+                dd($selected_resource_list);
                 return view('la.accessories.edit', [
                     'module' => $module,
                     'view_col' => $module->view_col,
+                    'resource_lists' => $resource_lists,
+                    'resources' => $resources,
+                    'selected_resource_list' => $selected_resource_list
                 ])->with('accessory', $accessory);
             } else {
                 return view('errors.404', [
@@ -165,6 +198,22 @@ class AccessoriesController extends Controller
             }
             
             $insert_id = Module::updateRow("Accessories", $request, $id);
+
+            $today = date('Y-m-d h:i:s');
+            DB:: table('accessories_resources')->where('accessories_id', $insert_id)->update(['deleted_at' => $today]);
+
+            $resource_list = $request->resource_list;
+            $resource_list = explode(',', $resource_list);
+            dd($resource_list);
+            foreach($resource_list as $resource)
+            {
+                DB::table('accessories_resources')
+                    ->insert([
+                        'created_at' => $today,
+                        'accessories_id' => $insert_id,
+                        'resource_id' => $resource
+                    ]);
+            }
             
             return redirect()->route(config('laraadmin.adminRoute') . '.accessories.index');
             
@@ -190,6 +239,18 @@ class AccessoriesController extends Controller
             return redirect(config('laraadmin.adminRoute') . "/");
         }
     }
+
+    public function accessories_by_resourceid(Request $request){
+        $resource_id = $request->resource_id;
+        $resource_lists = DB::table('accessories_resources')
+            ->select('accessories.*')
+            ->join('accessories','accessories.id','=','accessories_resources.accessories_id')
+            ->where('accessories_resources.resource_id', $resource_id)->whereNull('accessories.deleted_at')->whereNull('accessories_resources.deleted_at')->get();
+
+        return response()->json([
+            'resource_lists' => $resource_lists
+        ]);
+    }
     
     /**
      * Server side Datatable fetch via Ajax
@@ -209,6 +270,8 @@ class AccessoriesController extends Controller
         $fields_popup = ModuleFields::getModuleFields('Accessories');
         
         for($i = 0; $i < count($data->data); $i++) {
+            $id  = $data->data[$i][0];
+
             for($j = 0; $j < count($listing_cols); $j++) {
                 $col = $listing_cols[$j];
                 if($fields_popup[$col] != null && starts_with($fields_popup[$col]->popup_vals, "@")) {
@@ -221,6 +284,18 @@ class AccessoriesController extends Controller
             
             if($this->show_action) {
                 $output = '';
+                $resource_output = '';
+
+                $resource_lists = DB::table('accessories_resources')
+                    ->select('resources.id', 'resources.name')
+                    ->join('resources','resources.id','=','accessories_resources.resource_id')
+                    ->where('accessories_id', $id)->whereNull('resources.deleted_at')->whereNull('accessories_resources.deleted_at')->get();
+
+                foreach($resource_lists as $resource){
+                    $resource_output .= '<div class="label label-primary">' . $resource->name . '</div>';
+                }
+                $data->data[$i][] = (string) $resource_output;
+
                 if(Module::hasAccess("Accessories", "edit")) {
                     $output .= '<a href="' . url(config('laraadmin.adminRoute') . '/accessories/' . $data->data[$i][0] . '/edit') . '" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-edit"></i></a>';
                 }

@@ -1,12 +1,11 @@
 <?php
 
 use Dwij\Laraadmin\Helpers\LAHelper;
+use Illuminate\Http\Request;
 
 /* ================== Homepage ================== */
 Route::get('/admin', 'HomeController@index');
 Route::auth();
-
-Route::post('/doLogin', 'HomeController@doLogin');
 
 /* ================== Access Uploaded Files ================== */
 Route::get('files/{hash}/{name}', 'LA\UploadsController@get_file');
@@ -70,6 +69,7 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
     /* ================== Accessories ================== */
     Route::resource(config('laraadmin.adminRoute') . '/accessories', 'LA\AccessoriesController');
     Route::get(config('laraadmin.adminRoute') . '/accessory_dt_ajax', 'LA\AccessoriesController@dtajax');
+    Route::post(config('laraadmin.adminRoute') . '/accessories_by_resourceid', 'LA\AccessoriesController@accessories_by_resourceid');
 
     /* ================== Resources ================== */
     Route::resource(config('laraadmin.adminRoute') . '/resources', 'LA\ResourcesController');

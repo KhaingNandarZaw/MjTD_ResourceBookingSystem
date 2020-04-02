@@ -34,6 +34,7 @@
             <th>{{ $module->fields[$col]['label'] or ucfirst($col) }}</th>
             @endforeach
             @if($show_actions)
+            <th>Available Resources</th>
             <th>Actions</th>
             @endif
         </tr>
@@ -56,12 +57,36 @@
             {!! Form::open(['action' => 'LA\AccessoriesController@store', 'id' => 'accessory-add-form']) !!}
             <div class="modal-body">
                 <div class="box-body">
-                    @la_form($module)
-                    
-                    {{--
                     @la_input($module, 'name')
 					@la_input($module, 'available_quantity')
-                    --}}
+                    <div>
+                        <label for="">Resources</label>
+                        <select class="form-control" required="1" data-placeholder="Select Resources" rel="select2" name="select_resource" id="select_resource" onchange="addResource()">
+                                <option value="0" disabled selected>Select Resources</option>
+                            @foreach($resources as $resource)
+                                <option value="{{ $resource->id }}">{{ $resource->name }}</option>
+                            @endforeach
+                        </select>        
+                    </div>
+                    <input type="hidden" name="resource_list" id="resource_list" value="">
+                    <div>                      
+                       <div class="panel panel-green resources">
+                            <div class="panel-heading"></div>
+                            <div class="panel-body">
+                                <table class="table table-striped table-hover" id="resource_table" >
+                                    <thead>
+                                        <tr>
+                                            <th> No. </th>
+                                            <th> Resource </th>
+                                            <th> Actions </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>  
+                    </div> 
                 </div>
             </div>
             <div class="modal-footer">
@@ -83,6 +108,9 @@
 @push('scripts')
 <script src="{{ asset('la-assets/plugins/datatables/datatables.min.js') }}"></script>
 <script>
+let resource_row = 1;
+let resource = [];
+const table = document.querySelector("#resource_table").children[1];
 $(function () {
     $("#example1").DataTable({
         processing: true,
@@ -100,6 +128,53 @@ $(function () {
     $("#accessory-add-form").validate({
         
     });
+    document.querySelector(".resources").style.display = "none"; 
+    
 });
+function addResource()
+{
+    document.querySelector(".resources").style.display = "block";   
+    let select_resource = document.querySelector("#select_resource");
+    let resource_id = select_resource.value;
+    let resource_name = select_resource.options[select_resource.selectedIndex].text;
+
+    let op = select_resource.options;        
+
+    const row = document.createElement('tr');
+    row.className = 'resource_'+resource_id;
+    row.innerHTML = `<td>${resource_row}</td><td>${resource_name}</td>
+                     <td><button type="button" class="btn btn-danger btn-xs" id="btndelete" onclick="delete_resource(${resource_id})" ><i class="fa fa-times"></i> Delete</button></td>`;
+
+    if(resource.includes(resource_id)) {
+        alert("Cannot Add");
+        return;
+    } else {
+        if(resource_id == 0) {
+            alert("Cannot Add");
+            return;
+        } else {
+        resource_row++;
+        resource.push(resource_id);                         
+        table.appendChild(row);
+        }
+    }
+
+    document.getElementById("resource_list").value = resource;
+}
+// Remove
+function delete_resource(resource_id) 
+{
+    $(`.resource_${resource_id}`).remove();
+    var resource_info = String(resource_id);
+    var index = resource.indexOf(resource_info);
+    if(index > -1) {
+        resource.splice(index, 1);
+    }
+    resource_row--;
+    document.getElementById("resource_list").value = resource;
+    
+    if(resource.length == 0)
+        document.querySelector(".resources").style.display = "none";
+}
 </script>
 @endpush
