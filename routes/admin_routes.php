@@ -163,4 +163,24 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
     /* ================== Resource_Groups ================== */
     Route::resource(config('laraadmin.adminRoute') . '/resource_groups', 'LA\Resource_GroupsController');
     Route::get(config('laraadmin.adminRoute') . '/resource_group_dt_ajax', 'LA\Resource_GroupsController@dtajax');
+
+
+    /* ================== Car_Requests ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/car_requests', 'LA\Car_RequestsController');
+	Route::get(config('laraadmin.adminRoute') .'/car_requests/{id}/edit', 'LA\Car_RequestsController@edit');
+	Route::get(config('laraadmin.adminRoute') .'/car_requests/{id}/cancel', 'LA\Car_RequestsController@destroy');
+	Route::get(config('laraadmin.adminRoute') . '/car_request_dt_ajax', 'LA\Car_RequestsController@dtajax');
+
+	
+	/* ================== CarRequestsApprove ================== */
+	Route::resource(config('laraadmin.adminRoute') . '/carrequestsapprove', 'CarRequests_approveController');
+	Route::get(config('laraadmin.adminRoute') .'/carrequestsapproveindex', 'CarRequests_approveController@index');
+	Route::post(config('laraadmin.adminRoute') .'/carrequestsapprove', 'CarRequests_approveController@confirm');
+	Route::post(config('laraadmin.adminRoute') .'/carrequestspending', 'CarRequests_approveController@pending');
+	Route::post(config('laraadmin.adminRoute') .'/carrequestsreject', 'CarRequests_approveController@reject');
+	Route::match(['get', 'post'], config('laraadmin.adminRoute') . '/carrequestslist_filter', 'CarRequests_approveController@list_filter');
+
+    /* ================== Car_Request_Statuses ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/car_request_statuses', 'LA\Car_Request_StatusesController');
+    Route::get(config('laraadmin.adminRoute') . '/car_request_status_dt_ajax', 'LA\Car_Request_StatusesController@dtajax');
 });

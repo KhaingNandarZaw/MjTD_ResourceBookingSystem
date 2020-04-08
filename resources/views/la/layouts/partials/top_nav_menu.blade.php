@@ -4,6 +4,7 @@
 		<li><a href="{{ url(config('laraadmin.adminRoute')) }}">Dashboard</a></li>
 		<li><a href="{{ url(config('laraadmin.adminRoute') . '/calendar') }}">Calendar</a></li>
 		<li><a href="{{ url(config('laraadmin.adminRoute') . '/bookinglist') }}">BookingList</a></li>
+		<li><a href="{{ url(config('laraadmin.adminRoute') . '/carrequestsapprove') }}">CarRequestedList</a></li>
 		<?php
 		$menuItems = Dwij\Laraadmin\Models\Menu::where("parent", 0)->orderBy('hierarchy', 'asc')->get();
 		?>
