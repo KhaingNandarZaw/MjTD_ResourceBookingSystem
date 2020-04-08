@@ -92,6 +92,10 @@ class CarRequests_approveController extends Controller
 
     public function confirm(Request $request){
         
+        $this->validate($request, [
+            'car_number' => 'required',
+            'car_driver' => 'required',
+        ]);
         $user=Auth::user();
         $user_id=$user->id;
         
@@ -103,6 +107,7 @@ class CarRequests_approveController extends Controller
         
         DB:: table('car_requests')->where('id', $id)->update(['status' => 'Confirmed', 'car_number' => $car_number, 'car_driver' => $car_driver]);
         $today= date('Y-m-d');
+        
             $car_request_status = Car_Request_Status::create([
                 'requestedperson_id' => $user_id,
                 'status' => "Confirmed",
@@ -116,6 +121,10 @@ class CarRequests_approveController extends Controller
     }
 
     public function pending(Request $request){
+        $this->validate($request, [
+            'remark' => 'required',
+            
+        ]);
         $user=Auth::user();
         $user_id=$user->id;
         $id = $request->input('carrequest_id');
@@ -135,6 +144,10 @@ class CarRequests_approveController extends Controller
     }
 
     public function reject(Request $request){
+        $this->validate($request, [
+            'remark' => 'required',
+            
+        ]);
         $user=Auth::user();
         $user_id=$user->id;
         $id = $request->input('carrequest_id');
