@@ -22,7 +22,14 @@
                     <div class="panel-body">
                         @la_display($module, 'name')
 						@la_display($module, 'available_quantity')
-                        
+                        <div class="form-group">
+                            <label class="col-md-4 col-sm-6 col-xs-6">Available Resources :</label>
+                            <div class="col-md-8 col-sm-6 col-xs-6">
+                                @foreach($resource_lists as $resource)
+                                 <div class="label label-primary">{{$resource->name}}</div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

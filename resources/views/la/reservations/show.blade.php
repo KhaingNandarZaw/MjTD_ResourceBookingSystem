@@ -3354,7 +3354,7 @@ Reservations View
             </div>
             <div class="modal-body">
                 <div id="ok" class="container-fluid">
-                    <form action="{{route('admin.reservations.store')}}" method="post" enctype="multipart/form-data">
+                    <form action="{{route('admin.reservations.store')}}" method="post" enctype="multipart/form-data" id="new_reservation_form">
                         <meta name="csrf-token" content="{{ csrf_token() }}" />    
                             <input type="hidden" value="{{ Auth::user()->id }}" name="owner_id">
                             <input type="hidden" id="selected_booking_id" name="schedule_id" value = "{{$scheduleid}}" class="form-control input-sm" >
@@ -3374,58 +3374,101 @@ Reservations View
                                 </div>
                                 
                             </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="inputEmail4">Begin <span style="color: red;">*</span></label>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <input type="date" id="begindate" name="begin_date" required class="form-control" value=""  onmouseout="getTheDays({{$module->row['same_layout']}})"> 
-                                        </div>
-                                        <div class="col-md-6">
-                                            <select name="begin_time" id="begintime" class="form-control"></select>
-                                        </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="inputEmail4">Begin : <span style="color: red;">*</span></label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="date" id="begindate" name="begin_date" required class="form-control input-sm" value="" onmouseout="getTheDays({{$module->row['same_layout']}})"> 
+                                    </div>
+                                    <div class="col-md-6">
+                                        <select name="begin_time" id="begintime" class="form-control input-sm"></select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="inputEmail4">End <span style="color: red;">*</span></label>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <input type="date" id="enddate" name="end_date" class="form-control" value="" onmouseout="getTheEndDays({{$module->row['same_layout']}})">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <select name="end_time" id="end_time" class="form-control"></select>
-                                        </div>
-                                    </div>                  
-                                </div>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="inputEmail4">Title <span style="color: red">*</span></label>
-                                    <input type="text" required class="form-control" id="" name="title">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label>Description</label>
-                                    <textarea cols="30" rows="2" class="form-control" name="description"></textarea>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <div class="row">   
-                                        <div class="col-md-12 mx-auto">
-                                            <label class="control-label">Participant</label>                
-                                            <select class="js-example-basic-multiple form-control" name="user_id[]" multiple="multiple">
-                                                @foreach($user as $users)
-                                                    <option value="{{$users->id}}">
-                                                        {{$users->name}}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                            <div class="col-md-6">
+                                <label for="inputEmail4">End : <span style="color: red;">*</span></label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="date" id="enddate" name="end_date" class="form-control input-sm" value="" onmouseout="getTheEndDays({{$module->row['same_layout']}})" required>
                                     </div>
-                                </div>  
-                                <div class="form-group col-md-6">
-                                    <label>Invitees</label>
-                                    <input type="email" class="form-control" name="invitees">
+                                    <div class="col-md-6">
+                                        <select name="end_time" id="end_time" class="form-control input-sm"></select>
+                                    </div>
+                                </div>                  
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4">Title : <span style="color: red">*</span></label>
+                                <input type="text" required class="form-control input-sm" id="" name="title">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Description : </label>
+                                <textarea cols="30" rows="2" class="form-control input-sm" name="description"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <div class="row">   
+                                    <div class="col-md-12 mx-auto">
+                                        <label class="control-label">Participants : </label>                
+                                        <select class="js-example-basic-multiple form-control input-sm" name="user_id[]" multiple="multiple">
+                                            @foreach($user as $users)
+                                                @if($users->id != 1)
+                                                <option value="{{$users->id}}">{{$users->name}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Invitees(comma(,) separted for each mail) :</label>
+                                <input type="text" class="form-control input-sm" name="invitees">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                    <label>Accessories</label>
+                            </div> 
+                            <div class="col-md-3">
+                                    <label>Quantity Requested</label>
+                            </div>    
+                            <div class="col-md-3">
+                                    <label>Quantity Available</label>
+                            </div>    
+                            <div class="col-md-3">
+                                    <label>Actions</label>
+                            </div>    
+                        </div>
+                        <div class="inc_row">
+                            <?php $i = 1 ?>
+                            <div class="row" id="accessories_grid_{{ $i }}">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <select class="form-control input-sm" data-placeholder="Select Accessories" rel="select2" onchange="GetAccessory(this.value, {{$i}})" id="accessories_{{$i}}" name="accessories_{{$i}}" required>
+                                            <option selected disabled>Choose Accessories</option>
+                                            @foreach($accessorie as $accessories)
+                                                <option value="{{ $accessories->id }}">{{ $accessories->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <input type="text" name="requested_{{ $i }}" id="requested_{{ $i }}" onkeypress="return isNumberdecimal(this.event)"  class="form-control input-sm" placeholder="Quantity Requested">
+                                    </div>                       
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="available_{{ $i }}" onkeypress="return isNumberdecimal(this.event)" readonly="true" class="form-control input-sm" id="available_{{ $i }}" >
+                                </div>
+                                <div class="col-md-3 next">
+                                    <div class="form-group">
+                                        <a class="btn btn-primary btn-sm" onclick="insertRow()"><i class="fa fa-plus"></i></a>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteRow({{ $i }})"><i class="fa fa-minus"></i></button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -3451,42 +3494,7 @@ Reservations View
                             <div>
                                 <table class="show-cart table table-hover table-bordered"></table>
                             </div>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="cart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Add Accessories</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <table class="table table-hover">
-                                                    <tr>
-                                                        <th>Accessory</th>
-                                                        <th>Quantity Requested</th>
-                                                        <th>Quantity Available</th>
-                                                    </tr>
-                                                @foreach($accessorie as $accessories)
-                                                    <tr>
-                                                        <td data-id="{{$accessories->id}}">{{$accessories->name}}</td>
-                                                        <td><input type="number" data-id="{{$accessories->id}}" data-name="{{$accessories->name}}" class="add-to-cart  mt-3 cart-form"></td>
-                                                        <td>{{$accessories->available_quantity}} <input type="hidden" data-aqid="{{$accessories->available_quantity}}" class="available_quantity" value="{{$accessories->available_quantity}}"></td>
-                                                    </tr>
-                                                @endforeach
-                                            </table> 
-                                        </div>
-                                        <div class="modal-footer">
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> 
-
-                            <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />
-                            <button class="btn btn-success">Create</button>
+                        </div>
                     </form>  
                 <div>
             </div> 
@@ -3532,9 +3540,6 @@ Reservations View
 @endpush
 @push('scripts')
 <script src="{{ asset('la-assets/mine.js') }}"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
 <script src="{{ asset('la-assets/plugins/datatables/datatables.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
@@ -3552,6 +3557,10 @@ Reservations View
 
         var week = <?php echo json_encode($week); ?>;
         dateBinding(week);
+
+        $("#new_reservation_form").validate({
+
+        });
     });
     
 </script>
@@ -3690,186 +3699,6 @@ Reservations View
             }
         });
     }
-</script>
-<!--------------------------accessories added-------------------------------------------->
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('.js-example-basic-multiple').select2();
-        $('.js-example-basic-multiples').select2();
-        $('.acinput').hide();
-        $('.acces').click(function(){
-            $('.acinput').show();
-        })    
-        var quantity=[];
-            $('.add').click(function (){
-                quantity.push(document.getElementById('accquantity').value)
-            }); 
-            function displayAccessories(){
-                for(i=0; i<quantity.length; i++){
-                    quantity[i];
-                }
-            }
-            function getInputValue(){
-                    // Selecting the input element and get its value 
-                    var inputVal = document.getElementById("myInput").value;
-                }
-    });
-</script>
-
-<script type="text/javascript">
-    var shoppingCart = (function() {
-    cart = [];
-    function Item(name, id, count) {
-        this.name = name;
-        this.id = id;
-        this.count = count;
-    }
-    // Save cart
-    function saveCart() {
-        sessionStorage.setItem('shoppingCart', JSON.stringify(cart));
-    }
-    // Load cart
-    function loadCart() {
-        cart = JSON.parse(sessionStorage.getItem('shoppingCart'));
-    }
-
-    var obj = {};
-    // Add to cart
-    obj.addItemToCart = function(name, id, count) {
-        for(var item in cart) {
-        if(cart[item].name === name) {
-            cart[item].count ++;
-            saveCart();
-            return;
-        }
-        }
-        var item = new Item(name, id, count);
-        cart.push(item);
-        saveCart();
-    }
-
-    // Remove all items from cart
-    obj.removeItemFromCartAll = function(name) {
-        for(var item in cart) {
-        if(cart[item].name === name) {
-            cart.splice(item, 1);
-            break;
-        }
-        }
-        saveCart();
-        
-    }
-    // Clear cart
-    obj.clearCart = function() {
-        cart = [];
-        saveCart();
-    }
-    // Count cart 
-    obj.totalCount = function() {
-        var totalCount = 0;
-        for(var item in cart) {
-        totalCount += cart[item].count;
-        }
-        return totalCount;
-    }
-    // Total cart
-    obj.totalCart = function() {
-        var totalCart = 0;
-        for(var item in cart) {
-        totalCart += cart[item].price * cart[item].count;
-        }
-        return Number(totalCart.toFixed(2));
-    }
-    // List cart
-    obj.listCart = function() {
-        var cartCopy = [];
-        for(i in cart) {
-        item = cart[i];
-        itemCopy = {};
-        for(p in item) {
-            itemCopy[p] = item[p];
-
-        }
-        itemCopy.total = Number(item.price * item.count).toFixed(2);
-        cartCopy.push(itemCopy)
-        }
-        return cartCopy;
-    }
-    return obj;
-    })();
-    // Add item
-    
-    $('.add-to-cart').click(function(event) {
-    event.preventDefault();
-    var name = $(this).data('name');
-    var id = Number($(this).data('id'));
-    shoppingCart.addItemToCart(name, id, 1);
-    displayCart();
-    var value=$(this).val();
-    var quantity=$(".available_quantity").val();
-    
-    // for(var v in quanity)
-    // {
-    //     alert(v);
-    // }
-    });
-    // Clear items
-    $('.clear-cart').click(function() {
-    shoppingCart.clearCart();
-    displayCart();
-    $(".add-to-cart").val('');
-    });
-    function displayCart() {
-    var cartArray = shoppingCart.listCart();
-    var output = "<tr><th>Accessory</th><th>Quantity Requested</th><th>Quantity Available</th></tr>";
-    for(var i in cartArray) {
-        output += "<tr>"
-        + "<td>" + "<span>"+ cartArray[i].name +"</span><input type='hidden' name='accessories_id[]' class='item-count' data-name='" + cartArray[i].name + "' value='" + cartArray[i].id + "'>"+ "</td>" 
-        
-        + "<td><div class='input-group'><button class='minus-item input-group-addon btn btn-primary' data-name=" + cartArray[i].name + ">-</button>"
-        + "<input type='number' name='quantity[]' class='item-count  mt-3 cart-form d-inline' data-name='" + cartArray[i].name + "' value='" + cartArray[i].count + "'>"
-        + "<button class='plus-item btn btn-primary input-group-addon' data-name=" + cartArray[i].name + ">+</button></div></td>"
-        + "<td><button class='delete-item btn btn-danger' data-name=" + cartArray[i].name + ">X</button></td>"
-        + " = " 
-        +  "</tr>";
-    }
-    $('.show-cart').html(output);
-    $('.total-cart').html(shoppingCart.totalCart());
-    $('.total-count').html(shoppingCart.totalCount());
-    }
-    // Delete item button
-    $('.show-cart').on("click", ".delete-item", function(event) {
-    var name = $(this).data('name')
-    shoppingCart.removeItemFromCartAll(name);
-    displayCart();
-    //$(".add-to-cart").val('');
-    })
-    // -1
-    $('.show-cart').on("click", ".minus-item", function(event) {
-    var name = $(this).data('name')
-    shoppingCart.removeItemFromCart(name);
-    displayCart();
-    })
-    // +1
-    $('.show-cart').on("click", ".plus-item", function(event) {
-    var name = $(this).data('name')
-    shoppingCart.addItemToCart(name);
-    displayCart();
-    })
-    // Item count input
-    $('.show-cart').on("change", ".item-count", function(event) {
-    var name = $(this).data('name');
-    var count = Number($(this).val());
-    shoppingCart.setCountForItem(name, count);
-    displayCart();
-    });
-    displayCart();
-</script>
-<!----------------------------------------------------------------------------------------------------->
-<script type="text/javascript">
-  $(".add-to-cart").click(function(){
-    $("show-cart").show();
-  })
 </script>
 <!-- date binding -->
 <script type="text/javascript">
@@ -4014,9 +3843,7 @@ function colorBinding(){
 
             var dt_slot = slot_data.toString().substring(0, 12);
             var res_slot = slot_data.toString().substring(12);
-            // if(current_date_time > date_time){
-            //     $('[data-id="'+slot_data+'"]').css('background-color', '#CF9D9B');
-            // }
+            
             if(dt_v <= dt_slot && dt_val > dt_slot && res_v == res_slot && res_val == res_slot)
             {
                 $('[data-id="'+slot_data+'"]').css('background-color', '');
@@ -4038,6 +3865,82 @@ function colorBinding(){
         return $(this).val();
     }).get();
       
+</script>
+<!------------------------------------Accessories Grid------------------------------------------------------>
+<script>
+// var accessories = <?php echo json_encode($accessorie) ?>;
+var accessories = [];
+function getAccessoriesByResource(resource_id){
+    $.ajax({
+        "url" : "{{ url(config('laraadmin.adminRoute') . '/accessories_by_resourceid') }}",
+        type: 'POST',
+        data : {'_token': '{{ csrf_token() }}', 'resource_id' : resource_id},
+        success: function(data)
+        {
+            console.log(data);
+        }
+    });
+}
+function GetAccessory(accessories_id, grid_count){
+    console.log(accessories);
+}
+function isNumberdecimal(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode <= 45 || charCode > 57 || charCode == 47 )) {
+        return false;
+    }
+    return true;
+}
+var grid1;
+function insertRow()
+{
+    grid1 = $("#count1").val();
+    grid1++;
+    $("#count1").val(grid1);
+    var new_entry1 = `<div class="row" id="accessories_grid_${grid1}">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <select class="form-control input-sm" data-placeholder="Select Accessories" rel="select2" id="accessories_${grid1}" name="accessories_${grid1}">
+                        <option selected disabled>Choose Accessories</option>
+                        @foreach($accessorie as $accessories)
+                            <option value="{{ $accessories->id }}">{{ $accessories->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input type="text" name="requested_${grid1}" id="requested_${grid1}" onkeypress="return isNumberdecimal(this.event)" class="form-control input-sm" placeholder="Quantity Requested">
+                </div>                       
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="available_${grid1}" onkeypress="return isNumberdecimal(this.event)" readonly="true" class="form-control input-sm" id="available_${grid1}" >
+            </div>
+            <div class="col-md-3 next">
+                <div class="form-group">
+                    <a class="btn btn-primary btn-sm" onclick="insertRow()"><i class="fa fa-plus"></i></a>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteRow(${grid1})"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
+        </div>`;
+    grid1--;                        
+    $(".inc_row").append(new_entry1);
+}
+
+function deleteRow(grid_no){
+    var count = $("#count1").val();
+    if(count > 1)
+    {
+        $("#accessories_grid_"+grid_no).remove();   
+    }
+    else
+    {
+        alert('Rows cannot be removed');
+    }
+    count--;
+    $("#count1").val(count);
+}
 </script>
 @endpush
 
