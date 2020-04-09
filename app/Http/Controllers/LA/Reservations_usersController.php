@@ -239,4 +239,15 @@ class Reservations_usersController extends Controller
         $out->setData($data);
         return $out;
     }
+
+    public function getParticipants(Request $request){
+        $id = $request->reservation_id;
+        $sql = "select users.id, users.name from reservations_users left join users on reservations_users.user_id = users.id where users.deleted_at is null and reservations_users.deleted_at is null and reservations_users.reservations_id = $id";
+        $query = DB::table(DB::raw("($sql) as catch"));
+        $users = $query->get();
+        
+        return response()->json([
+            'users' => $users
+        ]);
+    }
 }

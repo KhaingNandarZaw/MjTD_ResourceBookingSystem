@@ -93,16 +93,26 @@ class ResourcesController extends Controller
             $insert_id = Module::insert("Resources", $request);
             
             
-            $user_id = $request->user_id; 
-            foreach($user_id as $user)
+            $operator_list = $request->operator_list;
+            if($operator_list == "")
+                $user_lists = array();
+            else
+                $user_lists = explode(',', $operator_list);
+
+            foreach($user_lists as $user)
             {
                 $resource_user=Resource_User::create([
                     'user_id' => $user,
                     'resource_id' => $insert_id
                 ]);
             }
-            $group_id = $request->group_id; 
-            foreach($group_id as $group)
+
+            $group_list = $request->group_list; 
+            if($group_list == "")
+                $groups = array();
+            else
+                $groups = explode(',', $group_list);
+            foreach($groups as $group)
             {
                 $resource_user=Resource_Group::create([
                     'group_id' => $group,
@@ -131,12 +141,28 @@ class ResourcesController extends Controller
             if(isset($resource->id)) {
                 $module = Module::get('Resources');
                 $module->row = $resource;
+                $group_lists = array();
+                $user_lists = array();
+
+                if(!$resource->is_public){
+                    $group_lists = DB::table('resource_groups')
+                    ->select('groups.id', 'groups.name')
+                    ->join('groups','groups.id','=','resource_groups.group_id')
+                    ->where('resource_groups.resource_id', $id)->whereNull('groups.deleted_at')->whereNull('resource_groups.deleted_at')->get();
+
+                    $user_lists = DB::table('resource_users')
+                    ->select('users.id', 'users.name')
+                    ->join('users','users.id','=','resource_users.user_id')
+                    ->where('resource_users.resource_id', $id)->whereNull('users.deleted_at')->whereNull('resource_users.deleted_at')->get();
+                }
                 
                 return view('la.resources.show', [
                     'module' => $module,
                     'view_col' => $module->view_col,
                     'no_header' => true,
-                    'no_padding' => "no-padding"
+                    'no_padding' => "no-padding",
+                    'user_lists' => $user_lists,
+                    'group_lists' => $group_lists
                 ])->with('resource', $resource);
             } else {
                 return view('errors.404', [
@@ -161,12 +187,43 @@ class ResourcesController extends Controller
             $resource = Resource::find($id);
             if(isset($resource->id)) {
                 $module = Module::get('Resources');
+                $users = User::whereNull('deleted_at')->get();
+                $groups = Group::whereNull('deleted_at')->get();
+
+                $group_lists = DB::table('resource_groups')
+                    ->select('groups.id', 'groups.name')
+                    ->join('groups','groups.id','=','resource_groups.group_id')
+                    ->where('resource_id', $id)->whereNull('groups.deleted_at')->whereNull('resource_groups.deleted_at')->get();
+                $user_lists = DB::table('resource_users')
+                    ->select('users.id', 'users.name')
+                    ->join('users','users.id','=','resource_users.user_id')
+                    ->where('resource_id', $id)->whereNull('users.deleted_at')->whereNull('resource_users.deleted_at')->get();
+
+                $selected_group_list = DB::table('resource_groups')->select('group_id')->where('resource_id', $id)->whereNull('deleted_at')->get();
+                $selected_user_list = DB::table('resource_users')->select('user_id')->where('resource_id', $id)->whereNull('deleted_at')->get();
+
+                $user_id_array = array();
+                foreach($selected_user_list as $user)
+                {
+                    array_push($user_id_array, $user->user_id);
+                }
+                $group_id_array = array();
+                foreach($selected_group_list as $group)
+                {
+                    array_push($group_id_array, $group->group_id);
+                }
                 
                 $module->row = $resource;
                 
                 return view('la.resources.edit', [
                     'module' => $module,
                     'view_col' => $module->view_col,
+                    'users' => $users,
+                    'groups' => $groups,
+                    'selected_group_list' => $group_id_array,
+                    'selected_user_list' => $user_id_array,
+                    'group_lists' => $group_lists,
+                    'user_lists' => $user_lists
                 ])->with('resource', $resource);
             } else {
                 return view('errors.404', [
@@ -199,6 +256,39 @@ class ResourcesController extends Controller
             }
             
             $insert_id = Module::updateRow("Resources", $request, $id);
+
+            $today = date('Y-m-d H:i:s');
+            DB:: table('resource_users')->where('resource_id', $id)->update(['deleted_at' => $today]);
+            DB:: table('resource_groups')->where('resource_id', $id)->update(['deleted_at' => $today]);
+
+            $user_list = $request->user_list;
+            if($user_list == "")
+                $user_lists = array();
+            else
+                $user_lists = explode(',', $user_list);
+
+            foreach($user_lists as $user)
+            {
+                $resource_user=Resource_User::create([
+                    'created_at' => $today,
+                    'user_id' => $user,
+                    'resource_id' => $insert_id
+                ]);
+            }
+
+            $group_list = $request->group_list; 
+            if($group_list == "")
+                $groups = array();
+            else
+                $groups = explode(',', $group_list);
+            foreach($groups as $group)
+            {
+                $resource_user=Resource_Group::create([
+                    'created_at' => $today,
+                    'group_id' => $group,
+                    'resource_id' => $insert_id
+                ]);
+            }
             
             return redirect()->route(config('laraadmin.adminRoute') . '.resources.index');
             

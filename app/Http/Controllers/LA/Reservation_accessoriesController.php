@@ -239,4 +239,15 @@ class Reservation_accessoriesController extends Controller
         $out->setData($data);
         return $out;
     }
+
+    public function getAccessories(Request $request){
+        $id = $request->reservation_id;
+        $sql = "select accessories.id, accessories.name, quantity, accessories.available_quantity from reservation_accessories left join accessories on accessories.id = reservation_accessories.accessories_id where reservation_accessories.deleted_at is null and accessories.deleted_at is null and reservations_id = $id";
+        $query = DB::table(DB::raw("($sql) as catch"));
+        $accessories = $query->get();
+        
+        return response()->json([
+            'accessories' => $accessories
+        ]);
+    }
 }

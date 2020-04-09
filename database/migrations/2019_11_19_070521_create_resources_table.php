@@ -20,7 +20,7 @@ class CreateResourcesTable extends Migration
      */
     public function up()
     {
-        Module::generate("Resources", 'resources', 'group_id', 'fa-cube', [
+        Module::generate("Resources", 'resources', 'name', 'fa-cube', [
             [
                 "colname" => "name",
                 "label" => "Name",
@@ -67,22 +67,22 @@ class CreateResourcesTable extends Migration
                 "label" => "Status",
                 "field_type" => "Dropdown",
                 "unique" => false,
-                "defaultvalue" => "",
+                "defaultvalue" => "Available",
                 "minlength" => 0,
-                "maxlength" => 0,
+                "maxlength" => 50,
                 "required" => true,
                 "listing_col" => true,
-                "popup_vals" => ["Available"],
+                "popup_vals" => ["Available","Not Available"],
             ], [
                 "colname" => "is_public",
                 "label" => "Is Public",
                 "field_type" => "Checkbox",
                 "unique" => false,
-                "defaultvalue" => "0",
+                "defaultvalue" => "1",
                 "minlength" => 0,
                 "maxlength" => 0,
                 "required" => true,
-                "listing_col" => true
+                "listing_col" => false
             ], [
                 "colname" => "need_approval",
                 "label" => "Need Approval",
@@ -92,7 +92,7 @@ class CreateResourcesTable extends Migration
                 "minlength" => 0,
                 "maxlength" => 0,
                 "required" => true,
-                "listing_col" => true
+                "listing_col" => false
             ], [
                 "colname" => "no_of_maximum_people",
                 "label" => "No of maximum People",

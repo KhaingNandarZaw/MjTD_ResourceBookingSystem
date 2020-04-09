@@ -17,6 +17,7 @@ use DB;
 use Validator;
 use Datatables;
 use Collective\Html\FormFacade as Form;
+use Zizaco\Entrust\EntrustFacade as Entrust;
 use Dwij\Laraadmin\Models\Module;
 use Dwij\Laraadmin\Models\ModuleFields;
 
@@ -101,23 +102,22 @@ class ReservationsController extends Controller
             foreach($request->input('user_id') as $user)
             {
                 $reservations_user=Reservations_user::create([
-            
                     'user_id' => $user,
                     'reservations_id' =>$reservation['id']
                 ]);
             }
         }
-        $accessories_id = $request->accessories_id;  
-        $quantity = $request->quantity;       
-
-        foreach($accessories_id as $key => $accessories)
+        $count = $request->input('count1');
+        for($i = 1; $i <= $count; $i++)
         {
-            $input['accessories_id'] = $accessories;
-            $input['quantity'] = $quantity[$key];
-            $input['reservations_id']=$reservation['id'];
-            Reservation_accessory::create($input);
-
-        }     
+            if($request->input('accessories_'.$i) != "")
+            {
+                $input['accessories_id'] = $request->input('accessories_' . $i);
+                $input['quantity'] = $request->input('requested_' . $i);
+                $input['reservations_id']=$reservation['id'];
+                Reservation_accessory::create($input);
+            } 
+        }  
            
         return redirect()->route('admin.reservations.show', ['id' => $request->schedule_id]);
     }
@@ -203,9 +203,10 @@ class ReservationsController extends Controller
             $query = DB::table(DB::raw("($sql) as catch"));
             $resource = $query->get();
 
-            $sql = "select reservations.* from reservations left join resources on resources.id = reservations.resource_id
+            $sql = "select reservations.*, users.name from reservations left join resources on resources.id = reservations.resource_id
                 left join all_schedules on all_schedules.id = resources.schedule
-                where reservations.deleted_at is null and resources.deleted_at is null and all_schedules.deleted_at is null and all_schedules.id = $id";
+                left join users on users.id = reservations.owner_id
+                where users.deleted_at is null and reservations.deleted_at is null and resources.deleted_at is null and all_schedules.deleted_at is null and all_schedules.id = $id";
             $query = DB::table(DB::raw("($sql) as catch"));
             $reservation = $query->get();
 
@@ -213,12 +214,46 @@ class ReservationsController extends Controller
             $endbookdate = [];
             foreach($reservation as $reservations)
             {
-                $datetime= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $reservations->begin_date.$reservations->begin_time.$reservations->resource_id));
-                $enddatetime= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $reservations->begin_date.$reservations->end_time.$reservations->resource_id));
+                $datetime= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $reservations->begin_date.$reservations->begin_time.$reservations->id));
+                $enddatetime= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $reservations->begin_date.$reservations->end_time.$reservations->id));
                 $bookdate[]=trim($datetime);
                 $endbookdate[]=trim($enddatetime);
             }
-            
+
+            if(Entrust::hasRole("SUPER_ADMIN")){
+                $data_resources = DB::table('resources')
+                    ->select('resources.name','resources.id', 'resources.no_of_maximum_people')
+                    ->where('schedule', $id)
+                    ->where('status', '=', 'Available')
+                    ->whereNull('deleted_at')
+                    ->get();
+            }else{
+                $data_resources = array();
+                $public_resources = DB::table('resources')
+                    ->select('resources.name','resources.id', 'resources.no_of_maximum_people')
+                    ->where('schedule', $id)
+                    ->where('status', '=', 'Available')
+                    ->where('is_public', 1)
+                    ->whereNull('deleted_at')
+                    ->get();
+                $private_resouces = DB::table('get_resource_by_userid')
+                    ->select('name','id')
+                    ->where('schedule', $id)
+                    ->where('status', '=', 'Available')
+                    ->where('is_public', 0)
+                    ->where('user_id', Auth::user()->id)
+                    ->whereNull('deleted_at')
+                    ->get();
+
+                foreach ($public_resources as $key => $res) {
+                    array_push($data_resources, $res);
+                }
+                foreach ($private_resouces as $key => $res) {
+                    array_push($data_resources, $res);
+                }
+
+                // dd($data_resources);
+            }
             if(isset($all_schedule->id)) {
                 $module = Module::get('Reservations');
                 $module->row = $all_schedule;
@@ -231,12 +266,13 @@ class ReservationsController extends Controller
                     ])->with('all_schedule', $all_schedule)
                     ->with('user',$user)
                     ->with('accessorie',$accessorie)
-                    ->with('resource',$resource)
+                    // ->with('resource',$resource)
                     ->with('reservation',$reservation)
                     ->with('bookdate',$bookdate)
                     ->with('endbookdate',$endbookdate)
                     ->with('scheduleid', $id)
-                    ->with('week', $week);
+                    ->with('week', $week)
+                    ->with('data_resources', $data_resources);
                     
             } else {
 
@@ -276,9 +312,7 @@ class ReservationsController extends Controller
             $query = DB::table(DB::raw("($sql) as catch"));
             $resource = $query->get();
 
-            $sql = "select reservations.* from reservations left join resources on resources.id = reservations.resource_id
-                left join all_schedules on all_schedules.id = resources.schedule
-                where reservations.deleted_at is null and resources.deleted_at is null and all_schedules.deleted_at is null and all_schedules.id = $id";
+            $sql = "select reservations.*, users.name from reservations left join resources on resources.id = reservations.resource_id left join all_schedules on all_schedules.id = resources.schedule left join users on users.id = reservations.owner_id where users.deleted_at is null and reservations.deleted_at is null and resources.deleted_at is null and all_schedules.deleted_at is null and all_schedules.id = $id";
             $query = DB::table(DB::raw("($sql) as catch"));
             $reservation = $query->get();
 
@@ -286,10 +320,43 @@ class ReservationsController extends Controller
             $endbookdate = [];
             foreach($reservation as $reservations)
             {
-                $datetime= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $reservations->begin_date.$reservations->begin_time.$reservations->resource_id));
-                $enddatetime= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $reservations->begin_date.$reservations->end_time.$reservations->resource_id));
+                $datetime= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $reservations->begin_date.$reservations->begin_time.$reservations->id));
+                $enddatetime= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $reservations->begin_date.$reservations->end_time.$reservations->id));
                 $bookdate[]=trim($datetime);
                 $endbookdate[]=trim($enddatetime);
+            }
+
+            if(Entrust::hasRole("SUPER_ADMIN")){
+                $data_resources = DB::table('resources')
+                    ->select('resources.name','resources.id', 'resources.no_of_maximum_people')
+                    ->where('schedule', $id)
+                    ->where('status', '=', 'Available')
+                    ->whereNull('deleted_at')
+                    ->get();
+            }else{
+                $data_resources = array();
+                $public_resources = DB::table('resources')
+                    ->select('resources.name','resources.id', 'resources.no_of_maximum_people')
+                    ->where('schedule', $id)
+                    ->where('status', '=', 'Available')
+                    ->where('is_public', 1)
+                    ->whereNull('deleted_at')
+                    ->get();
+                $private_resouces = DB::table('get_resource_by_userid')
+                    ->select('name','id')
+                    ->where('schedule', $id)
+                    ->where('status', '=', 'Available')
+                    ->where('is_public', 0)
+                    ->where('user_id', Auth::user()->id)
+                    ->whereNull('deleted_at')
+                    ->get();
+
+                foreach ($public_resources as $key => $res) {
+                    array_push($data_resources, $res);
+                }
+                foreach ($private_resouces as $key => $res) {
+                    array_push($data_resources, $res);
+                }
             }
             
             if(isset($all_schedule->id)) {
@@ -309,7 +376,8 @@ class ReservationsController extends Controller
                     ->with('bookdate',$bookdate)
                     ->with('endbookdate',$endbookdate)
                     ->with('scheduleid', $id)
-                    ->with('week', $week);
+                    ->with('week', $week)
+                    ->with('data_resources', $data_resources);
                     
             } else {
 
@@ -346,9 +414,7 @@ class ReservationsController extends Controller
             $query = DB::table(DB::raw("($sql) as catch"));
             $resource = $query->get();
 
-            $sql = "select reservations.* from reservations left join resources on resources.id = reservations.resource_id
-                left join all_schedules on all_schedules.id = resources.schedule
-                where reservations.deleted_at is null and resources.deleted_at is null and all_schedules.deleted_at is null and all_schedules.id = $id";
+            $sql = "select reservations.*, users.name from reservations left join resources on resources.id = reservations.resource_id left join all_schedules on all_schedules.id = resources.schedule left join users on users.id = reservations.owner_id where users.deleted_at is null and reservations.deleted_at is null and resources.deleted_at is null and all_schedules.deleted_at is null and all_schedules.id = $id";
             $query = DB::table(DB::raw("($sql) as catch"));
             $reservation = $query->get();
 
@@ -356,10 +422,43 @@ class ReservationsController extends Controller
             $endbookdate = [];
             foreach($reservation as $reservations)
             {
-                $datetime= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $reservations->begin_date.$reservations->begin_time.$reservations->resource_id));
-                $enddatetime= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $reservations->begin_date.$reservations->end_time.$reservations->resource_id));
+                $datetime= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $reservations->begin_date.$reservations->begin_time.$reservations->id));
+                $enddatetime= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $reservations->begin_date.$reservations->end_time.$reservations->id));
                 $bookdate[]=trim($datetime);
                 $endbookdate[]=trim($enddatetime);
+            }
+
+            if(Entrust::hasRole("SUPER_ADMIN")){
+                $data_resources = DB::table('resources')
+                    ->select('resources.name','resources.id', 'resources.no_of_maximum_people')
+                    ->where('schedule', $id)
+                    ->where('status', '=', 'Available')
+                    ->whereNull('deleted_at')
+                    ->get();
+            }else{
+                $data_resources = array();
+                $public_resources = DB::table('resources')
+                    ->select('resources.name','resources.id', 'resources.no_of_maximum_people')
+                    ->where('schedule', $id)
+                    ->where('status', '=', 'Available')
+                    ->where('is_public', 1)
+                    ->whereNull('deleted_at')
+                    ->get();
+                $private_resouces = DB::table('get_resource_by_userid')
+                    ->select('name','id')
+                    ->where('schedule', $id)
+                    ->where('status', '=', 'Available')
+                    ->where('is_public', 0)
+                    ->where('user_id', Auth::user()->id)
+                    ->whereNull('deleted_at')
+                    ->get();
+
+                foreach ($public_resources as $key => $res) {
+                    array_push($data_resources, $res);
+                }
+                foreach ($private_resouces as $key => $res) {
+                    array_push($data_resources, $res);
+                }
             }
             
             if(isset($all_schedule->id)) {
@@ -379,7 +478,8 @@ class ReservationsController extends Controller
                     ->with('bookdate',$bookdate)
                     ->with('endbookdate',$endbookdate)
                     ->with('scheduleid', $id)
-                    ->with('week', $week);
+                    ->with('week', $week)
+                    ->with('data_resources', $data_resources);
                     
             } else {
 

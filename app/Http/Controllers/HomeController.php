@@ -11,6 +11,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use JWTAuth;
+use Auth;
 
 /**
  * Class HomeController
@@ -47,12 +49,17 @@ class HomeController extends Controller
 			]);
 		}
     }
-    public function doLogin(Request $request){
-        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
-           return response()->json(true);
-        } 
-        else{ 
-            return response()->json(false); 
-        } 
-    }
+    // public function doLogin(Request $request){
+    //     $user = JWTAuth::toUser($request->token);
+    //     if(isset($user->id)){
+    //         Auth::guard('web')->login($user, true);
+    //         return response()->json(
+    //             Auth::check()
+    //         );
+    //     }else{
+    //         return response()->json(
+    //             'error'
+    //         );
+    //     }
+    // }
 }

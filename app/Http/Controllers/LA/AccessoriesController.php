@@ -79,11 +79,15 @@ class AccessoriesController extends Controller
             
             $insert_id = Module::insert("Accessories", $request);
 
-            $today = date('Y-m-d h:i:sa');
+            $today = date('Y-m-d H:i:s');
+            
             $resource_list = $request->resource_list;
-            $resource_list = explode(',', $resource_list);
+            if($resource_list == "")
+                $resource_lists = array();
+            else
+                $resource_lists = explode(',', $resource_list);
 
-            foreach($resource_list as $resource)
+            foreach($resource_lists as $resource)
             {
                 DB::table('accessories_resources')
                     ->insert([
@@ -159,13 +163,19 @@ class AccessoriesController extends Controller
                     ->where('accessories_id', $id)->whereNull('resources.deleted_at')->whereNull('accessories_resources.deleted_at')->get();
                 $resources = Resource::whereNull('deleted_at')->get();
                 $selected_resource_list = DB::table('accessories_resources')->select('resource_id')->where('accessories_id', $id)->whereNull('deleted_at')->get();
-                dd($selected_resource_list);
+
+                $resource_id_array = array();
+                foreach($selected_resource_list as $resource)
+                {
+                    array_push($resource_id_array, $resource->resource_id);
+                }
+
                 return view('la.accessories.edit', [
                     'module' => $module,
                     'view_col' => $module->view_col,
                     'resource_lists' => $resource_lists,
                     'resources' => $resources,
-                    'selected_resource_list' => $selected_resource_list
+                    'resource_id_array' => $resource_id_array
                 ])->with('accessory', $accessory);
             } else {
                 return view('errors.404', [
@@ -199,13 +209,16 @@ class AccessoriesController extends Controller
             
             $insert_id = Module::updateRow("Accessories", $request, $id);
 
-            $today = date('Y-m-d h:i:s');
+            $today = date('Y-m-d H:i:s');
             DB:: table('accessories_resources')->where('accessories_id', $insert_id)->update(['deleted_at' => $today]);
 
             $resource_list = $request->resource_list;
-            $resource_list = explode(',', $resource_list);
-            dd($resource_list);
-            foreach($resource_list as $resource)
+            if($resource_list == "")
+                $resource_lists = array();
+            else
+                $resource_lists = explode(',', $resource_list);
+
+            foreach($resource_lists as $resource)
             {
                 DB::table('accessories_resources')
                     ->insert([

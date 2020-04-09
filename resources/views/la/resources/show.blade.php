@@ -27,7 +27,26 @@
 						@la_display($module, 'notes')
 						@la_display($module, 'status')
 						@la_display($module, 'is_public')
-						@la_display($module, 'need_approval')
+                        @if(count($user_lists) > 0)
+                        <div class="form-group">
+                            <label class="col-md-4 col-sm-6 col-xs-6">Allowed Users :</label>
+                            <div class="col-md-8 col-sm-6 col-xs-6">
+                                @foreach($user_lists as $user)
+                                 <div class="label label-primary">{{$user->name}}</div>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+                        @if(count($group_lists) > 0)
+                        <div class="form-group">
+                            <label class="col-md-4 col-sm-6 col-xs-6">Allowed Groups :</label>
+                            <div class="col-md-8 col-sm-6 col-xs-6">
+                                @foreach($group_lists as $group)
+                                 <div class="label label-primary">{{$group->name}}</div>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

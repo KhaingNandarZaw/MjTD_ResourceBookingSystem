@@ -239,4 +239,11 @@ class Reservations_inviteesController extends Controller
         $out->setData($data);
         return $out;
     }
+    public function getInvitees(Request $request){
+        $id = $request->reservation_id;
+        $invitees = DB::table('reservations_invitees')->select('email')->whereNull('deleted_at')->where('reservations_id', $id)->get();
+        return response()->json([
+            'invitees' => $invitees
+        ]);
+    }
 }

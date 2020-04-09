@@ -193,20 +193,21 @@ class BookinglistController extends Controller
         $all_bookinglists = $query->get();
         //dd($all_bookinglists);
 
+        $results = array();
             foreach($all_bookinglists as $key=>$data)
             {
-            $newarr=array();
-            $newarr['id']=$data->id;
-            $newarr['title']=$data->title;
-            $newarr['resourcename']=$data->name;
-            $newarr['resourceid']=$data->id;
-            $newarr['begin_date']=$data->begin_date;
-            $newarr['begin_time']=$data->begin_time;
-            $newarr['end_date']=$data->end_date;
-            $newarr['end_time']=$data->end_time;
-            $newarr['no_of_participant']=$data->no_of_participant;
-            $newarr['username']=$user->name;
-            $results[]=$newarr;
+                $newarr=array();
+                $newarr['id']=$data->id;
+                $newarr['title']=$data->title;
+                $newarr['resourcename']=$data->name;
+                $newarr['resourceid']=$data->id;
+                $newarr['begin_date']=$data->begin_date;
+                $newarr['begin_time']=$data->begin_time;
+                $newarr['end_date']=$data->end_date;
+                $newarr['end_time']=$data->end_time;
+                $newarr['no_of_participant']=$data->no_of_participant;
+                $newarr['username']=$user->name;
+                $results[] = $newarr;
             }
         
 
