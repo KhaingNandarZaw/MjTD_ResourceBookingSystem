@@ -191,8 +191,6 @@ class BookinglistController extends Controller
             $query = $query->where('resources.id', '=', $resourcename);
         }
         $all_bookinglists = $query->get();
-        //dd($all_bookinglists);
-
             foreach($all_bookinglists as $key=>$data)
             {
             $newarr=array();
@@ -209,9 +207,7 @@ class BookinglistController extends Controller
             $results[]=$newarr;
             }
         
-
         
-        //dd($all_bookinglists);
         return View('la.bookinglist.index', [
             'from_date' => $input_from_date,
             'to_date' => $input_to_date,
