@@ -83,17 +83,28 @@
             <tr>
                 <td>{{$requested_lists->id}}</td>
                 <?php $user = DB::table('users')->where('id', $requested_lists->user_id)->first(); ?>
-                <td>@if(isset($user)) {{$user->name}} @endif</td>
-                <td>{{$requested_lists->start_date}}</td>
-                <td>{{$requested_lists->end_date}}</td>
+                <td><a href="{{ url(config('laraadmin.adminRoute') . '/carrequestsapprove/'.$requested_lists->id) }}">@if(isset($user)) {{$user->name}} @endif</a></td>
+                <td><a href="{{ url(config('laraadmin.adminRoute') . '/carrequestsapprove/'.$requested_lists->id) }}">{{$requested_lists->start_date}}</a></td>
+                <td><a href="{{ url(config('laraadmin.adminRoute') . '/carrequestsapprove/'.$requested_lists->id) }}">{{$requested_lists->end_date}}</a></td>
                 <td>{{$requested_lists->start_time}}</td>
                 <td>{{$requested_lists->end_time}}</td>
                 <td>{{$requested_lists->way}}</td>
                 <td>{{$requested_lists->no_of_participant}}</td>
-                <td>{{$requested_lists->status}}</td>
-                <td><a class="btn btn-success btn-xs" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#ConfirmModal">Confirm</a>
-                    <a class="btn btn-primary btn-xs" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#PendingModal">Pending</a>
-                    <a class="btn btn-danger btn-xs" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#RejectModal">Reject</a> </td>
+                <td class="status {{$requested_lists->status}}" value="{{$requested_lists->status}}">{{$requested_lists->status}}</td>
+                <td>
+                @if($requested_lists->status == 'Confirmed')
+                <a class="btn btn-primary btn-xs" id="pending" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#PendingModal">Pending</a>
+                <a class="btn btn-danger btn-xs" id="reject" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#RejectModal">Reject</a> 
+                @endif
+                @if($requested_lists->status == 'Rejected')
+                <a class="btn btn-success btn-xs" id="confirm" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#ConfirmModal">Confirm</a>
+                <a class="btn btn-primary btn-xs" id="pending" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#PendingModal">Pending</a>
+                @endif
+                @if($requested_lists->status == 'Pending')
+                <a class="btn btn-success btn-xs" id="confirm" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#ConfirmModal">Confirm</a>
+                <a class="btn btn-danger btn-xs" id="reject" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#RejectModal">Reject</a> 
+                @endif
+                </td>  
             </tr>
         @endforeach
         </tbody>
@@ -198,20 +209,6 @@
 
 @push('scripts')
 <script src="{{ asset('la-assets/plugins/datatables/datatables.min.js') }}"></script>
-<script>
-$(function () {
-    $("#example1").DataTable({
-        processing: true,
-        serverSide: true,
-        language: {
-            lengthMenu: "_MENU_",
-            search: "_INPUT_",
-            searchPlaceholder: "Search"
-        }
-    });
-    
-});
-</script>
 <script>
 $("#ConfirmModal").on("show.bs.modal", function(e){
         var modal = $(this);
