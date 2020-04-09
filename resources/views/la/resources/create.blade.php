@@ -8,7 +8,7 @@
 
 @section("main-content")
 
-<div class="box box-info">
+<div class="box box-purple">
     <div class="box-header with-border">
         Resource Entry
     </div> 
@@ -22,6 +22,7 @@
                     @la_input($module, 'notes')
                     @la_input($module, 'status')
                     @la_input($module, 'no_of_maximum_people')
+                    @la_input($module, 'room_types')
                     <div class='public'>
                         @la_input($module, 'is_public')
                     </div>

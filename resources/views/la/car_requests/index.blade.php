@@ -8,7 +8,7 @@
 
 @section("headerElems")
 @la_access("Car_Requests", "create")
-    <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#AddModal">Add Car Request</button>
+    <button class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#AddModal">Add Car Request</button>
 @endla_access
 @endsection
 
@@ -27,12 +27,11 @@
     </div>
 @endif
 
-<div class="box box-success">
-    <!--<div class="box-header"></div>-->
+<div class="box box-purple">
     <div class="box-body">
         <table id="example1" class="table table-bordered">
         <thead>
-        <tr class="success">
+        <tr>
             <th>ID</th>
             <th>Requested Person</th>
             <th>Start Date</th>
@@ -125,7 +124,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                {!! Form::submit( 'Submit', ['class'=>'btn btn-success']) !!}
+                {!! Form::submit( 'Submit', ['class'=>'btn btn-info']) !!}
             </div>
             {!! Form::close() !!}
         </div>

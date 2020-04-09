@@ -131,7 +131,7 @@ $('#fullCalendar').fullCalendar({
       },
       slotLabelFormat:"HH:mm",
 	    events: [
-                @foreach($reservations_list as $reservations_lists)
+                @foreach($reservations as $reservations_lists)
                 {
                     title: '{{ $reservations_lists->title." ".$reservations_lists->begin_time."-".$reservations_lists->end_time }}',
                     start: '{{ $reservations_lists->begin_date." ".$reservations_lists->begin_time }}',

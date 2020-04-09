@@ -7,7 +7,7 @@
 
 @section("headerElems")
 @la_access("All_Schedules", "create")
-<button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#AddModal"><i class="fa fa-plus"></i> Add New Schedule</button>
+<button class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#AddModal"><i class="fa fa-plus"></i> Add New Schedule</button>
 @endla_access
 @endsection
 
@@ -21,7 +21,7 @@
     </ul>
 </div>
 @endif
-<div class="box box-info">
+<div class="box box-purple">
     <div class="box-body">
         <table id="example1" class="table table-bordered table-striped">
             <thead>
@@ -56,7 +56,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
-                {!! Form::submit( 'Submit', ['class'=>'btn btn-sm btn-success']) !!}
+                {!! Form::submit( 'Submit', ['class'=>'btn btn-sm btn-info']) !!}
             </div>
             {!! Form::close() !!}
         </div>

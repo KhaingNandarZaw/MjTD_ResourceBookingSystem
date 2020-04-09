@@ -22,7 +22,7 @@
     </div>
 @endif
 
-<div class="box">
+<div class="box box-purple">
     <div class="box-header">
         
     </div>
@@ -34,7 +34,7 @@
                     
                     <div class="form-group col-sm-12">
                         <div class="col-sm-6">
-                            {!! Form::submit( 'Update', ['class'=>'btn btn-sm btn-success pull-right']) !!} 
+                            {!! Form::submit( 'Update', ['class'=>'btn btn-sm btn-info pull-right']) !!} 
                         </div>
                         <div class="col-sm-6">
                             <a href="{{ url(config('laraadmin.adminRoute') . '/all_schedules') }}" class="btn btn-sm btn-default">Cancel</a>

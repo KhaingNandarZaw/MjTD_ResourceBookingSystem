@@ -22,7 +22,7 @@
     </div>
 @endif
 
-<div class="box box-green">
+<div class="box box-purple">
     <div class="box-header with-border">
         User Entry
     </div>    
@@ -50,7 +50,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-6" align="right">
-                    {!! Form::submit( 'Update', ['class'=>'btn btn-primary btn-sm']) !!}
+                    {!! Form::submit( 'Update', ['class'=>'btn btn-info btn-sm']) !!}
                 </div>
                 <div class="col-sm-6" align="left">
                     <a href="{{ url(config('laraadmin.adminRoute') . '/users') }}" class="btn btn-default btn-sm">Cancel</a>

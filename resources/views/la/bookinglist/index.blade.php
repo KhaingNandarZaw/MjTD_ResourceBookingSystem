@@ -8,7 +8,7 @@
 
 @section("main-content")
 
-<div class="box box-green">  
+<div class="box box-purple">  
     <div class="box-body">
     {!! Form::open(['action' => 'BookinglistController@bookinglist_filter', 'method' => 'POST']) !!}
         <div class="row form-group">

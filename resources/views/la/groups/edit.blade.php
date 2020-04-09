@@ -22,7 +22,7 @@
     </div>
 @endif
 
-<div class="box">
+<div class="box box-purple">
     <div class="box-header">
         
     </div>
@@ -64,7 +64,7 @@
                             </div>
                         </div>                           
                     </div>
-                {!! Form::submit( 'Update', ['class'=>'btn btn-success']) !!} <a href="{{ url(config('laraadmin.adminRoute') . '/groups') }}" class="btn btn-default pull-right">Cancel</a>
+                {!! Form::submit( 'Update', ['class'=>'btn btn-info']) !!} <a href="{{ url(config('laraadmin.adminRoute') . '/groups') }}" class="btn btn-default pull-right">Cancel</a>
                 {!! Form::close() !!}
             </div>
         </div>

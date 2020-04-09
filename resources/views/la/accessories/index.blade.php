@@ -8,7 +8,7 @@
 
 @section("headerElems")
 @la_access("Accessories", "create")
-    <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#AddModal"><i class="fa fa-plus"> Add New Accessory</i></button>
+    <button class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#AddModal"><i class="fa fa-plus"> Add New Accessory</i></button>
 @endla_access
 @endsection
 
@@ -24,7 +24,7 @@
     </div>
 @endif
 
-<div class="box">
+<div class="box box-purple">
     <!--<div class="box-header"></div>-->
     <div class="box-body">
         <table id="example1" class="table table-striped table-bordered">
@@ -91,7 +91,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                {!! Form::submit( 'Submit', ['class'=>'btn btn-success']) !!}
+                {!! Form::submit( 'Submit', ['class'=>'btn btn-info']) !!}
             </div>
             {!! Form::close() !!}
         </div>

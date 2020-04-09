@@ -186,4 +186,8 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
     /* ================== Car_Request_Statuses ================== */
     Route::resource(config('laraadmin.adminRoute') . '/car_request_statuses', 'LA\Car_Request_StatusesController');
     Route::get(config('laraadmin.adminRoute') . '/car_request_status_dt_ajax', 'LA\Car_Request_StatusesController@dtajax');
+
+    /* ================== Room_Types ================== */
+    Route::resource(config('laraadmin.adminRoute') . '/room_types', 'LA\Room_TypesController');
+    Route::get(config('laraadmin.adminRoute') . '/room_type_dt_ajax', 'LA\Room_TypesController@dtajax');
 });

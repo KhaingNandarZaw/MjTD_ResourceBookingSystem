@@ -22,7 +22,7 @@
     </div>
 @endif
 
-<div class="box box-info container contact">
+<div class="box box-purple container contact">
 	<div class="box-body">
                 
         {!! Form::model($resource, ['route' => [config('laraadmin.adminRoute') . '.resources.update', $resource->id ], 'method'=>'PUT', 'id' => 'resource-edit-form']) !!}
@@ -110,7 +110,7 @@
 
             <div class="form-group col-sm-12">
                 <div class="col-sm-6">
-                    {!! Form::submit( 'Update', ['class'=>'btn btn-sm btn-success pull-right']) !!}
+                    {!! Form::submit( 'Update', ['class'=>'btn btn-sm btn-info pull-right']) !!}
                 </div>
                 <div class="col-sm-6">
                     <a href="{{ url(config('laraadmin.adminRoute') . '/resources') }}" class="btn btn-sm btn-default">Cancel</a>

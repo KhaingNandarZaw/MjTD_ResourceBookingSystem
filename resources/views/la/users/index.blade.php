@@ -7,7 +7,11 @@
 @section("contentheader_title", "Users")
 @section("contentheader_description", "Users listing")
 
-@section("main-content")
+@section("headerElems")
+@la_access("Users", "create")
+    <a class="btn btn-info btn-sm" style="float: right;" href="<?= URL::to('/admin/users/create') ?>"><i class="fa fa-plus"> Add New User</i></a>
+@endla_access
+@endsection
 
 @if (count($errors) > 0)
     <div class="alert alert-danger">
@@ -18,14 +22,9 @@
         </ul>
     </div>
 @endif
-
-<div class="box box-green">
-    <div class="box-header with-border">
-        User List
-        @la_access("Users", "create")
-            <a class="btn btn-primary btn-sm" style="float: right;" href="<?= URL::to('/admin/users/create') ?>"><i class="fa fa-plus"> Add New User</i></a>
-        @endla_access
-    </div>    
+@section("main-content")
+<div class="box box-purple">
+    
     <div class="box-body">
         <table id="example1" class="table table-bordered table-striped" data-form="deleteFormusers">
         <thead>

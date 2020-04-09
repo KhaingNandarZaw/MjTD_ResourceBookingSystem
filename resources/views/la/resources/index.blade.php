@@ -8,7 +8,7 @@
 
 @section("headerElems")
 @la_access("Resources", "create")
-<a class="btn btn-primary btn-sm" style="float: right;" href="<?= URL::to('/admin/resources/create') ?>"><i class="fa fa-plus"> Add New Resource</i></a>
+<a class="btn btn-info btn-sm" style="float: right;" href="<?= URL::to('/admin/resources/create') ?>"><i class="fa fa-plus"> Add New Resource</i></a>
 @endla_access
 @endsection
 
@@ -24,7 +24,7 @@
     </div>
 @endif
 
-<div class="box box-info">
+<div class="box box-purple">
     <div class="box-body">
         <table id="example1" class="table table-bordered">
         <thead>

@@ -8,7 +8,7 @@
 
 @section("headerElems")
 @la_access("Groups", "create")
-    <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#AddModal"><i class="fa fa-plus">Add New Group</i></button>
+    <button class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#AddModal"><i class="fa fa-plus">Add New Group</i></button>
 @endla_access
 @endsection
 
@@ -24,7 +24,7 @@
     </div>
 @endif
 
-<div class="box">
+<div class="box box-purple">
     <div class="box-body">
         <table id="example1" class="table table-bordered table-striped table-hover">
         <thead>
@@ -86,7 +86,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                {!! Form::submit( 'Submit', ['class'=>'btn btn-success']) !!}
+                {!! Form::submit( 'Submit', ['class'=>'btn btn-info']) !!}
             </div>
             {!! Form::close() !!}
         </div>

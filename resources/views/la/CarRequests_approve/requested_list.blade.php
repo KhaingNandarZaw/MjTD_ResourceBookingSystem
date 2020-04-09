@@ -24,7 +24,7 @@
     </div>
 @endif
 
-<div class="box box-info">
+<div class="box box-purple">
     <div class="box-body">
     {!! Form::open(['action' => 'CarRequests_approveController@list_filter', 'method' => 'POST']) !!}
         <div class="row form-group">
@@ -46,7 +46,7 @@
                 <div class="input-group date"><input class="form-control input-sm" placeholder="Enter To Date" data-rule-minlength="0" id="to_date" name="to_date" type="text" value=""><span class="input-group-addon input_dt"><span class="fa fa-calendar"></span></span></div>
             </div>
             <div class="col-md-1" style="margin-top:25px;">
-                {{ Form::button('<i class="fa fa-search"> Search</i>', ['type' => 'submit', 'class' => 'btn btn-primary btn-sm'] )  }} 
+                {{ Form::button('<i class="fa fa-search"> Search</i>', ['type' => 'submit', 'class' => 'btn btn-info btn-sm'] )  }} 
             </div>
         </div>
         {!! Form::close() !!}
@@ -60,12 +60,12 @@
 </div>
 
 
-<div class="box box-success">
+<div class="box box-purple">
     <!--<div class="box-header"></div>-->
     <div class="box-body">
         <table id="example1" class="table table-bordered">
         <thead>
-        <tr class="success">
+        <tr>
             <th>ID</th>
             <th>Requested Person</th>
             <th>Start Date</th>

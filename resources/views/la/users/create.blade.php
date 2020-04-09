@@ -18,7 +18,7 @@
     </div>
 @endif
 
-<div class="box box-green">
+<div class="box box-purple">
     <div class="box-header with-border">
         User Entry
     </div>    

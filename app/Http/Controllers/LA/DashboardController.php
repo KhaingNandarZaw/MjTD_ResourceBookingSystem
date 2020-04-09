@@ -49,7 +49,10 @@ class DashboardController extends Controller
 
         $query = DB::table(DB::raw("($sql) as catch"));
         $reservations_list = $query->get();
+
+
+        $reservations=Reservation::get();
         
-        return view('la.dashboard',compact('bookinglist','reservations_list'));
+        return view('la.dashboard',compact('bookinglist','reservations_list','reservations'));
     }
 }
