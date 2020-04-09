@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 use App\User; 
 use Illuminate\Support\Facades\Auth; 
 use Validator;
+use JWTAuth;
+
 
 class AuthController extends Controller {
 
@@ -15,14 +17,15 @@ class AuthController extends Controller {
      * @return \Illuminate\Http\Response 
      */ 
     public function login(Request $request){ 
-        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
-            $user = Auth::user(); 
-            $success['token'] =  $user->createToken('MyApp')->accessToken; 
-            $success['user'] = $user;
-
-            $success['login_user'] = Auth::loginUsingId($user->id);
-
+        // $muTTL = 60 * 24 *30;
+        // JWTAuth::factory()->setTTL($muTTL);
+        if(JWTAuth::attempt(['email' => request('email'), 'password' => request('password')])){ 
+            // $user = Auth::user(); 
+            // $success['token'] =  $user->createToken('MyApp')->accessToken;
             
+            $user = Auth::user();
+            $success['token'] = JWTAuth::fromUser($user);
+
             return response()->json(['success' => $success], $this-> successStatus); 
         } 
         else{ 
@@ -45,8 +48,9 @@ class AuthController extends Controller {
             return response()->json(['error'=>$validator->errors()], 401);            
         }
         $input = $request->all(); 
-        $input['password'] = bcrypt($input['password']); 
-        $user = User::create($input); 
+        // $input['password'] = bcrypt($input['password']); 
+        $input['password'] = ($input['password']);
+        $user = User::create($input);
         $success['token'] =  $user->createToken('MyApp')-> accessToken; 
         $success['name'] =  $user->name;
         return response()->json(['success'=>$success], $this-> successStatus); 

@@ -61,7 +61,7 @@
 					@la_input($module, 'available_quantity')
                     <div>
                         <label for="">Resources</label>
-                        <select class="form-control" required="1" data-placeholder="Select Resources" rel="select2" name="select_resource" id="select_resource" onchange="addResource()">
+                        <select class="form-control" data-placeholder="Select Resources" rel="select2" name="select_resource" id="select_resource" onchange="addResource()">
                                 <option value="0" disabled selected>Select Resources</option>
                             @foreach($resources as $resource)
                                 <option value="{{ $resource->id }}">{{ $resource->name }}</option>

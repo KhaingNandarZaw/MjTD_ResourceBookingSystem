@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,12 +11,25 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
 	$user = Auth::user();
 	if(isset($user->id)){
 		return redirect('/admin');
 	}
     return view('auth.login');
+});
+
+Route::get('/doLogin', function(Request $request){
+	try{
+		$user = JWTAuth::toUser($request->token);
+
+	    if(isset($user->id)){
+	        Auth::guard('web')->login($user, true);
+	        return redirect('/admin');
+	    }
+	}catch(Exception $e){
+    	return view('auth.login');
+	}
 });
 
 /* ================== Homepage + Admin Routes ================== */

@@ -108,8 +108,13 @@ class All_SchedulesController extends Controller
 
             if($all_schedule->same_layout){
                 $datas = SlotOne::where('schedule_id',$id)->latest('created_at')->first();
-                if(!session()->exists('data'))
+                if(isset($datas)){
+                    if(!session()->exists('data'))
                         session()->put('data', unserialize($datas->time_slot));
+                }else{
+                    session()->forget('data');
+                }
+                
             } else{
                 $datas = SlotZero::where('schedule_id',$id)->latest('created_at')->first();
                 if(isset($datas)){

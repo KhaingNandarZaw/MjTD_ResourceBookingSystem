@@ -10,7 +10,7 @@
           <!-- Main row -->
           <div class="row">
             <div class="col-md-6">
-              <div class="box">
+              <div class="box box-purple">
                     <div class="box-header">
                         <h4 class="box-title">Upcoming reservations</h4>
                     </div>
@@ -40,7 +40,7 @@
             </div>
 
             <div class="col-md-6 col-lg-6">
-              <div class="box">
+              <div class="box box-purple">
                     <div class="box-header">
                         <h4 class="box-title">Your Calendar</h4>
                     </div>

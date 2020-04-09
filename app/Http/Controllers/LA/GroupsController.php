@@ -79,11 +79,15 @@ class GroupsController extends Controller
             }
             $insert_id = Module::insert("Groups", $request);
             
-            $user_id = $request->user_id; 
+            $today = date('Y-m-d H:i:s');
+
+            $user_list = $request->user_list;
+            $user_list = explode(',', $user_list);
             
-            foreach($user_id as $user)
+            foreach($user_list as $user)
             {
                 $reservations_user=User_Group::create([
+                    'created_at' => $today,
                     'user_id' => $user,
                     'group_id' =>$insert_id
                 ]);
@@ -155,7 +159,16 @@ class GroupsController extends Controller
                     ->where("group_id",$id)
                     ->get();
         
-        $user   = User::get();
+        $users   = User::whereNull('deleted_at')->get();
+
+        $selected_user_list = DB::table('user_groups')->select('user_id')->where('group_id', $id)->whereNull('deleted_at')->get();
+
+        $user_id_array = array();
+        foreach($selected_user_list as $user)
+        {
+            array_push($user_id_array, $user->user_id);
+        }
+
         if(Module::hasAccess("Groups", "edit")) {
             $group = Group::find($id);
             if(isset($group->id)) {
@@ -166,8 +179,9 @@ class GroupsController extends Controller
                 return view('la.groups.edit', [
                     'module' => $module,
                     'view_col' => $module->view_col,
+                    'user_id_array' => $user_id_array
                 ])->with('group', $group)
-                ->with('user',$user)
+                ->with('users',$users)
                 ->with('username',$username)
                 ->with('user_group',$user_group);
             } else {
@@ -191,8 +205,6 @@ class GroupsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
-        dd($request);
         if(Module::hasAccess("Groups", "edit")) {
             
             $rules = Module::validateRules("Groups", $request, true);
@@ -204,14 +216,20 @@ class GroupsController extends Controller
             }
             
             $insert_id = Module::updateRow("Groups", $request, $id);
-            $user_id = $request->user_id;  
+
+            $today = date('Y-m-d H:i:s');
+            DB:: table('user_groups')->where('group_id', $id)->update(['deleted_at' => $today]);
+
+            $user_list = $request->user_list;
+            $user_list = explode(',', $user_list);
             
-            foreach($user_id as $user)
+            foreach($user_list as $user)
             {
-                $group = User_Group::find($id);
-                $group->user_id = $user;
-                $group->group_id = $insert_id;
-                $group->save();
+                $reservations_user=User_Group::create([
+                    'created_at' => $today,
+                    'user_id' => $user,
+                    'group_id' =>$insert_id
+                ]);
             }
             return redirect()->route(config('laraadmin.adminRoute') . '.groups.index');
             

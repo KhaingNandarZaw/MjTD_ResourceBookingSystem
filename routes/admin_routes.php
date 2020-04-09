@@ -112,14 +112,17 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
     /* ================== Reservations_users ================== */
     Route::resource(config('laraadmin.adminRoute') . '/reservations_users', 'LA\Reservations_usersController');
     Route::get(config('laraadmin.adminRoute') . '/reservations_user_dt_ajax', 'LA\Reservations_usersController@dtajax');
+    Route::post(config('laraadmin.adminRoute') . '/getParticipants', 'LA\Reservations_usersController@getParticipants');
 
     /* ================== Reservations_invitees ================== */
     Route::resource(config('laraadmin.adminRoute') . '/reservations_invitees', 'LA\Reservations_inviteesController');
     Route::get(config('laraadmin.adminRoute') . '/reservations_invitee_dt_ajax', 'LA\Reservations_inviteesController@dtajax');
+    Route::post(config('laraadmin.adminRoute') . '/getInvitees', 'LA\Reservations_inviteesController@getInvitees');
 
     /* ================== Reservation_accessories ================== */
     Route::resource(config('laraadmin.adminRoute') . '/reservation_accessories', 'LA\Reservation_accessoriesController');
 	Route::get(config('laraadmin.adminRoute') . '/reservation_accessory_dt_ajax', 'LA\Reservation_accessoriesController@dtajax');
+	Route::post(config('laraadmin.adminRoute') . '/getAccessories', 'LA\Reservation_accessoriesController@getAccessories');
 	
 	/* ================== Calendar ================== */
 	Route::resource(config('laraadmin.adminRoute') . '/calendar', 'CalendarController');

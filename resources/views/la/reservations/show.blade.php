@@ -53,12 +53,6 @@ Reservations View
                                     ->orderBy('created_at', 'desc')
                                     ->first();
                             }
-                            
-                            
-                            $data_resources = DB::table('resources')
-                                ->select('resources.name','resources.id')
-                                ->where('schedule', $scheduleid)
-                                ->get();
                                 
                             if($module->row['start_on'] == 8 && $module->row['no_of_days_visible'] > 1){
                                 switch($module->row['no_of_days_visible']){
@@ -3334,9 +3328,6 @@ Reservations View
                         <input type="hidden" class="begintime" value="{{$reservations->begin_time}}">
                         <input type="hidden" class="resource" value="{{$reservations->resource_id}}">
                     @endforeach
-                    @foreach($resource as $res)
-
-                    @endforeach
                 </div>
                   
             </div>  
@@ -3354,25 +3345,21 @@ Reservations View
             </div>
             <div class="modal-body">
                 <div id="ok" class="container-fluid">
-                    <form action="{{route('admin.reservations.store')}}" method="post" enctype="multipart/form-data" id="new_reservation_form">
-                        <meta name="csrf-token" content="{{ csrf_token() }}" />    
-                            <input type="hidden" value="{{ Auth::user()->id }}" name="owner_id">
-                            <input type="hidden" id="selected_booking_id" name="schedule_id" value = "{{$scheduleid}}" class="form-control input-sm" >
-                            <input type="hidden" name="week" value="{{json_encode($week)}}">
-                            <div class="row">
-                                <div class="form-group col-sm-12">
-                                    <label class="control-label">Resource</label>                
-                                    <select class="js-example-basic-multiple form-control" name="resource">
-                                        @foreach($resource as $resources)
-                                            <option value="{{$resources->id}}">
-                                                {{$resources->name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of maximum people
-                                                ({{$resources->no_of_maximum_people}})
-                                            </option>
-                                        @endforeach
-                                    </select>
-                
-                                </div>
-                                
+                    {!! Form::open(['action' => 'LA\ReservationsController@store', 'id' => 'new_reservation_form']) !!}
+                        <input type="hidden" value="{{ Auth::user()->id }}" name="owner_id">
+                        <input type="hidden" id="selected_booking_id" name="schedule_id" value = "{{$scheduleid}}" class="form-control input-sm" >
+                        <input type="hidden" name="week" value="{{json_encode($week)}}">
+                        <div class="row">
+                            <div class="form-group col-sm-12">
+                                <label class="control-label">Resource</label>                
+                                <select class="js-example-basic-multiple form-control" onchange="getAccessoriesByResource(this.value)" name="resource">
+                                    @foreach($data_resources as $resources)
+                                        <option value="{{$resources->id}}">
+                                            {{$resources->name}}</span> - Number of maximum people
+                                            ({{$resources->no_of_maximum_people}})
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="row form-group">
@@ -3380,7 +3367,7 @@ Reservations View
                                 <label for="inputEmail4">Begin : <span style="color: red;">*</span></label>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <input type="date" id="begindate" name="begin_date" required class="form-control input-sm" value="" onmouseout="getTheDays({{$module->row['same_layout']}})"> 
+                                        <input type="date" id="begindate" name="begin_date" required class="form-control input-sm" value="" onchange="getTheDays({{$module->row['same_layout']}})"> 
                                     </div>
                                     <div class="col-md-6">
                                         <select name="begin_time" id="begintime" class="form-control input-sm"></select>
@@ -3391,7 +3378,7 @@ Reservations View
                                 <label for="inputEmail4">End : <span style="color: red;">*</span></label>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <input type="date" id="enddate" name="end_date" class="form-control input-sm" value="" onmouseout="getTheEndDays({{$module->row['same_layout']}})" required>
+                                        <input type="date" id="enddate" name="end_date" class="form-control input-sm" value="" onchange="getTheEndDays({{$module->row['same_layout']}})" required>
                                     </div>
                                     <div class="col-md-6">
                                         <select name="end_time" id="end_time" class="form-control input-sm"></select>
@@ -3425,6 +3412,10 @@ Reservations View
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
+                                <label>Number of Participant</label>
+                                <input type="number" class="form-control input-sm" name="no_of_participant" value=0>     
+                            </div>
+                            <div class="form-group col-md-6">
                                 <label>Invitees(comma(,) separted for each mail) :</label>
                                 <input type="text" class="form-control input-sm" name="invitees">
                             </div>
@@ -3444,6 +3435,7 @@ Reservations View
                             </div>    
                         </div>
                         <div class="inc_row">
+                            <input type="hidden" name="count1" id="count1" value="1">
                             <?php $i = 1 ?>
                             <div class="row" id="accessories_grid_{{ $i }}">
                                 <div class="col-md-3">
@@ -3462,7 +3454,7 @@ Reservations View
                                     </div>                       
                                 </div>
                                 <div class="col-md-3">
-                                    <input type="text" name="available_{{ $i }}" onkeypress="return isNumberdecimal(this.event)" readonly="true" class="form-control input-sm" id="available_{{ $i }}" >
+                                    <input type="text" name="available_{{ $i }}" readonly="true" class="form-control input-sm" id="available_{{ $i }}" >
                                 </div>
                                 <div class="col-md-3 next">
                                     <div class="form-group">
@@ -3471,29 +3463,107 @@ Reservations View
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                <label>Number of Participant</label>
-                                <input type="number" class="form-control" name="no_of_participant">     
-                                </div>  
-                                <div class="form-group col-md-6">
-                                    
-                                    
-                                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#cart">Accessories (<span class="total-count"></span>)</button>
-                                        <a href="#" class="clear-cart btn btn-danger">Clear</a>
-                                    
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
+                            {!! Form::submit( 'Submit', ['class'=>'btn btn-sm btn-success']) !!}
+                        </div>
+                    {!! Form::close() !!}
+                <div>
+            </div> 
+        </div>                
+    </div>
+    </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="ViewBooking" tabindex="-1" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">View Reservation</h5>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                        <div class="row">
+                            <div class="form-group col-sm-12">
+                                <label class="control-label">Resource : <span style="color: red;">*</span></label>                
+                                <input type="text" id="resource" name="resource" class="form-control input-sm" readonly>
                             </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-6">
+                                <label for="inputEmail4">Begin : <span style="color: red;">*</span></label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="date" id="begin_date" name="begin_date" readonly class="form-control input-sm" value=""> 
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" name="begin_time" id="begin_time" readonly class="form-control input-sm">
+                                    </div>
                                 </div>
                             </div>
-
-
-
-                            <!-- Main -->
-                            
-
-                            <div>
-                                <table class="show-cart table table-hover table-bordered"></table>
+                            <div class="col-md-6">
+                                <label for="inputEmail4">End : <span style="color: red;">*</span></label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="date" id="end_date" name="end_date" class="form-control input-sm" value="" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" name="end_time" id="end_time" class="form-control input-sm" readonly>
+                                    </div>
+                                </div>                  
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4">Title : <span style="color: red">*</span></label>
+                                <input type="text" readonly class="form-control input-sm" id="title" name="title">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Description : </label>
+                                <textarea cols="30" rows="2" readonly class="form-control input-sm" name="description"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <div class="row">   
+                                    <div class="col-md-12 mx-auto">
+                                        <label class="control-label">Participants : </label>                
+                                        <select class="js-example-basic-multiple form-control input-sm" id="participants" name="user_id[]" disabled multiple="multiple">
+                                            @foreach($user as $users)
+                                                @if($users->id != 1)
+                                                <option value="{{$users->id}}">{{$users->name}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Number of Participant</label>
+                                <input type="number" readonly class="form-control input-sm" id="no_of_participant" name="no_of_participant" value=0>     
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Invitees(comma(,) separted for each mail) :</label>
+                                <input type="text" readonly class="form-control input-sm" id="invitees" name="invitees">
+                            </div>
+                        </div>
+                        <div class="row" id="accessories_div" style="display: none;">
+                            <div class="col-md-4">
+                                <label>Accessories</label>
+                            </div> 
+                            <div class="col-md-4">
+                                <label>Quantity Requested</label>
+                            </div>    
+                            <div class="col-md-4">
+                                <label>Quantity Available</label>
+                            </div>    
+                        </div>
+                        <div class="inc_row">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </form>  
                 <div>
@@ -3581,7 +3651,7 @@ Reservations View
         $('#enddate').val($('#begindate').val());
 
         var scheduleidone =$('#selected_booking_id').val();
-        var date = new Date(dategtc.getTime() - (dategtc.getTimezoneOffset() * 60000 )).toISOString().split("T")[0];
+        // var date = new Date(dategtc.getTime() - (dategtc.getTimezoneOffset() * 60000 )).toISOString().split("T")[0];
        
         $.ajax({
             type: "POST",
@@ -3634,6 +3704,8 @@ Reservations View
                 }
             }
         });
+
+        getTheEndDays(same_layout);
     }
         
     function getTheEndDays(same_layout) {
@@ -3641,7 +3713,7 @@ Reservations View
         var day = enddate.getDay();
 
         var scheduleidone =$('#selected_booking_id').val();
-        var date = new Date(enddate.getTime() - (enddate.getTimezoneOffset() * 60000 )).toISOString().split("T")[0];
+        // var date = new Date(enddate.getTime() - (enddate.getTimezoneOffset() * 60000 )).toISOString().split("T")[0];
         
         $.ajax({
             type: "POST",
@@ -3702,7 +3774,10 @@ Reservations View
 </script>
 <!-- date binding -->
 <script type="text/javascript">
+var reservations = <?php echo json_encode($reservation); ?>;
+var data_resources = <?php echo json_encode($data_resources); ?>;
 function dateBinding(week){
+
     $('.startdate').html(week[0]);
     $('.startdate').attr("data-start",week[0]);
     $('.enddate').html(week[6]);
@@ -3808,6 +3883,7 @@ function colorBinding(){
     var resource= $(".resource").map(function() {
         return $(this).val();         
     }).get();
+
     //get resourceid value from table column
     var resourceid = $(".slots").map(function() {
         var resource_id = $(this).data('resourceid');
@@ -3831,45 +3907,138 @@ function colorBinding(){
     {
         var slot_data = $(this).data('id');
         var date_time = $(this).data('datetime');
+
         $.each(databasedatetime,function(i,v) //v - start date, val - end date
         { 
             val = databaseenddatetime[i];
 
             var dt_val = val.substring(0, 12);
-            var res_val = val.substring(12);
+            var res_val = val.substring(12); // reservation id
 
             var dt_v = v.substring(0, 12);
-            var res_v = v.substring(12);
+            var res_v = v.substring(12); // reservation id
 
             var dt_slot = slot_data.toString().substring(0, 12);
-            var res_slot = slot_data.toString().substring(12);
+            var res_slot = slot_data.toString().substring(12); // resource id
             
-            if(dt_v <= dt_slot && dt_val > dt_slot && res_v == res_slot && res_val == res_slot)
-            {
-                $('[data-id="'+slot_data+'"]').css('background-color', '');
-                $('[data-id="'+slot_data+'"]').addClass('bg-success');
-            }else{
-                $('[data-id="'+slot_data+'"]').addClass('bg-default');
-            }                        
+            for (var i = reservations.length - 1; i >= 0; i--) {
+                var reservation = reservations[i];
+
+                if(reservation.id == res_v && res_val == reservation.id){
+                    if(dt_v <= dt_slot && dt_val > dt_slot && reservation.resource_id == res_slot && reservation.resource_id == res_slot) {
+                        $('[data-id="'+slot_data+'"]').html('<a href="javascript:viewReservation('+reservation.id+');">'+reservations[i].name+'</a>');
+                        $('[data-id="'+slot_data+'"]').css('background-color', '');
+                        $('[data-id="'+slot_data+'"]').addClass('bg-success');
+                    } else{
+                        $('[data-id="'+slot_data+'"]').addClass('bg-default');
+                    }
+                }
+            }
         });
     });
+}
+
+function viewReservation(reservation_id){
+    for (var i = reservations.length - 1; i >= 0; i--) {
+        if(reservations[i].id == reservation_id){
+            var reservation = reservations[i];
+            var modal = $("#ViewBooking");
+            modal.find('#title').val(reservation.title);
+            modal.find('#begin_date').val(reservation.begin_date);
+            modal.find('#end_date').val(reservation.end_date);
+            modal.find('#description').val(reservation.description);
+            modal.find('#begin_time').val(reservation.begin_time);
+            modal.find('#end_time').val(reservation.end_time);
+            modal.find("#no_of_participant").val(reservation.no_of_participant);
+
+            for (var i = data_resources.length - 1; i >= 0; i--) {
+                if(data_resources[i].id == reservation.resource_id){
+                    modal.find('#resource').val(data_resources[i].name + '- Number of maximum people('+ data_resources[i].no_of_maximum_people + ')');
+                }
+            }
+            $.ajax({
+                dataType: 'json',
+                url : "{{ url(config('laraadmin.adminRoute') . '/getParticipants') }}",
+                type: 'POST',
+                data : {'_token': '{{ csrf_token() }}', 'reservation_id' : reservation_id},
+                success: function ( response ) {
+                    var user_list = [];
+                    var users = response.users;
+                    for (var i = response.users.length - 1; i >= 0; i--) {
+                        user_list.push(response.users[i].id);
+                    }
+                    modal.find('#participants').val(user_list).trigger('change');
+                }
+            });
+            $.ajax({
+                dataType: 'json',
+                url : "{{ url(config('laraadmin.adminRoute') . '/getInvitees') }}",
+                type: 'POST',
+                data : {'_token': '{{ csrf_token() }}', 'reservation_id' : reservation_id},
+                success: function ( response ) {
+                    var invitees = response.invitees;
+                    
+                    modal.find('#invitees').val(invitees[0].email);
+                }
+            });
+            $.ajax({
+                dataType: 'json',
+                url : "{{ url(config('laraadmin.adminRoute') . '/getAccessories') }}",
+                type: 'POST',
+                data : {'_token': '{{ csrf_token() }}', 'reservation_id' : reservation_id},
+                success: function ( response ) {
+                    modal.find(".inc_row").html('');
+                    $("#accessories_div").css('display', 'none');
+                    var accessories = response.accessories;
+                    if(accessories.length > 0){
+                        $("#accessories_div").css('display', 'block');
+                        for (var i = accessories.length - 1; i >= 0; i--) {
+                            var accessory = accessories[i];
+                            var new_entry1 = `<div class="row" id="accessories_grid">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <select class="form-control input-sm" data-placeholder="Select Accessories" rel="select2" readonly id="accessories" name="accessories">
+                                            <option selected disabled>Choose Accessories</option>
+                                            <option value="`+accessory.id+`" selected>`+accessory.name+`</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <input type="text" name="requested" id="requested" readonly value=`+accessory.quantity+` class="form-control input-sm" placeholder="Quantity Requested">
+                                    </div>                       
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" name="available" value=`+accessory.available_quantity+` readonly="true" class="form-control input-sm" id="available" >
+                                </div>
+                            </div>`;                    
+                            modal.find(".inc_row").append(new_entry1);
+                        }
+                    }
+                    
+                }
+            });
+
+            $("#ViewBooking").modal('show');
+        }
+    }
 }
 </script>
 <!-------------------------Add Color------------------------------------------------------------------------>
 <script type="text/javascript">          
 
-    var databasedatetime= $(".bookdate").map(function() {
+    var databasedatetime = $(".bookdate").map(function() {
         return $(this).val();         
     }).get();
-    var databaseenddatetime=$(".endbookdate").map(function(){
+    var databaseenddatetime = $(".endbookdate").map(function(){
         return $(this).val();
     }).get();
       
 </script>
 <!------------------------------------Accessories Grid------------------------------------------------------>
 <script>
-// var accessories = <?php echo json_encode($accessorie) ?>;
-var accessories = [];
+var accessories = <?php echo $accessorie; ?>;
+// var accessories = [];
 function getAccessoriesByResource(resource_id){
     $.ajax({
         "url" : "{{ url(config('laraadmin.adminRoute') . '/accessories_by_resourceid') }}",
@@ -3882,7 +4051,12 @@ function getAccessoriesByResource(resource_id){
     });
 }
 function GetAccessory(accessories_id, grid_count){
-    console.log(accessories);
+    for (var i = 0; i < accessories.length; i++) {
+        var accessory = accessories[i];
+        if (accessory.id == accessories_id) {
+            $("#accessories_grid_"+grid_count+" #available_"+grid_count).val(accessory.available_quantity);
+        }
+    }
 }
 function isNumberdecimal(evt) {
     evt = (evt) ? evt : window.event;
@@ -3901,7 +4075,7 @@ function insertRow()
     var new_entry1 = `<div class="row" id="accessories_grid_${grid1}">
             <div class="col-md-3">
                 <div class="form-group">
-                    <select class="form-control input-sm" data-placeholder="Select Accessories" rel="select2" id="accessories_${grid1}" name="accessories_${grid1}">
+                    <select class="form-control input-sm" data-placeholder="Select Accessories" rel="select2" onchange="GetAccessory(this.value, ${grid1})" required id="accessories_${grid1}" name="accessories_${grid1}">
                         <option selected disabled>Choose Accessories</option>
                         @foreach($accessorie as $accessories)
                             <option value="{{ $accessories->id }}">{{ $accessories->name }}</option>
@@ -3915,7 +4089,7 @@ function insertRow()
                 </div>                       
             </div>
             <div class="col-md-3">
-                <input type="text" name="available_${grid1}" onkeypress="return isNumberdecimal(this.event)" readonly="true" class="form-control input-sm" id="available_${grid1}" >
+                <input type="text" name="available_${grid1}" readonly="true" class="form-control input-sm" id="available_${grid1}" >
             </div>
             <div class="col-md-3 next">
                 <div class="form-group">

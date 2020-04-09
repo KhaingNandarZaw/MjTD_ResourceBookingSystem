@@ -5,6 +5,14 @@
 		<li><a href="{{ url(config('laraadmin.adminRoute') . '/calendar') }}">Calendar</a></li>
 		<li><a href="{{ url(config('laraadmin.adminRoute') . '/bookinglist') }}">BookingList</a></li>
 		<li><a href="{{ url(config('laraadmin.adminRoute') . '/carrequestsapprove') }}">CarRequestedList</a></li>
+		<?php $all_schedule = App\Models\All_Schedule::All(); ?>
+		<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="{{ url(config('laraadmin.adminRoute') . '/reservations') }}"> Reservations <span class="caret"></span></a>
+			<ul class="dropdown-menu">
+				@foreach($all_schedule as $all_schedules)
+				<li><a href="{{route('admin.reservations.show',$all_schedules->id)}}">{{$all_schedules->schedule_name}}</a><li>
+				@endforeach
+			</ul>
+		</li>
 		<?php
 		$menuItems = Dwij\Laraadmin\Models\Menu::where("parent", 0)->orderBy('hierarchy', 'asc')->get();
 		?>
