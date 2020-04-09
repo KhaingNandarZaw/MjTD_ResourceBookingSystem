@@ -50,6 +50,7 @@
                     <th>End Time</th>
                     <th>Number Of Participant</th>
                     <th>Reserved By</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,12 +60,16 @@
                     <td><a href="{{route('admin.bookinglist.show',$all_bookinglist['id'])}}">{{$all_bookinglist['resourcename']}}</a></td>
                     <td><a href="{{route('admin.bookinglist.show',$all_bookinglist['id'])}}">{{$all_bookinglist['title']}}</a></td>
                     <td>{{$all_bookinglist['begin_date']}}</td>
-                    <td>{{$all_bookinglist['begin_time']}}</td>
+                    <td id="begintime" data-time="{{$all_bookinglist['begin_time']}}">{{$all_bookinglist['begin_time']}}</td>
                     <td>{{$all_bookinglist['end_date']}}</td>
                     <td>{{$all_bookinglist['end_time']}}</td>
                     <td>{{$all_bookinglist['no_of_participant']}}</td>
                     <td>{{$all_bookinglist['username']}}</td>
+                    @if('09:00' < $all_bookinglist['end_time'])
+                    <td><a href="{{ url(config('laraadmin.adminRoute') . '/bookinglist/'.$all_bookinglist['id'] . '/cancel') }}" class="btn btn-danger btn-xs" id="bookingcancel" style="display:inline;padding:2px 5px 3px 5px;">Cancel</i></a></td>
+                    @endif
                 </tr>
+                
             @endforeach
             </tbody>
         </table>
@@ -94,5 +99,25 @@ $(function () {
     });
     
 });
+</script>
+<script>
+$("#bookingcancel").hide;  
+
+// function CompareDate() {  
+//     var begintime = $("#begintime").data("time") ;
+//         alert(begintime);
+//     var now = new Date();
+//     var current_date_time = moment(now).format('HH:mm');
+//     console.log(current_date_time);
+ 
+    
+//     if (current_date_time < begintime) {  
+        
+//     }else {  
+//         alert("no");  
+//     }  
+// }  
+// CompareDate();  
+
 </script>
 @endpush

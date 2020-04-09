@@ -92,6 +92,11 @@
                 <td>{{$requested_lists->no_of_participant}}</td>
                 <td class="status {{$requested_lists->status}}" value="{{$requested_lists->status}}">{{$requested_lists->status}}</td>
                 <td>
+                @if($requested_lists->status == 'Requested')
+                <a class="btn btn-success btn-xs" id="confirm" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#ConfirmModal">Confirm</a>
+                <a class="btn btn-primary btn-xs" id="pending" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#PendingModal">Pending</a>
+                <a class="btn btn-danger btn-xs" id="reject" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#RejectModal">Reject</a> 
+                @endif
                 @if($requested_lists->status == 'Confirmed')
                 <a class="btn btn-primary btn-xs" id="pending" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#PendingModal">Pending</a>
                 <a class="btn btn-danger btn-xs" id="reject" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#RejectModal">Reject</a> 

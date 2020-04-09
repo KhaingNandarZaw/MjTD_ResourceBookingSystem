@@ -86,7 +86,7 @@
             <div class="modal-body">
                 <div class="box-body">
                     
-                    
+                    <input type="hidden" name="status" value="Requested">
                     <input type="hidden" name="user_id" value="{{$user_id}}">
 					@la_input($module, 'start_date')
 					@la_input($module, 'end_date')

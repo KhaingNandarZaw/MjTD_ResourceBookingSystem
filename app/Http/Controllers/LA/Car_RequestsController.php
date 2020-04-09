@@ -69,6 +69,7 @@ class Car_RequestsController extends Controller
      */
     public function store(Request $request)
     {
+        
         if(Module::hasAccess("Car_Requests", "create")) {
             
             $rules = Module::validateRules("Car_Requests", $request);
