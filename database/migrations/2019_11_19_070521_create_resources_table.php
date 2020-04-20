@@ -20,7 +20,7 @@ class CreateResourcesTable extends Migration
      */
     public function up()
     {
-        Module::generate("Resources", 'resources', 'room_types', 'fa-cube', [
+        Module::generate("Resources", 'resources', 'name', 'fa-cube', [
             [
                 "colname" => "name",
                 "label" => "Name",
@@ -105,7 +105,7 @@ class CreateResourcesTable extends Migration
                 "listing_col" => true
             ], [
                 "colname" => "room_types",
-                "label" => "Room Types",
+                "label" => "Select Room Type?",
                 "field_type" => "Checkbox",
                 "unique" => false,
                 "defaultvalue" => "0",

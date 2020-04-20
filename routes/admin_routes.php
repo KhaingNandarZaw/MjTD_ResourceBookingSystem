@@ -108,6 +108,7 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
 	Route::post(config('laraadmin.adminRoute') . '/getstartendtime', 'LA\ReservationsController@getstartendtime');
 	Route::post(config('laraadmin.adminRoute') . '/reservations/next', 'LA\ReservationsController@next');
 	Route::post(config('laraadmin.adminRoute') . '/reservations/previous', 'LA\ReservationsController@previous');
+	Route::post(config('laraadmin.adminRoute') . '/cancel', 'LA\ReservationsController@cancel');
 
     /* ================== Reservations_users ================== */
     Route::resource(config('laraadmin.adminRoute') . '/reservations_users', 'LA\Reservations_usersController');

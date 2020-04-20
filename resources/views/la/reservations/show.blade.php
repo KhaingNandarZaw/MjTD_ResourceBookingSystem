@@ -3317,12 +3317,6 @@ Reservations View
 
                 <!-- hidden div -->
                 <div>
-                    @foreach($bookdate as $bookdates)
-                        <input type="hidden" class="bookdate" value="{{$bookdates}}">
-                    @endforeach
-                    @foreach($endbookdate as $endbookdates)
-                        <input type="hidden" class="endbookdate" value="{{$endbookdates}}">
-                    @endforeach
                     @foreach($reservation as $reservations)
                         <input type="hidden" class="begindate" value="{{$reservations->begin_date}}">
                         <input type="hidden" class="begintime" value="{{$reservations->begin_time}}">
@@ -3398,26 +3392,33 @@ Reservations View
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <div class="row">   
-                                    <div class="col-md-12 mx-auto">
-                                        <label class="control-label">Participants : </label>                
-                                        <select class="js-example-basic-multiple form-control input-sm" name="user_id[]" multiple="multiple">
-                                            @foreach($user as $users)
-                                                @if($users->id != 1)
-                                                <option value="{{$users->id}}">{{$users->name}}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+                                <label class="control-label">Participants : </label>                
+                                <select class="js-example-basic-multiple form-control input-sm" name="user_id[]" multiple="multiple">
+                                    @foreach($user as $users)
+                                        @if($users->id != 1)
+                                        <option value="{{$users->id}}">{{$users->name}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Number of Participant</label>
                                 <input type="number" class="form-control input-sm" name="no_of_participant" value=0>     
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Invitees(comma(,) separted for each mail) :</label>
                                 <input type="text" class="form-control input-sm" name="invitees">
+                            </div>
+                            <?php $room_types = App\Models\Room_Type::all(); ?>
+                            <div class="form-group col-md-6" id="room_type_div" style="display: none;">
+                                <label>Room Type :</label>
+                                <select class="js-example-basic-multiple form-control input-sm" name="room_type_id">
+                                    @foreach($room_types as $room_type)
+                                        <option value="{{$room_type->id}}">{{$users->name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="row">
@@ -3485,6 +3486,9 @@ Reservations View
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
+                    {!! Form::open(['action' => 'LA\ReservationsController@cancel']) !!}
+                        <input type="hidden" id="reservation_id" name="reservation_id" class="form-control input-sm" >
+                        <input type="hidden" id="schedule_id" name="schedule_id" value = "{{$scheduleid}}" class="form-control input-sm" >
                         <div class="row">
                             <div class="form-group col-sm-12">
                                 <label class="control-label">Resource : <span style="color: red;">*</span></label>                
@@ -3510,7 +3514,7 @@ Reservations View
                                         <input type="date" id="end_date" name="end_date" class="form-control input-sm" value="" readonly>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" name="end_time" id="end_time" class="form-control input-sm" readonly>
+                                        <input type="text" name="end_time" id="endtime" class="form-control input-sm" readonly>
                                     </div>
                                 </div>                  
                             </div>
@@ -3564,8 +3568,9 @@ Reservations View
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Close</button>
+                            {!! Form::submit( 'Cancel Reservation', ['class'=>'btn btn-sm btn-warning']) !!}
                         </div>
-                    </form>  
+                    {!! Form::close() !!} 
                 <div>
             </div> 
         </div>                
@@ -3903,39 +3908,36 @@ function colorBinding(){
     var now = new Date();
     var current_date_time = moment(now).format('YYYYMMDDHHmm');
 
-    $('.slots').each(function(slot)
-    {
-        var slot_data = $(this).data('id');
-        var date_time = $(this).data('datetime');
+    for (var i = reservations.length - 1; i >= 0; i--) {
+        var reservation = reservations[i];
 
-        $.each(databasedatetime,function(i,v) //v - start date, val - end date
-        { 
-            val = databaseenddatetime[i];
+        var start_date_time = reservation.begin_date.concat(reservation.begin_time);
+        var end_date_time = reservation.end_date.concat(reservation.end_time);
 
-            var dt_val = val.substring(0, 12);
-            var res_val = val.substring(12); // reservation id
+        start_date_time = start_date_time.replace(/([:-])+/g, "");
+        end_date_time = end_date_time.replace(/([:-])+/g, "");
 
-            var dt_v = v.substring(0, 12);
-            var res_v = v.substring(12); // reservation id
+        start_date_time = start_date_time.concat(reservation.resource_id);
+        end_date_time = end_date_time.concat(reservation.resource_id);
+        var count = 0;
 
-            var dt_slot = slot_data.toString().substring(0, 12);
-            var res_slot = slot_data.toString().substring(12); // resource id
-            
-            for (var i = reservations.length - 1; i >= 0; i--) {
-                var reservation = reservations[i];
+        $('.slots').each(function(slot)
+        {
+            var slot_data = $(this).data('id');
+            res_val = slot_data.toString().substring(12);
 
-                if(reservation.id == res_v && res_val == reservation.id){
-                    if(dt_v <= dt_slot && dt_val > dt_slot && reservation.resource_id == res_slot && reservation.resource_id == res_slot) {
-                        $('[data-id="'+slot_data+'"]').html('<a href="javascript:viewReservation('+reservation.id+');">'+reservations[i].name+'</a>');
-                        $('[data-id="'+slot_data+'"]').css('background-color', '');
-                        $('[data-id="'+slot_data+'"]').addClass('bg-success');
-                    } else{
-                        $('[data-id="'+slot_data+'"]').addClass('bg-default');
-                    }
+            if(parseInt(start_date_time) <= slot_data && slot_data < parseInt(end_date_time) &&  res_val == reservation.resource_id) {
+                $('[data-id="'+slot_data+'"]').html('<a href="javascript:viewReservation('+reservation.id+');">'+reservations[i].name+'</a>');
+                $('[data-id="'+slot_data+'"]').css('background-color', '');
+                $('[data-id="'+slot_data+'"]').addClass('bg-success');
+                ++count;
+                if(count > 1){
+                    $('[data-id="'+start_date_time+'"]').attr("colspan", count);  
+                    $('[data-id="'+start_date_time+'"]').next("td").remove(); 
                 }
             }
-        });
-    });
+        });     
+    }
 }
 
 function viewReservation(reservation_id){
@@ -3943,12 +3945,13 @@ function viewReservation(reservation_id){
         if(reservations[i].id == reservation_id){
             var reservation = reservations[i];
             var modal = $("#ViewBooking");
+            modal.find("#reservation_id").val(reservation.id);
             modal.find('#title').val(reservation.title);
             modal.find('#begin_date').val(reservation.begin_date);
             modal.find('#end_date').val(reservation.end_date);
             modal.find('#description').val(reservation.description);
             modal.find('#begin_time').val(reservation.begin_time);
-            modal.find('#end_time').val(reservation.end_time);
+            modal.find('#endtime').val(reservation.end_time);
             modal.find("#no_of_participant").val(reservation.no_of_participant);
 
             for (var i = data_resources.length - 1; i >= 0; i--) {
@@ -4024,17 +4027,6 @@ function viewReservation(reservation_id){
     }
 }
 </script>
-<!-------------------------Add Color------------------------------------------------------------------------>
-<script type="text/javascript">          
-
-    var databasedatetime = $(".bookdate").map(function() {
-        return $(this).val();         
-    }).get();
-    var databaseenddatetime = $(".endbookdate").map(function(){
-        return $(this).val();
-    }).get();
-      
-</script>
 <!------------------------------------Accessories Grid------------------------------------------------------>
 <script>
 var accessories = <?php echo $accessorie; ?>;
@@ -4049,6 +4041,16 @@ function getAccessoriesByResource(resource_id){
             console.log(data);
         }
     });
+
+    for (var i = data_resources.length - 1; i >= 0; i--) {
+        if(data_resources[i].id == resource_id){
+            var data_resource = data_resources[i];
+            if(data_resource.room_types){
+                $("#room_type_div").css('display', 'block');
+            }else
+                $("#room_type_div").css('display', 'none');
+        }
+    }
 }
 function GetAccessory(accessories_id, grid_count){
     for (var i = 0; i < accessories.length; i++) {

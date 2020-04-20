@@ -11,6 +11,7 @@
 				@foreach($all_schedule as $all_schedules)
 				<li><a href="{{route('admin.reservations.show',$all_schedules->id)}}">{{$all_schedules->schedule_name}}</a><li>
 				@endforeach
+				<li><a href="{{ url(config('laraadmin.adminRoute') . '/car_requests') }}">Car</a><li>
 			</ul>
 		</li>
 		<?php

@@ -40,7 +40,7 @@ class DashboardController extends Controller
     public function index()
     {
         $now_str = \Carbon\Carbon::now()->format('Y-m-d');
-        $bookinglist=DB::table('reservations')
+        $bookinglist = DB::table('reservations')
                     ->whereDate('begin_date', '>=', $now_str)
                     ->get();
         $user = Auth::user();
@@ -50,6 +50,9 @@ class DashboardController extends Controller
         $query = DB::table(DB::raw("($sql) as catch"));
         $reservations_list = $query->get();
 
+        foreach ($bookinglist as $booking) {
+            $booking->resource = DB::table('resources')->where('id', $booking->resource_id)->whereNull('deleted_at')->first();
+        }
 
         $reservations=Reservation::get();
         

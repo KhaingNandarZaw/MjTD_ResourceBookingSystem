@@ -111,6 +111,17 @@ class CreateReservationsTable extends Migration
                 "maxlength" => 11,
                 "required" => false,
                 "listing_col" => true
+            ], [
+                "colname" => "room_type_id",
+                "label" => "Room Type",
+                "field_type" => "Dropdown",
+                "unique" => false,
+                "defaultvalue" => "",
+                "minlength" => 0,
+                "maxlength" => 0,
+                "required" => false,
+                "listing_col" => false,
+                "popup_vals" => "@room_types",
             ]
         ]);
         

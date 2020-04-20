@@ -22,15 +22,16 @@
                         <ul class="products-list product-list-in-box">
                           <li class="item">
                             <div class="product-img">
-                              <span class="fa fa-gift" style="font-size:25px;"></span>
+                              <span class="fa fa-clock-o" style="font-size:15px;"></span>
                             </div>
                             
                             <div class="product-info">
-                              <a href="{{route('admin.bookinglist.show',$bookinglists->id)}}" class="product-title">{{$bookinglists->title}}
-                                <span class="label label-warning pull-right">{{$bookinglists->begin_date}}</span></a>
-                              <span class="product-description">
-                                   {{$bookinglists->begin_time}}-{{$bookinglists->end_time}}
-                                  </span>
+                              <a href="{{route('admin.bookinglist.show',$bookinglists->id)}}" class="product-title">
+                                <span class="label label-success" style="font-size: 12px;
+                                ">{{$bookinglists->resource->name}}</span> {{$bookinglists->title}}
+                                <span class="label label-warning pull-right">{{$bookinglists->begin_date}}</span>
+                              </a>
+                              <span class="product-description">{{$bookinglists->begin_time}}-{{$bookinglists->end_time}}</span>
                             </div>
                           </li>
                         </ul>
