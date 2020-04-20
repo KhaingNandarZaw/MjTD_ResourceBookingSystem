@@ -3651,6 +3651,7 @@ Reservations View
 <script type="text/javascript">
     function getTheDays(same_layout) {
         var dategtc = new Date($('#begindate').val());
+        console.log(dategtc);
         var day=dategtc.getDay();
 
         $('#enddate').val($('#begindate').val());

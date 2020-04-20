@@ -88,8 +88,24 @@
                     
                     <input type="hidden" name="status" value="Requested">
                     <input type="hidden" name="user_id" value="{{$user_id}}">
-					@la_input($module, 'start_date')
-					@la_input($module, 'end_date')
+                    
+                    
+                    <div class="row">
+                            <div class='col-sm-6'>
+                                <div class="form-group bootstrap-timepicker timepicker">
+                                <label for="">Start Date :</label>
+                                   <input type="date" id="startdate" class="form-control" name="start_date" onchange="getstartdate()">
+                                </div>
+                            </div>
+
+                            <div class='col-sm-6'>
+                                <div class="form-group bootstrap-timepicker timepicker">
+                                <label for="">End Date :</label>
+                                <input type="date" id="enddate" class="form-control" name="end_date">  
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class='col-sm-6'>
                                 <div class="form-group bootstrap-timepicker timepicker">
@@ -171,7 +187,18 @@ $('#end_date').val($('#start_date').val());
   $('#timepicker2').datetimepicker({
     format: 'LT'
   });
-</script>
 
+  
+</script>
+<script>
+    function getstartdate() {
+    var dategtc = new Date($('#startdate').val());
+    console.log(dategtc);
+    var day=dategtc.getDay();
+
+    $('#enddate').val($('#startdate').val());
+    };
+
+</script>
 
 @endpush

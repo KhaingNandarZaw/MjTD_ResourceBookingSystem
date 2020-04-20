@@ -43,6 +43,7 @@ class BookinglistController extends Controller
             $newarr['no_of_participant']=$data->no_of_participant;
             $results[]=$newarr;
             }
+            
             return view('la.bookinglist.index')->with('results',$results);
     }
 
@@ -136,7 +137,9 @@ class BookinglistController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $booking = Reservation::find($id);
+        $booking->delete();
+        return redirect(config('laraadmin.adminRoute') . "/bookinglist");
     }
 
 
@@ -150,10 +153,13 @@ class BookinglistController extends Controller
         $bookinglist=Reservation::all();
         $user = Auth::user();
         $resources=Resource::all();
+        $today = date('Y-m-d h:i:s');
+        $hr=date('h:i');
         
-        $query = DB::table('resources')
-            ->select('resources.id','name','title','begin_date','end_date','begin_time','end_time','no_of_participant')
-            ->leftJoin('reservations', 'resources.id', '=', 'reservations.resource_id');
+        
+        $query = DB::table('reservations')
+            ->select('reservations.id','name','title','begin_date','end_date','begin_time','end_time','no_of_participant')
+            ->leftJoin('resources', 'resources.id', '=', 'reservations.resource_id');
         
         $from_date = Carbon::now()->startOfMonth()->toDateString();
         $to_date = Carbon::now()->endOfMonth()->toDateString();
@@ -191,7 +197,7 @@ class BookinglistController extends Controller
             $query = $query->where('resources.id', '=', $resourcename);
         }
         $all_bookinglists = $query->get();
-        //dd($all_bookinglists);
+        
 
         $results = array();
             foreach($all_bookinglists as $key=>$data)
@@ -215,7 +221,9 @@ class BookinglistController extends Controller
             'from_date' => $input_from_date,
             'to_date' => $input_to_date,
             'results' => $results,
-            'resources' => $resources
+            'resources' => $resources,
+            'today' => $today,
+            'hr' => $hr
         ]);
         
     }

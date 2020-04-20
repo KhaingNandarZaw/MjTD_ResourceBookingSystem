@@ -79,7 +79,6 @@ class Car_RequestsController extends Controller
             if($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-            
             $insert_id = Module::insert("Car_Requests", $request);
             $today= date('Y-m-d');
             $car_request_status = Car_Request_Status::create([
