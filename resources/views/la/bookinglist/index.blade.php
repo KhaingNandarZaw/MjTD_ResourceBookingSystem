@@ -54,6 +54,7 @@
                 </tr>
             </thead>
             <tbody>
+            <input type="hidden" value="{{$hr}}">
             @foreach($results as $all_bookinglist)
                 <tr>
                     <td>{{$all_bookinglist['id']}}</td>
@@ -65,7 +66,8 @@
                     <td>{{$all_bookinglist['end_time']}}</td>
                     <td>{{$all_bookinglist['no_of_participant']}}</td>
                     <td>{{$all_bookinglist['username']}}</td>
-                    @if('09:00' < $all_bookinglist['end_time'])
+                    
+                    @if( $hr <= $all_bookinglist['begin_time'])
                     <td><a href="{{ url(config('laraadmin.adminRoute') . '/bookinglist/'.$all_bookinglist['id'] . '/cancel') }}" class="btn btn-danger btn-xs" id="bookingcancel" style="display:inline;padding:2px 5px 3px 5px;">Cancel</i></a></td>
                     @endif
                 </tr>

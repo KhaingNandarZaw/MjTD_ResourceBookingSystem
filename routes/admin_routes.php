@@ -134,7 +134,7 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
 	/* ================== BookingList ================== */
 	Route::resource(config('laraadmin.adminRoute') . '/bookinglist', 'BookinglistController');
 	Route::match(['get', 'post'], config('laraadmin.adminRoute') . '/bookinglist', 'BookinglistController@bookinglist_filter');
-	
+	Route::get(config('laraadmin.adminRoute') .'/bookinglist/{id}/cancel', 'BookinglistController@destroy');
 
 
     /* ================== Groups ================== */
