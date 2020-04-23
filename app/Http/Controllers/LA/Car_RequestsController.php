@@ -19,7 +19,7 @@ use Datatables;
 use Collective\Html\FormFacade as Form;
 use Dwij\Laraadmin\Models\Module;
 use Dwij\Laraadmin\Models\ModuleFields;
-
+use Zizaco\Entrust\EntrustFacade as Entrust;
 use App\Models\Car_Request;
 use App\Models\Car_Request_Status;
 
@@ -34,10 +34,18 @@ class Car_RequestsController extends Controller
      */
     public function index()
     {
+        if(Entrust::hasRole("SUPER_ADMIN") ){
+            $car_request_list=Car_Request::all();
+        }else {
+           
+            $car_request_list = DB::table('car_requests')->whereNull('deleted_at')->where('user_id', Auth::user()->id)->get();
+            //$car_request_list = DB::table('car_requests')->whereNull('deleted_at')->where('participants', Auth::user()->id)->get();
+           
+        }
+
         $module = Module::get('Car_Requests');
         $user=Auth::user();
         $user_id=$user->id;
-        $car_request_list=Car_Request::all();
         if(Module::hasAccess($module->id)) {
             return View('la.car_requests.index', [
                 'show_actions' => $this->show_action,

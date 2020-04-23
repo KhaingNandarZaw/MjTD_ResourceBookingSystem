@@ -157,17 +157,27 @@ class BookinglistController extends Controller
         $resources=Resource::all();
         $today = date('Y-m-d h:i:s');
         $hr=date('H:i');
+        $id=Auth::user()->id;
         
         
-        // $query = DB::table('reservations')
-        //     ->select('reservations.id','name','title','begin_date','end_date','begin_time','end_time','no_of_participant')
-        //     ->leftJoin('resources', 'resources.id', '=', 'reservations.resource_id');
-
-        $sql = "select reservations.id, reservations.title, reservations.begin_date, reservations.end_date,
+        
+        if(Entrust::hasRole("SUPER_ADMIN") ){
+            $sql = "select reservations.id, reservations.title, reservations.begin_date, reservations.end_date,
                 reservations.begin_time, reservations.end_time, reservations.no_of_participant,
                 resources.name as resourcename from reservations left join resources on resources.id = reservations.resource_id 
                 where reservations.deleted_at is null and resources.deleted_at is null";
                 $query = DB::table(DB::raw("($sql) as catch"));
+        }else {
+           
+            $sql = "select reservations.id, reservations.title, reservations.begin_date, reservations.end_date,
+                reservations.begin_time, reservations.end_time, reservations.no_of_participant,
+                resources.name as resourcename from reservations join resources on resources.id = reservations.resource_id 
+                where reservations.deleted_at is null and resources.deleted_at is null and reservations.owner_id = $id";
+                $query = DB::table(DB::raw("($sql) as catch"));
+                //dd($query);
+        }
+
+        
                 
            
                 

@@ -4,7 +4,9 @@
 		<li><a href="{{ url(config('laraadmin.adminRoute')) }}">Dashboard</a></li>
 		<li><a href="{{ url(config('laraadmin.adminRoute') . '/calendar') }}">Calendar</a></li>
 		<li><a href="{{ url(config('laraadmin.adminRoute') . '/bookinglist') }}">BookingList</a></li>
-		<li><a href="{{ url(config('laraadmin.adminRoute') . '/carrequestsapprove') }}">CarRequestedList</a></li>
+		@if(Entrust::hasRole("RECEPTION") )
+            <li><a href="{{ url(config('laraadmin.adminRoute') . '/carrequestsapprove') }}">CarRequestedList</a></li>
+        @endif
 		<?php $all_schedule = App\Models\All_Schedule::All(); ?>
 		<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="{{ url(config('laraadmin.adminRoute') . '/reservations') }}"> Reservations <span class="caret"></span></a>
 			<ul class="dropdown-menu">
