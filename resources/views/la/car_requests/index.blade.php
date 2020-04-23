@@ -58,12 +58,14 @@
             <td><a href="{{ url(config('laraadmin.adminRoute') . '/car_requests/'.$car_request_lists->id) }}">{{$car_request_lists->end_time}}</a></td>
             <td><a href="{{ url(config('laraadmin.adminRoute') . '/car_requests/'.$car_request_lists->id) }}">{{$car_request_lists->way}}</a></td>            
             <td>{{$car_request_lists->no_of_participant}}</td>
-            <td>{{$car_request_lists->participants}}</td>
             <td>{{$car_request_lists->remark}}</td>
+            <td><a href="{{ url(config('laraadmin.adminRoute') . '/car_requests/'.$car_request_lists->id) }}">{{ $car_request_lists->remark }}</a></td>
             <td><a href="{{ url(config('laraadmin.adminRoute') . '/car_requests/'.$car_request_lists->id) }}">{{ $car_request_lists->status }}</a></td>
             <td>
+            @if($car_request_lists->status != 'Confirmed')
                 <a href="{{ url(config('laraadmin.adminRoute') . '/car_requests/'.$car_request_lists->id . '/edit') }}" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;">Edit</i></a>
                 <a href="{{ url(config('laraadmin.adminRoute') . '/car_requests/'.$car_request_lists->id . '/cancel') }}" class="btn btn-danger btn-xs" style="display:inline;padding:2px 5px 3px 5px;">Cancel</i></a>
+            @endif
             </td>
             </tr>
             @endforeach

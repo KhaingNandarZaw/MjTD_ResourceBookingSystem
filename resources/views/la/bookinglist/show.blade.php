@@ -30,7 +30,7 @@
                         </div>
                         <div class="form-group">
                             <label for="name" class="col-md-4 col-sm-6 col-xs-6">Resource :</label>
-                            <div class="col-md-8 col-sm-6 col-xs-6 fvalue">{{$bookinglist->name}}</div>
+                            <div class="col-md-8 col-sm-6 col-xs-6 fvalue">{{$resourcename->name}}</div>
                         </div>
                         <div class="form-group">
                             <label for="name" class="col-md-4 col-sm-6 col-xs-6">Booking Date :</label>

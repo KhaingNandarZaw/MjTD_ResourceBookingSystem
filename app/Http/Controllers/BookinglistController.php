@@ -22,6 +22,7 @@ class BookinglistController extends Controller
      */
     public function index()
     {
+        
         $bookinglist=Reservation::all();
         $user = Auth::user();
         $resource = DB::table('resources')
@@ -82,7 +83,7 @@ class BookinglistController extends Controller
                     ->select('resource_id')
                     ->where('id',$id)
                     ->first(); 
-        $resource = DB::table('resources')
+        $resourcename = DB::table('resources')
                     ->select('name')
                     ->where('id', '=',$resourceid->resource_id)
                     ->first();
@@ -103,7 +104,7 @@ class BookinglistController extends Controller
         return view('la.bookinglist.show', [
             'no_header' => true,
             'no_padding' => "no-padding"
-        ], compact('bookinglist','resource','participants_list','invitees','accessories_list'));
+        ], compact('bookinglist','resourcename','participants_list','invitees','accessories_list'));
     }
 
     /**
@@ -150,17 +151,26 @@ class BookinglistController extends Controller
         $input_from_date = '';
         $input_to_date = '';
         $resourcename='0';
-        $bookinglist=Reservation::all();
+        $bookinglist=Reservation::get();
+        //dd($bookinglist);
         $user = Auth::user();
         $resources=Resource::all();
         $today = date('Y-m-d h:i:s');
-        $hr=date('h:i');
+        $hr=date('H:i');
         
         
-        $query = DB::table('reservations')
-            ->select('reservations.id','name','title','begin_date','end_date','begin_time','end_time','no_of_participant')
-            ->leftJoin('resources', 'resources.id', '=', 'reservations.resource_id');
-        
+        // $query = DB::table('reservations')
+        //     ->select('reservations.id','name','title','begin_date','end_date','begin_time','end_time','no_of_participant')
+        //     ->leftJoin('resources', 'resources.id', '=', 'reservations.resource_id');
+
+        $sql = "select reservations.id, reservations.title, reservations.begin_date, reservations.end_date,
+                reservations.begin_time, reservations.end_time, reservations.no_of_participant,
+                resources.name as resourcename from reservations left join resources on resources.id = reservations.resource_id 
+                where reservations.deleted_at is null and resources.deleted_at is null";
+                $query = DB::table(DB::raw("($sql) as catch"));
+                
+           
+                
         $from_date = Carbon::now()->startOfMonth()->toDateString();
         $to_date = Carbon::now()->endOfMonth()->toDateString();
         $input_from_date = Carbon::createFromFormat('Y-m-d', $from_date)->format('d/m/Y');
@@ -197,6 +207,7 @@ class BookinglistController extends Controller
             $query = $query->where('resources.id', '=', $resourcename);
         }
         $all_bookinglists = $query->get();
+        //dd($all_bookinglists);
         
 
         $results = array();
@@ -205,7 +216,7 @@ class BookinglistController extends Controller
                 $newarr=array();
                 $newarr['id']=$data->id;
                 $newarr['title']=$data->title;
-                $newarr['resourcename']=$data->name;
+                $newarr['resourcename']=$data->resourcename;
                 $newarr['resourceid']=$data->id;
                 $newarr['begin_date']=$data->begin_date;
                 $newarr['begin_time']=$data->begin_time;
