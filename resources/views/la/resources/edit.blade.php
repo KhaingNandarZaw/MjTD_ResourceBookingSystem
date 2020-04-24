@@ -32,6 +32,7 @@
     			@la_input($module, 'image')
     			@la_input($module, 'notes')
     			@la_input($module, 'status')
+                @la_input($module, 'room_types')
     			<div class='public'>
                     @la_input($module, 'is_public')
                 </div>

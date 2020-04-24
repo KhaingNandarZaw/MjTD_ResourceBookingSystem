@@ -98,8 +98,8 @@
                 <a class="btn btn-danger btn-xs" id="reject" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#RejectModal">Reject</a> 
                 @endif
                 @if($requested_lists->status == 'Confirmed')
-                <a class="btn btn-primary btn-xs" id="pending" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#PendingModal">Pending</a>
-                <a class="btn btn-danger btn-xs" id="reject" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#RejectModal">Reject</a> 
+                <a class="btn btn-danger btn-xs" id="pending" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#CancelModal">Cancel</a>
+                
                 @endif
                 @if($requested_lists->status == 'Rejected')
                 <a class="btn btn-success btn-xs" id="confirm" style="display:inline;padding:2px 5px 3px 5px;" data-toggle="modal" data-target-id="{{$requested_lists->id}}" data-target="#ConfirmModal">Confirm</a>
@@ -206,6 +206,33 @@
 	</div>
 </div>
 
+
+<div class="modal fade in" id="CancelModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<h4 class="modal-title" id="myModalLabel">Cancel</h4>
+            </div>
+            {!! Form::open(['action' => 'CarRequests_approveController@cancel', 'files' => true]) !!}
+			<div class="modal-body">
+                <div class="box-body">
+                    <input type="text" class="form-control input-sm" id="ccar_id" value="carrequest_id" name="carrequest_id">
+					<div class="form-group">
+						<label for="name">Remark :</label>
+						<textarea class="form-control module_label_edit" placeholder="Remark" name="remark"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+                {!! Form::submit( 'Reject', ['class'=>'btn btn-sm btn-danger']) !!}
+				<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+            {!! Form::close() !!}
+		</div>
+	</div>
+</div>
+
 @endsection
 
 @push('styles')
@@ -232,6 +259,12 @@ $("#RejectModal").on("show.bs.modal", function(e){
     var link = $(e.relatedTarget);
     var id = link.data('target-id');
     modal.find('#rcar_id').val(id);
+});
+$("#CancelModal").on("show.bs.modal", function(e){
+    var modal = $(this);
+    var link = $(e.relatedTarget);
+    var id = link.data('target-id');
+    modal.find('#ccar_id').val(id);
 });
 </script>
 

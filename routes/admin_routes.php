@@ -106,6 +106,7 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
     Route::resource(config('laraadmin.adminRoute') . '/reservations', 'LA\ReservationsController');
     Route::get(config('laraadmin.adminRoute') . '/reservation_dt_ajax', 'LA\ReservationsController@dtajax');
 	Route::post(config('laraadmin.adminRoute') . '/getstartendtime', 'LA\ReservationsController@getstartendtime');
+	Route::post(config('laraadmin.adminRoute') . '/getdatetime', 'LA\ReservationsController@getdatetime');
 	Route::post(config('laraadmin.adminRoute') . '/reservations/next', 'LA\ReservationsController@next');
 	Route::post(config('laraadmin.adminRoute') . '/reservations/previous', 'LA\ReservationsController@previous');
 	Route::post(config('laraadmin.adminRoute') . '/cancel', 'LA\ReservationsController@cancel');
@@ -182,6 +183,7 @@ Route::group(['as' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], 
 	Route::post(config('laraadmin.adminRoute') .'/carrequestsapprove', 'CarRequests_approveController@confirm');
 	Route::post(config('laraadmin.adminRoute') .'/carrequestspending', 'CarRequests_approveController@pending');
 	Route::post(config('laraadmin.adminRoute') .'/carrequestsreject', 'CarRequests_approveController@reject');
+	Route::post(config('laraadmin.adminRoute') .'/carrequestscancel', 'CarRequests_approveController@cancel');
 	Route::match(['get', 'post'], config('laraadmin.adminRoute') . '/carrequestslist_filter', 'CarRequests_approveController@list_filter');
 
     /* ================== Car_Request_Statuses ================== */

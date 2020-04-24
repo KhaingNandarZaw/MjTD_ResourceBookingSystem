@@ -182,6 +182,29 @@ class CarRequests_approveController extends Controller
         return redirect(config('laraadmin.adminRoute') . "/carrequestsapprove");
     }
 
+    public function cancel(Request $request){
+        $this->validate($request, [
+            'remark' => 'required',
+            
+        ]);
+        $user=Auth::user();
+        $user_id=$user->id;
+        $id = $request->input('carrequest_id');
+        $remark = $request->input('remark');
+        $today= date('Y-m-d');
+        
+        $today= date('Y-m-d');
+            $car_request_status = Car_Request_Status::create([
+                'requestedperson_id' => $user_id,
+                'status' => "Canceled",
+                'date' => $today,
+                'remark' => $remark,
+                'car_requested_id' => $id
+                
+            ]);
+        DB:: table('car_requests')->where('id', $id)->delete();
+        return redirect(config('laraadmin.adminRoute') . "/carrequestsapprove");
+    }
 
 
     public function list_filter(Request $request)

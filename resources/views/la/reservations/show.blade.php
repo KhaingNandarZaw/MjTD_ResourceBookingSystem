@@ -3357,14 +3357,15 @@ Reservations View
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-6">
+                            <div class="col-md-6" >
+                                <div id="span"></div>
                                 <label for="inputEmail4">Begin : <span style="color: red;">*</span></label>
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" >
                                         <input type="date" id="begindate" name="begin_date" required class="form-control input-sm" value="" onchange="getTheDays({{$module->row['same_layout']}})"> 
                                     </div>
                                     <div class="col-md-6">
-                                        <select name="begin_time" id="begintime" class="form-control input-sm"></select>
+                                        <select name="begin_time" id="begintime" value="" class="form-control input-sm times"></select>
                                     </div>
                                 </div>
                             </div>
@@ -3375,7 +3376,7 @@ Reservations View
                                         <input type="date" id="enddate" name="end_date" class="form-control input-sm" value="" onchange="getTheEndDays({{$module->row['same_layout']}})" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <select name="end_time" id="end_time" class="form-control input-sm"></select>
+                                        <select name="end_time" id="end_time" class="form-control input-sm times"></select>
                                     </div>
                                 </div>                  
                             </div>
@@ -3649,13 +3650,16 @@ Reservations View
 </script>
 <!-------------------------time binding in new reservations ----------------------------->
 <script type="text/javascript">
+
+
+
     function getTheDays(same_layout) {
         var dategtc = new Date($('#begindate').val());
-        console.log(dategtc);
+        //console.log(dategtc);
         var day=dategtc.getDay();
 
         $('#enddate').val($('#begindate').val());
-
+        
         var scheduleidone =$('#selected_booking_id').val();
         // var date = new Date(dategtc.getTime() - (dategtc.getTimezoneOffset() * 60000 )).toISOString().split("T")[0];
        
@@ -3665,9 +3669,21 @@ Reservations View
             url: "{{ url(config('laraadmin.adminRoute') . '/getstartendtime') }}",
             success: function(response)
             {
+                var result=response.result;
+                //console.log(result);
                 var day=response.day;
+                //console.log(day);
                 var data=response.betimes;
+                //console.log(data);
                 var i = 0;
+                if(result == true)
+                {
+                    $("#test").val('aa');
+                }
+                else{
+                    $("#test").val("vv");
+                }
+                
                 $("#begintime").html('');
                 if(day=='0'){
                     for(i=0;i<data.length;i++)
@@ -3777,6 +3793,36 @@ Reservations View
             }
         });
     }
+
+    $( ".times" ).change(function() {
+    var begindate=$('#begindate').val();
+    var begintime = $( "#begintime option:selected" ).val();
+    var endtime = $( "#end_time option:selected" ).val();
+    console.log(begindate);
+    console.log(begintime);
+    console.log(endtime);
+    $.ajax({
+            type: "POST",
+            data: {"_token": "{{ csrf_token() }}", "begindate" : begindate, "begintime" : begintime, "endtime" : endtime},
+            url: "{{ url(config('laraadmin.adminRoute') . '/getdatetime') }}",
+            success: function(response)
+            {
+                var result=response.result;
+                var result=response;
+                console.log(result);
+                console.log(result);
+                if(result == 'true')
+                {
+                    $("#span").html('<span id="errormsg" style="color: red;">Resource is not available for that time!</span>');
+                   
+                }else{
+                    $("#errormsg").hide();
+                }
+                
+               
+            }
+        });
+    });
 </script>
 <!-- date binding -->
 <script type="text/javascript">

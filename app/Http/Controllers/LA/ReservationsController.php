@@ -21,9 +21,9 @@ use Zizaco\Entrust\EntrustFacade as Entrust;
 use Dwij\Laraadmin\Models\Module;
 use Dwij\Laraadmin\Models\ModuleFields;
 
-use App\Models\Reservation;
 use App\Models\User;
 use App\Models\Accessory;
+use App\Models\Reservation;
 use App\Models\Reservations_invitee;
 use App\Models\Reservation_Accessory;
 use App\Models\Reservations_user;
@@ -36,6 +36,9 @@ use Redirect;
 
 
 use Carbon\Carbon;
+use DateInterval;
+use DateTime;
+use DatePeriod;
 
 class ReservationsController extends Controller
 {
@@ -128,7 +131,7 @@ class ReservationsController extends Controller
         $sid = $request->scheduleidone;
         $day = $request->day;
         $same_layout = $request->same_layout;
-
+       
         if(!$same_layout){
             $for_same_day= DB::table('slot_zeros')
                         ->select('*')
@@ -173,7 +176,46 @@ class ReservationsController extends Controller
         return response()->json([
             'betimes' => unserialize($betimes),
             'day' => $day
+           
         ]);
+    }
+
+    public function getdatetime(Request $request)
+    {
+       
+        $begindate=  $request->input('begindate');;
+        $btime=  $request->input('begintime');;
+        $etime=  $request->input('endtime');;
+        $begintimea= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $btime));
+        $endtimea= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $etime));
+        $begintime=(int)$begintimea;
+        $endtime=(int)$endtimea;
+        
+        $datetime = DB::table('reservations')
+                    ->select('begin_date','begin_time','end_time')
+                    ->whereDate('begin_date',$begindate)
+                    ->whereNull('deleted_at')
+                    ->get();
+       
+        foreach($datetime as $datetimes)
+        {
+        $betime= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $datetimes->begin_time));
+        $entime= trim(str_replace( ['\'', '"', '-' , ':', '<', '>','\\u00a0'], '', $datetimes->end_time));
+        $begin_time=(int)$betime;
+        $end_time=(int)$entime;
+        
+        
+            if(($begin_time < $begintime && $begintime < $end_time) || ($begin_time < $endtime && $endtime < $end_time) || ($begin_time < $endtime && $endtime > $end_time) || ($begin_time < $begintime && $end_time < $endtime))
+            {
+                return ("true");
+            }
+            else
+            {
+                $result=("false");
+            }
+        }
+        
+        return [ 'result' => $result];
     }
     /**
      * Display the specified reservation.
