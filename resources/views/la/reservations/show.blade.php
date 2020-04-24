@@ -3416,7 +3416,7 @@ Reservations View
                                 <label>Room Type :</label>
                                 <select class="js-example-basic-multiple form-control input-sm" name="room_type_id">
                                     @foreach($room_types as $room_type)
-                                        <option value="{{$room_type->id}}">{{$users->name}}</option>
+                                        <option value="{{$room_type->id}}">{{$room_type->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
