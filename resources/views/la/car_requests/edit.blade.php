@@ -40,7 +40,7 @@
                                 <div class="form-group bootstrap-timepicker timepicker">
                                 <label for="">Start Time :</label>
                                     <div class='input-group time' id='timepicker1'>
-                                    <input id="timepicker1" name="start_time" type="text" class="form-control input-small">
+                                    <input id="timepicker1" name="start_time" type="text" value="{{$car_request->start_time}}" class="form-control input-small">
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-time"></span>
                                         </span>
@@ -52,7 +52,7 @@
                                 <div class="form-group bootstrap-timepicker timepicker">
                                 <label for="">End Time :</label>
                                     <div class='input-group time' id='timepicker2'>
-                                        <input type='text' name="end_time" class="form-control" />
+                                        <input type='text' name="end_time" value="{{$car_request->end_time}}" class="form-control" />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-time"></span>
                                         </span>
