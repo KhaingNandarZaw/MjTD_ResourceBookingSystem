@@ -269,7 +269,7 @@ class ReservationsController extends Controller
                     ->whereNull('deleted_at')
                     ->get();
                 $private_resouces = DB::table('get_resource_by_userid')
-                    ->select('name','id')
+                    ->select('name','id', 'no_of_maximum_people', 'room_types')
                     ->where('schedule', $id)
                     ->where('status', '=', 'Available')
                     ->where('is_public', 0)
@@ -363,7 +363,7 @@ class ReservationsController extends Controller
                     ->whereNull('deleted_at')
                     ->get();
                 $private_resouces = DB::table('get_resource_by_userid')
-                    ->select('name','id')
+                    ->select('name','id', 'no_of_maximum_people', 'room_types')
                     ->where('schedule', $id)
                     ->where('status', '=', 'Available')
                     ->where('is_public', 0)
@@ -453,7 +453,7 @@ class ReservationsController extends Controller
                     ->whereNull('deleted_at')
                     ->get();
                 $private_resouces = DB::table('get_resource_by_userid')
-                    ->select('name','id')
+                    ->select('name','id', 'no_of_maximum_people', 'room_types')
                     ->where('schedule', $id)
                     ->where('status', '=', 'Available')
                     ->where('is_public', 0)

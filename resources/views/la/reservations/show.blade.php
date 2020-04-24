@@ -3974,7 +3974,10 @@ function colorBinding(){
             res_val = slot_data.toString().substring(12);
 
             if(parseInt(start_date_time) <= slot_data && slot_data < parseInt(end_date_time) &&  res_val == reservation.resource_id) {
-                $('[data-id="'+slot_data+'"]').html('<a href="javascript:viewReservation('+reservation.id+');">'+reservations[i].name+'</a>');
+
+                <?php if (Entrust::hasRole("Reception") || Entrust::hasRole("SUPER_ADMIN")): ?>
+                    $('[data-id="'+slot_data+'"]').html('<a href="javascript:viewReservation('+reservation.id+');">'+reservations[i].name+'</a>');
+                <?php endif ?>
                 $('[data-id="'+slot_data+'"]').css('background-color', '');
                 $('[data-id="'+slot_data+'"]').addClass('bg-success');
                 ++count;

@@ -42,7 +42,20 @@
                                 <label class="col-md-4 col-sm-6 col-xs-6">Status :</label>
                                 <div class="col-md-8 col-sm-6 col-xs-6">{{ $car_request->status }}</div>
                         </div>
-
+                        @if($car_request->status == 'Confirmed')
+                        <div class="form-group">
+                                <label class="col-md-4 col-sm-6 col-xs-6">Car Driver :</label>
+                                <div class="col-md-8 col-sm-6 col-xs-6">{{ $car_request->car_driver }}</div>
+                        </div>
+                        <div class="form-group">
+                                <label class="col-md-4 col-sm-6 col-xs-6">Car Number :</label>
+                                <div class="col-md-8 col-sm-6 col-xs-6">{{ $car_request->car_number }}</div>
+                        </div>
+                        <div class="form-group">
+                                <label class="col-md-4 col-sm-6 col-xs-6">Status :</label>
+                                <div class="col-md-8 col-sm-6 col-xs-6">{{ $car_request->status }}</div>
+                        </div>
+                        @endif
                         History
                     
                         <table class="table"> 

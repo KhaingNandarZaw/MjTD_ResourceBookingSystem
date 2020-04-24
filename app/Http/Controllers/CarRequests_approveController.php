@@ -54,22 +54,18 @@ class CarRequests_approveController extends Controller
      */
     public function show($id)
     {
-        if(Module::hasAccess("Car_Requests", "view")) {
-            
-            $car_request = Car_Request::find($id);
-            if(isset($car_request->id)) {
-                $module = Module::get('Car_Requests');
-                $module->row = $car_request;
-                
-                return view('la.CarRequests_approve.show', [
-                    'module' => $module,
-                    'view_col' => $module->view_col,
-                    'no_header' => true,
-                    'no_padding' => "no-padding"
-                ])->with('car_request', $car_request);
-            } 
+        $car_request = Car_Request::find($id);
+        if(isset($car_request->id)) {
+            $module = Module::get('Car_Requests');
+            $module->row = $car_request;
+
+            return view('la.CarRequests_approve.show', [
+                'module' => $module,
+                'view_col' => $module->view_col,
+                'no_header' => true,
+                'no_padding' => "no-padding"
+            ])->with('car_request', $car_request);
         } 
-       
     }
 
     /**
