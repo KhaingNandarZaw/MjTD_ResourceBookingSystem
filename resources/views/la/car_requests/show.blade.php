@@ -42,6 +42,24 @@
                                 <label class="col-md-4 col-sm-6 col-xs-6">Status :</label>
                                 <div class="col-md-8 col-sm-6 col-xs-6">{{ $car_request->status }}</div>
                         </div>
+
+                        History
+                    
+                        <table class="table"> 
+                            <tr>
+                                <th>User</th>
+                                <th>Status</th>
+                                <th>Effected Date</th>
+                                <th>Remark</th>
+                            </tr>
+                            <tr>
+                                <td> <?php $user = DB::table('users')->wherenull('deleted_at')->where('id', $car_request->user_id)->first(); ?>
+                                {{ $user->name }}</td>
+                                <td>{{ $car_request->status }}</td>
+                                <td>{{ $car_request->created_at }}</td>
+                                <td>{{ $car_request->remark }}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
